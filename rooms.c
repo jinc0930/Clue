@@ -1,6 +1,7 @@
 #include "rooms.h"
 #include "items.h"
 #include <stdbool.h>
+#include <string.h>
 
 //makeroom(roomname:char*):Room*
 //initializes room, takes a roomname as input and outputs a room
@@ -25,7 +26,7 @@ struct Room* makeroom(char* roomname){
 //getters
 //getname(room:Room*):char*
 //gets the name of the room, takes room as input and return the name as output
-char* getname(struct Room* room){
+char* getName(struct Room* room){
   return room->name;
 }
 

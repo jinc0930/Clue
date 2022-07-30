@@ -15,9 +15,9 @@ struct Item * makeitem(char*name){
 struct Item * getNext(struct Item* item){
     return item -> next;
 }
-//getN(item:Item*):char*
+//getItemName(item:Item*):char*
 //takes item as input, gets the name of given item
-char*  getN(struct Item* item){
+char* getItemName(struct Item* item){
     return item->name;
 }
 

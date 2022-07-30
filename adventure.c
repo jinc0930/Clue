@@ -66,11 +66,11 @@ int main() {
     struct Item* itemarr[6] = {item1,item2,item3,item4,item5,item6};
 
     //make characters
-    struct Charatcer * char1 = makeChar("minh");
-    struct Charatcer * char2 = makeChar("james");
-    struct Charatcer * char3 = makeChar("ivan");
-    struct Charatcer * char4 = makeChar("tenzin");
-    struct Charatcer * char5 = makeChar("edrick");
+    struct Character * char1 = makeChar("minh");
+    struct Character * char2 = makeChar("james");
+    struct Character * char3 = makeChar("ivan");
+    struct Character * char4 = makeChar("tenzin");
+    struct Character * char5 = makeChar("edrick");
     //arr for easier access later
     struct Character * chararr[5] = {char1,char2,char3,char4,char5};
     int charnum[9] = {0,0,0,0,0,0,0,0,0};
@@ -201,7 +201,7 @@ int main() {
         }
         //if command was go
         else if(strcmp(cmd,"go")==0){
-            printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
+            // printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
             char direction[MAX_LINE];
             scanf("%s",direction);
             struct Room *curroom = avatar->location;
@@ -283,7 +283,7 @@ int main() {
             //iterate to see if such item exist in the game
             bool c = false;
             for (int t=0;t<6;t++){
-                if (strcmp(description,getname(itemarr[t]))==0){
+                if (strcmp(description,getItemName(itemarr[t]))==0){
                     c = true;
                 }
             }
@@ -325,7 +325,7 @@ int main() {
             //loop through array of item list to check if input item is valid
             bool c=false;
             for (int t=0;t<6;t++){
-                if (strcmp(description,getname(itemarr[t]))==0){
+                if (strcmp(description,getItemName(itemarr[t]))==0){
                     c = true;
                 }
             }
@@ -343,7 +343,7 @@ int main() {
                 else if((avatar->inventory !=NULL)&&(avatar->inventory->next !=NULL)){
                     m = avatar->inventory;
                     while(m != NULL){
-                        if (strcmp(getN(m),description)==0){
+                        if (strcmp(getItemName(m),description)==0){
                             rmv(avatar, m);
                             additem(curroom,m);
                         }

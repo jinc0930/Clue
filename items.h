@@ -13,7 +13,7 @@ struct Item{
 struct Item * makeitem(char* name);
 
 //getter
-char*  getN(struct Item* item);
+char* getItemName(struct Item* item);
 struct Item * getNext(struct Item* item);
 
 //setter
