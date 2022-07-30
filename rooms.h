@@ -20,7 +20,7 @@ struct Room {
 struct Room* makeroom(char* roomname);
 
 //getters
-char* getname(struct Room* room);
+char* getRoomName(struct Room* room);
 struct Room* getNorth(struct Room* room);
 struct Room* getSouth(struct Room* room);
 struct Room* getEast(struct Room* room);

@@ -24,9 +24,9 @@ struct Room* makeroom(char* roomname){
 }
 
 //getters
-//getname(room:Room*):char*
+//getRoomName(room:Room*):char*
 //gets the name of the room, takes room as input and return the name as output
-char* getName(struct Room* room){
+char* getRoomName(struct Room* room){
   return room->name;
 }
 

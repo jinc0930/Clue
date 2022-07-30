@@ -1,4 +1,5 @@
 #include "rooms.h"
+#include "cli.h"
 #include "character.h"
 #include "items.h"
 #include <time.h>
@@ -10,15 +11,15 @@
 
 int main() {
     //make nine rooms
-    struct Room * room1 = makeroom("kitchen");
-    struct Room * room2 = makeroom("hall");
-    struct Room * room3 = makeroom("study");
-    struct Room * room4 = makeroom("bathroom");
-    struct Room * room5 = makeroom("ballroom");
-    struct Room * room6 = makeroom("library");
-    struct Room * room7 = makeroom("lounge");
-    struct Room * room8 = makeroom("office");
-    struct Room * room9 = makeroom("bedroom");
+    struct Room * room1 = makeroom("Kitchen");
+    struct Room * room2 = makeroom("Hall");
+    struct Room * room3 = makeroom("Study");
+    struct Room * room4 = makeroom("Bathroom");
+    struct Room * room5 = makeroom("Ballroom");
+    struct Room * room6 = makeroom("Library");
+    struct Room * room7 = makeroom("Lounge");
+    struct Room * room8 = makeroom("Office");
+    struct Room * room9 = makeroom("Bedroom");
     //making arrays for easier manipulation in randomnizing them
     struct Room* roomarr[9] = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
     struct Room* map[9] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -56,21 +57,21 @@ int main() {
     }
 
     //make items
-    struct Item * item1 = makeitem("knife");
-    struct Item * item2 = makeitem("bat");
-    struct Item * item3 = makeitem("wrench");
-    struct Item * item4 = makeitem("rope");
-    struct Item * item5 = makeitem("dagger");
-    struct Item * item6 = makeitem("rifle");
+    struct Item * item1 = makeitem("Knife 🔪");
+    struct Item * item2 = makeitem("Bat 🦇");
+    struct Item * item3 = makeitem("Wrench 🔧");
+    struct Item * item4 = makeitem("Rope");
+    struct Item * item5 = makeitem("Dagger 🗡️");
+    struct Item * item6 = makeitem("Rifle 🔫");
     //item arr for easier access later
     struct Item* itemarr[6] = {item1,item2,item3,item4,item5,item6};
 
     //make characters
-    struct Character * char1 = makeChar("minh");
-    struct Character * char2 = makeChar("james");
-    struct Character * char3 = makeChar("ivan");
-    struct Character * char4 = makeChar("tenzin");
-    struct Character * char5 = makeChar("edrick");
+    struct Character * char1 = makeChar("Minh");
+    struct Character * char2 = makeChar("James");
+    struct Character * char3 = makeChar("Ivan");
+    struct Character * char4 = makeChar("Tenzin");
+    struct Character * char5 = makeChar("Edrick");
     //arr for easier access later
     struct Character * chararr[5] = {char1,char2,char3,char4,char5};
     int charnum[9] = {0,0,0,0,0,0,0,0,0};
@@ -96,9 +97,8 @@ int main() {
     addChar(room5, char5, charnum[4]);
 
     //asks for user name 
-    printf("Welcome, please type your name, keep it short and simple\n");
     char avatarname[MAX_LINE];
-    scanf("%s", avatarname);
+    prompt(avatarname, "Welcome, please type your name, keep it short and simple: ");
     struct Character * avatar = makeChar(avatarname);
 
     //spawn avatar in a room with userinputed name
@@ -120,19 +120,18 @@ int main() {
     while( clue <= 10 ){
         struct Room* curroom = avatar ->location;
         char cmd[MAX_LINE];
-        printf("Type your command : \n");
-        scanf("%s", cmd);
+        promptWithLoc(cmd, "Type your command:", getRoomName(curroom));
         //if command is help
         if(strcmp(cmd,"help")==0){
-            printf("This is a list of all commands\n");
-            printf("help: shows the list of all commands\n");
-            printf("list: list of all room, character and item names\n");
-            printf("look: shows current room, items in the room, player's inventory, and the same information for rooms in all directions\n");
-            printf("go: move the avatar, you can pick from four directions north, south, west, and east\n");
-            printf("take: pick up an item and place it in your inventory\n");
-            printf("drop: drop an item in the room you are currently in\n");
-            printf("inventory: list all items in your current inventory\n");
-            printf("clue: make your guess with this call, you can pick from all valid characters\n");
+            printf(BLD "COMMANDS:\n" RESET);
+            describe("list", "list of all room, character and item names\n");
+            describe("look", "shows current room, items in the room, player's inventory, and the same information for rooms in all directions\n");
+            describe("go", "move the avatar, you can pick from four directions north, south, west, and east\n");
+            describe("take", "pick up an item and place it in your inventory\n");
+            describe("drop", "drop an item in the room you are currently in\n");
+            describe("inventory", "list all items in your current inventory\n");
+            describe("clue", "make your guess with this call, you can pick from all valid characters\n");
+            describe("help", "shows the list of all commands\n");
         }
         //or list
         else if(strcmp(cmd,"list")==0){
@@ -154,7 +153,7 @@ int main() {
                 }
             }
             if(h!=1){
-                printf("noone");
+                printf("no one");
             }
             printf("\n");
             //items in the room
