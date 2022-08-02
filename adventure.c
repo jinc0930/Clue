@@ -11,7 +11,7 @@
 
 int main() {
     //make nine rooms
-    struct Room * room1 = makeroom("Kitchen");
+    struct Room * room1 = makeroom("Kitchen ");
     struct Room * room2 = makeroom("Hall");
     struct Room * room3 = makeroom("Study");
     struct Room * room4 = makeroom("Bathroom");
