@@ -11,7 +11,7 @@
 
 int main() {
     //make nine rooms
-    struct Room * room1 = makeroom("Kitchen ");
+    struct Room * room1 = makeroom("Kitchen");
     struct Room * room2 = makeroom("Hall");
     struct Room * room3 = makeroom("Study");
     struct Room * room4 = makeroom("Bathroom");
@@ -57,12 +57,12 @@ int main() {
     }
 
     //make items
-    struct Item * item1 = makeitem("Knife 🔪");
-    struct Item * item2 = makeitem("Bat 🦇");
-    struct Item * item3 = makeitem("Wrench 🔧");
+    struct Item * item1 = makeitem("Knife");
+    struct Item * item2 = makeitem("Bat");
+    struct Item * item3 = makeitem("Wrench");
     struct Item * item4 = makeitem("Rope");
-    struct Item * item5 = makeitem("Dagger 🗡️");
-    struct Item * item6 = makeitem("Rifle 🔫");
+    struct Item * item5 = makeitem("Dagger");
+    struct Item * item6 = makeitem("Rifle");
     //item arr for easier access later
     struct Item* itemarr[6] = {item1,item2,item3,item4,item5,item6};
 
