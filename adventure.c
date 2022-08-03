@@ -104,7 +104,6 @@ int main() {
     setloc(char7, room7);
     setloc(char8, room8);
     setloc(char9, room9);
-    
     addChar(room1, char1, charnum[0]);
     addChar(room2, char2, charnum[1]);
     addChar(room3, char3, charnum[2]);
