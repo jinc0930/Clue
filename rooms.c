@@ -19,7 +19,7 @@ struct Room* makeroom(char* roomname){
   room -> chara[4] = NULL;
   room -> chara[5] = NULL;
   room -> itemList = NULL;
-  room -> num = 0;
+  room -> num = 1;
   return room;
 }
 
