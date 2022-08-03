@@ -113,7 +113,7 @@ int main() {
     addChar(room6, char6, charnum[5]);
     addChar(room7, char7, charnum[6]);
     addChar(room8, char8, charnum[7]);
-    addChar(room9, char9, charnum[8]);
+    addChar(room9, char9, charnum[8]); 
 
     //asks for user name 
     char avatarname[MAX_LINE];
@@ -126,10 +126,14 @@ int main() {
     addChar(room6, avatar, charnum[5]);
     room6->num +=1;
 
+    int tarcharint = rand()%9;
+    int intarr[9]={0,1,2,3,4,5,6,7,8};
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
-    char* targetChar = chararr[rand()%9]->name;
+    char* targetChar = chararr[tarcharint]->name;
     char* targetItem = itemarr[rand()%9]->name;  
+
+    chararr[tarcharint]->id = "murderer";
 
     //set boolean to check win statement
     bool booroom;
