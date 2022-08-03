@@ -57,14 +57,17 @@ int main() {
     }
 
     //make items
-    struct Item * item1 = makeitem("Knife 🔪");
-    struct Item * item2 = makeitem("Bat 🦇");
-    struct Item * item3 = makeitem("Wrench 🔧");
+    struct Item * item1 = makeitem("Butter Knife");
+    struct Item * item2 = makeitem("Bat");
+    struct Item * item3 = makeitem("Wrench");
     struct Item * item4 = makeitem("Rope");
-    struct Item * item5 = makeitem("Dagger 🗡️");
-    struct Item * item6 = makeitem("Rifle 🔫");
+    struct Item * item5 = makeitem("Dagger");
+    struct Item * item6 = makeitem("Rifle");
+    struct Item * item7 = makeitem("Hammer");
+    struct Item * item8 = makeitem("Lead Pipe");
+    struct Item * item9 = makeitem("Poison Bottle");
     //item arr for easier access later
-    struct Item* itemarr[6] = {item1,item2,item3,item4,item5,item6};
+    struct Item* itemarr[9] = {item1,item2,item3,item4,item5,item6,item7,item8,item9};
 
     //make characters
     struct Character * char1 = makeChar("Minh");
@@ -83,6 +86,9 @@ int main() {
     additem(room4, item4);
     additem(room5, item5);
     additem(room6, item6);
+    additem(room7, item7);
+    additem(room8, item8);
+    additem(room9, item9);
 
     //set chracter locations
     setloc(char1, room1);
@@ -108,7 +114,7 @@ int main() {
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
     char* targetChar = chararr[rand()%5]->name;
-    char* targetItem = itemarr[rand()%6]->name;  
+    char* targetItem = itemarr[rand()%9]->name;  
 
     //set boolean to check win statement
     bool booroom;
@@ -137,7 +143,7 @@ int main() {
         else if(strcmp(cmd,"list")==0){
             printf("This is a list of all rooms, characters and items\n");
             printf("rooms include: kitchen, study, hall, ballroom, library, lounge, bathroom, office, and bedroom\n");
-            printf("items include: knife, rope, rifle, dagger, and bat\n");
+            printf("items include: butter knife, rope, rifle, dagger, hammer, lead pipe, poison bottle, and bat\n");
             printf("characters include: minh, ivan, tenzin, edrick, and james\n");
         }
         //or look
