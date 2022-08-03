@@ -26,3 +26,15 @@ void promptWithLoc(char out[], char*str, char*loc);
 
 // describe a command but indented and bold
 void describe(char *cmd, char *description);
+
+// return a formatted string cell/room to be used
+const char * cell(char *str);
+
+// print a row with 3 columns
+void printRow(char *col1, char *col2, char *col3);
+
+// print a header/footer
+void printHeader();
+
+// print all the rooms
+// void printMap(struct Room* map[9]);
