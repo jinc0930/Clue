@@ -225,7 +225,7 @@ int main() {
             }
         }
         //if command was go
-        else if(startsWith(cmd,"go")==1){
+        else if(startsWith(cmd,"go")!=0){
             // printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
             char direction[MAX_LINE];
             slice(cmd, direction, strlen("go "), MAX_LINE);
@@ -299,10 +299,10 @@ int main() {
             }
         }
         //take item command
-        else if(strcmp(cmd,"take")==0){
+        else if(startsWith(cmd, "take") != 0){
             char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             char description[MAX_LINE];
-            promptWithLoc(description, "What item do you like to take?", getRoomName(curroom));
+            slice(cmd, description, strlen("take "), MAX_LINE);
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
@@ -349,10 +349,10 @@ int main() {
             }                
         }
         //if command was drop
-        else if(strcmp(cmd,"drop")==0){
+        else if(startsWith(cmd, "drop") != 0){
             char *arr1[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             char description[MAX_LINE];
-            prompt(description, "what would you like to drop?\n");
+            slice(cmd, description, strlen("drop "), MAX_LINE);
             curroom = getloc(avatar);
             //loop through array of item list to check if input item is valid
             bool c = false;
@@ -394,11 +394,12 @@ int main() {
             clue = 12;
         }
         //if command is clue
-        else if(strcmp(cmd,"clue")==0){
+        else if(startsWith(cmd, "clue")!=0){
             //temperary statement for testing
             //printf("%s,%s,%s\n",targetRoom,targetChar,targetItem);
             char des[MAX_LINE];
-            prompt(des, "Who is the murderer?");
+            slice(cmd, des, strlen("clue "), MAX_LINE);
+            // prompt(des, "Who is the murderer?");
             //check if user input a valid character
             int rep = 0;
             for(int r = 0; r<9;r++){
