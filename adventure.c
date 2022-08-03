@@ -26,12 +26,12 @@ int main() {
 
     //randomnize rooms
     srand(time(0));
-    for (int i = 0; i < 9 ; i++ ){
+    for (int i = 0; i < 9 ; i++){
         int j = rand()%9;
         if( map[j] != NULL ){
-            while( map[j] != NULL){
+            while (map[j] != NULL){
                 j++;
-                if( j > 8 ){j=0;}
+                if(j > 8 ){j=0;}
             }
             map[j] = roomarr[i];
         }
@@ -100,7 +100,6 @@ int main() {
     setloc(char3, room3);
     setloc(char4, room4);
     setloc(char5, room5);
-
     setloc(char6, room6);
     setloc(char7, room7);
     setloc(char8, room8);
@@ -384,7 +383,7 @@ int main() {
             prompt(des, "Who is the murderer?");
             //check if user input a valid character
             int rep = 0;
-            for(int r = 0; r<5;r++){
+            for(int r = 0; r<9;r++){
                 //case insensitive
                 if(strcasecmp(chararr[r]->name,des)==0){
                     rep = 1;
