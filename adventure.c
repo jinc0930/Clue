@@ -380,13 +380,13 @@ int main() {
         else if(strcmp(cmd,"clue")==0){
             //temperary statement for testing
             //printf("%s,%s,%s\n",targetRoom,targetChar,targetItem);
-            printf("make sure you include a character\n");
             char des[MAX_LINE];
-            scanf("%s",des);
+            prompt(des, "Who is the murderer?");
             //check if user input a valid character
             int rep = 0;
-            for(int r = 0; r<9;r++){
-                if(strcmp(chararr[r]->name,des)==0){
+            for(int r = 0; r<5;r++){
+                //case insensitive
+                if(strcasecmp(chararr[r]->name,des)==0){
                     rep = 1;
                 }
             }
