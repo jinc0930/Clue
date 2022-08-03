@@ -1,3 +1,5 @@
+#include "rooms.h"
+#include "character.h"
 #include <stdio.h>
 #include "prettyprint.h"
 #define VAL 120
@@ -24,30 +26,40 @@ void describe(char *cmd, char *description) {
     printf(BLD "   %s: " RESET "%s", cmd, description);
 }
 
-const char * cell(char *str) {
-    // char* inner = malloc(18*sizeof(char));
-    static char inner[18];
-    int is_end = 0;
-    for (int i = 1; i < 18; i++) {
-        if (str[i] == '\0' && is_end == 0 && i < 17) {
-            is_end = 1;
-            inner[i] = str[i];
-        } else {
-            inner[i] = ' ';
-        }
+void cell(char *dest, char *str) {
+    if (str != NULL) {
+        strncpy(dest, str, 18);
+    } else {
+        strncpy(" ", str, 18);
     }
-    return inner;
+    size_t len = strnlen(dest, 18);
+    for (size_t i = len; i < 18; i++) {
+        dest[i] = ' ';
+    };
+    dest[18] = '\0';
+
 }
 
 void printRow(char *col1, char *col2, char *col3) {
-    printf("|%s|%s|%s|\n", cell(col1), cell(col2), cell(col3));
+    char c1[18], c2[18], c3[18];
+    cell(c1, col1);
+    cell(c2, col2);
+    cell(c3, col3);
+    printf("| %s | %s | %s |\n", c1, c2, c3);
 }
 
-void printHeader() {
-    printf("+------------------+-------------------+------------------+\n");
+void rowBreak() {
+    printf("+--------------------+--------------------+--------------------+\n");
 }
 
 // print all the rooms
-// void printMap(struct Room* map[9]) {
-    
-// }
+void printMap(struct Room* map[9]) {
+    rowBreak();
+    for (size_t i = 0; i < 9; i = i+3) {
+        printRow(getRoomName(map[i]), getRoomName(map[i+1]), getRoomName(map[i+2]));
+        printRow(getcharname(map[i]->chara[0]), getcharname(map[i+1]->chara[0]), getcharname(map[i+2]->chara[0]));
+        printRow(getcharname(map[i]->chara[1]), getcharname(map[i+1]->chara[1]), getcharname(map[i+2]->chara[1]));
+        printRow(getcharname(map[i]->chara[2]), getcharname(map[i+1]->chara[2]), getcharname(map[i+2]->chara[2]));
+        rowBreak();
+    }
+}

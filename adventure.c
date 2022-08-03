@@ -135,7 +135,7 @@ int main() {
     bool booroom;
     bool booitem;
     bool boochara;
-
+    printMap(map);
     //main game portion with clue counter
     int clue = 0;
     while( clue <= 10 ){

@@ -12,7 +12,10 @@
     "initializer_list": "c",
     "utility": "c",
     "character.h": "c",
-    "prettyprint.h": "c"
+    "prettyprint.h": "c",
+    "typeinfo": "c",
+    "*.tcc": "c",
+    "string": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
