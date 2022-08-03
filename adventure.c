@@ -386,6 +386,9 @@ int main() {
                 }
             }
         }
+        else if(strcmp(cmd,"quit")==0){
+            clue = 12;
+        }
         //if command is clue
         else if(strcmp(cmd,"clue")==0){
             //temperary statement for testing
@@ -502,7 +505,10 @@ int main() {
         }
     }
     //check if user gets all three answers correct
-    if(booroom && booitem && boochara){
+    if(clue==12){
+        printf("Thank you for playing, see you next time!\n");
+    }
+    else if(booroom && booitem && boochara){
         printf("YOU WON\n");
     }
     else{
