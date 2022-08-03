@@ -296,7 +296,7 @@ int main() {
             char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             printf("make sure you specify what item you would like to take\n");
             char description[MAX_LINE];
-            scanf("%s",description);
+            scanf("%s",description); 
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
