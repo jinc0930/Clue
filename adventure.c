@@ -122,6 +122,7 @@ int main() {
     //spawn avatar in a room with userinputed name
     setloc(avatar, room6);
     addChar(room6, avatar, charnum[5]);
+    room6->num +=1;
 
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
@@ -334,13 +335,13 @@ int main() {
         }
         //if command was drop
         else if(strcmp(cmd,"drop")==0){
-            char * arr1[6] = {"bat","rope","knife","dagger","rifle","wrench"};
+            char *arr1[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             printf("what would you like to drop?\n");
             char description[MAX_LINE];
             scanf("%s",description);
             curroom = getloc(avatar);
             //loop through array of item list to check if input item is valid
-            bool c=false;
+            bool c = false;
             for (int t=0;t<9;t++){
                 if (strcmp(description,getItemName(itemarr[t]))==0){
                     c = true;
@@ -392,6 +393,9 @@ int main() {
             if(rep == 0){
                 printf("not a valid chracter\n");
             }
+            else if((curroom->num)>=3){
+                printf("too many characters in this room already\n");
+            }
             //they do input a valid character
             else{
                 clue++;
@@ -434,9 +438,6 @@ int main() {
                 else{
                     printf("WRONG ITEM\n");
                 }
-                //check character
-                // int t = sizeof(getloc(chararr));
-                // printf("%s",t);
                 //checked validity above, now check if already in room
                 int h = 0;
                 for(int z = 0; z<9;z++){
@@ -459,7 +460,7 @@ int main() {
                             //set character to current room
                             setloc(chararr[z], curroom);
                             //check where character is on the character array
-                            int temp =0;
+                            int temp = 0;
                             for(int v = 0; v<9;v++){
                                 if(strcmp(roomarr[v]->name,curroom->name)==0){
                                     temp = v;
@@ -467,6 +468,7 @@ int main() {
                                 }
                             }
                             addChar(curroom,chararr[z],charnum[temp]);
+                            curroom->num+=1;
                             //after adding character to the room, check if it's the correct guess
                             if(strcmp(des,targetChar)==0){
                                 printf("CHARACTER MATCH\n");
