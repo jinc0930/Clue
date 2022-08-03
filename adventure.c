@@ -293,14 +293,14 @@ int main() {
         }
         //take item command
         else if(strcmp(cmd,"take")==0){
-            char *arr[6] = {"bat","rope","knife","dagger","rifle","wrench"};
+            char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             printf("make sure you specify what item you would like to take\n");
             char description[MAX_LINE];
             scanf("%s",description);
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
-            for (int t=0;t<6;t++){
+            for (int t=0;t<9;t++){
                 if (strcmp(description,getItemName(itemarr[t]))==0){
                     c = true;
                 }
@@ -342,7 +342,7 @@ int main() {
             curroom = getloc(avatar);
             //loop through array of item list to check if input item is valid
             bool c=false;
-            for (int t=0;t<6;t++){
+            for (int t=0;t<9;t++){
                 if (strcmp(description,getItemName(itemarr[t]))==0){
                     c = true;
                 }
@@ -385,7 +385,7 @@ int main() {
             scanf("%s",des);
             //check if user input a valid character
             int rep = 0;
-            for(int r = 0; r<5;r++){
+            for(int r = 0; r<9;r++){
                 if(strcmp(chararr[r]->name,des)==0){
                     rep = 1;
                 }
@@ -438,7 +438,7 @@ int main() {
                 //check character
                 //checked validity above, now check if already in room
                 int h=0;
-                for(int z = 0;z<5;z++){
+                for(int z = 0;z<9;z++){
                     //iterate and check all character in room
                     if(strcmp(getloc(chararr[z])->name, curroom->name)==0){
                         //the desired character is already in the room
@@ -501,11 +501,11 @@ int main() {
         free(roomarr[k]);
     }
     //free items
-    for(int l=0;l<6;l++){
+    for(int l=0;l<9;l++){
         free(itemarr[l]);
     }
     //free characters
-    for(int j=0;j<5;j++){
+    for(int j=0;j<9;j++){
         free(chararr[j]);
     }
     //and avatar
