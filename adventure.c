@@ -294,9 +294,8 @@ int main() {
         //take item command
         else if(strcmp(cmd,"take")==0){
             char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
-            printf("make sure you specify what item you would like to take\n");
             char description[MAX_LINE];
-            scanf("%s",description); 
+            prompt(description, "What item do you like to take?");
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
@@ -320,7 +319,11 @@ int main() {
                     while(m != NULL){
                         if (strcmp(m->name,description)==0){
                             removeItem(curroom, m);
-                            add(avatar,m);
+                            if (add(avatar,m) != 1) {
+                                printf("sorry, your inventory is full\n");
+                            } else {
+                                printf("you took the %s\n", description);
+                            }
                         }
                         m  = getNext(m);
                     }
