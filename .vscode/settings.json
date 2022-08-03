@@ -1,10 +1,13 @@
 {
-    "files.associations": {
-        "items.h": "c",
-        "rooms.h": "c",
-        "time.h": "c",
-        "stdio.h": "c",
-        "stdlib.h": "c",
-        "string.h": "c"
-    }
+  "files.associations": {
+    "items.h": "c",
+    "rooms.h": "c",
+    "time.h": "c",
+    "stdio.h": "c",
+    "stdlib.h": "c",
+    "string.h": "c"
+  },
+  "git.enabled": true,
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false
 }
