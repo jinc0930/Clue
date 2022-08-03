@@ -126,15 +126,41 @@ int main() {
     addChar(room6, avatar, charnum[5]);
     room6->num +=1;
 
-    int tarcharint = rand()%9;
-    int intarr[9]={0,1,2,3,4,5,6,7,8};
+    int intarr1[9]={0,1,2,3,4,5,6,7,8};
+    int intarr2[9]={0,1,2,3,4,5,6,7,8};
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
-    char* targetChar = chararr[tarcharint]->name;
-    char* targetItem = itemarr[rand()%9]->name;  
+    char* targetItem = itemarr[rand()%9]->name; 
+    //shuffle character array 
+    srand(time(0));
+    for (int b = 0; b < 9 ; b++){
+        int n = rand()%9;
+        if( intarr2[n] != NULL ){
+            while (intarr2[n] != NULL){
+                n++;
+                if(n > 8 ){n=0;}
+            }
+            intarr2[n] = intarr1[b];
+        }
+        else{
+            intarr2[n] = intarr1[b];
+        }
+    }
+    //asign murderer
+    char* targetChar = chararr[intarr2[0]]->name;
+    chararr[intarr2[0]]->id = "murderer";
 
-    chararr[tarcharint]->id = "murderer";
-
+    //assign id to all characters, 5 being hint giver and 3 being accuser
+    for(int m=1;m<9;m++){
+        if(m<6){
+            chararr[intarr2[m]]->id = "hint giver";
+        }
+        else{
+            chararr[intarr2[m]]->id = "accuser";
+        }
+        
+    }
+    
     //set boolean to check win statement
     bool booroom;
     bool booitem;
