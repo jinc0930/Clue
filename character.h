@@ -9,6 +9,7 @@ struct Character{
     char* name;
     struct Item * inventory;
     struct Room * location;
+    char* id;
     int inventoryItems;
 };
 

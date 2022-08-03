@@ -10,6 +10,7 @@ struct Character* makeChar(char* name){
     character->location =NULL;
     character->inventory = NULL;
     character->inventoryItems = 0;
+    character->id = NULL;
     return character;
 }
 
