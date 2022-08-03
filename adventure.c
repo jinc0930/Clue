@@ -1,5 +1,6 @@
 #include "rooms.h"
-#include "cli.h"
+#include "prettyprint.h"
+#include "utils.h"
 #include "character.h"
 #include "items.h"
 #include <time.h>
@@ -140,6 +141,7 @@ int main() {
         struct Room* curroom = avatar ->location;
         char cmd[MAX_LINE];
         promptWithLoc(cmd, "Type your command:", getRoomName(curroom));
+        // printf("%s", cmd);
         //if command is help
         if(strcmp(cmd,"help")==0){
             printf(BLD "COMMANDS:\n" RESET);
@@ -218,10 +220,10 @@ int main() {
             }
         }
         //if command was go
-        else if(strcmp(cmd,"go")==0){
+        else if(startsWith(cmd,"go")==1){
             // printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
             char direction[MAX_LINE];
-            scanf("%s",direction);
+            slice(cmd, direction, strlen("go "), MAX_LINE);
             struct Room *curroom = avatar->location;
             struct Room *target;
             //cases for each direction
@@ -295,12 +297,12 @@ int main() {
         else if(strcmp(cmd,"take")==0){
             char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             char description[MAX_LINE];
-            prompt(description, "What item do you like to take?");
+            promptWithLoc(description, "What item do you like to take?", getRoomName(curroom));
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
             for (int t=0;t<9;t++){
-                if (strcmp(description,getItemName(itemarr[t]))==0){
+                if (startsWith(getItemName(itemarr[t]), description)==0){
                     c = true;
                 }
             }
@@ -317,13 +319,14 @@ int main() {
                 else if((curroom->itemList!=NULL)&&(curroom->itemList->next !=NULL)){
                     m = curroom->itemList;
                     while(m != NULL){
-                        if (strcmp(m->name,description)==0){
-                            removeItem(curroom, m);
-                            if (add(avatar,m) != 1) {
-                                printf("sorry, your inventory is full\n");
-                            } else {
+                        if (startsWith(m->name, description) != 0){
+                            if (add(avatar,m) != 0) {
+                                removeItem(curroom, m);
                                 printf("you took the %s\n", description);
+                            } else {
+                                printf("sorry, your inventory is full\n");
                             }
+                            break;
                         }
                         m  = getNext(m);
                     }
@@ -331,17 +334,20 @@ int main() {
                 //if it has only one item
                 else{
                     m =curroom->itemList;
-                    removeItem(curroom,m);
-                    add(avatar,m);
+                    if (add(avatar,m) != 0) {
+                        removeItem(curroom,m);
+                        printf("you took the %s\n", description);
+                    } else {
+                        printf("sorry, your inventory is full\n");
+                    }
                 }
             }                
         }
         //if command was drop
         else if(strcmp(cmd,"drop")==0){
             char *arr1[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
-            printf("what would you like to drop?\n");
             char description[MAX_LINE];
-            scanf("%s",description);
+            prompt(description, "what would you like to drop?\n");
             curroom = getloc(avatar);
             //loop through array of item list to check if input item is valid
             bool c = false;

@@ -5,7 +5,14 @@
     "time.h": "c",
     "stdio.h": "c",
     "stdlib.h": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "random": "c",
+    "array": "c",
+    "string_view": "c",
+    "initializer_list": "c",
+    "utility": "c",
+    "character.h": "c",
+    "prettyprint.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,

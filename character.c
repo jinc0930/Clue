@@ -1,5 +1,6 @@
 #include "character.h"
 #include "items.h"
+#include<stdio.h>
 
 //makeChar(name:char*): struct character *
 //takes name as input, gives out a character as output
