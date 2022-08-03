@@ -100,11 +100,11 @@ int main() {
     setloc(char3, room3);
     setloc(char4, room4);
     setloc(char5, room5);
+
     setloc(char6, room6);
     setloc(char7, room7);
     setloc(char8, room8);
     setloc(char9, room9);
-    
     addChar(room1, char1, charnum[0]);
     addChar(room2, char2, charnum[1]);
     addChar(room3, char3, charnum[2]);
@@ -165,7 +165,7 @@ int main() {
             int h=0;
             //get all characters in the room
             printf("with: ");
-            for(int z = 0;z<5;z++){
+            for(int z = 0;z<9;z++){
                 if(strcmp(getloc(chararr[z])->name, curroom->name)==0){
                     printf("%s ", getcharname(chararr[z]));
                     h = 1;
