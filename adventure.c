@@ -400,7 +400,7 @@ int main() {
                 printf("too many characters in this room already\n");
             }
             //they do input a valid character
-            else{
+            else{ 
                 clue++;
                 //satisfy all three conditions to win
                 booroom = false;
