@@ -9,6 +9,7 @@ struct Character{
     char* name;
     struct Item * inventory;
     struct Room * location;
+    int inventoryItems;
 };
 
 //make character
@@ -25,7 +26,7 @@ struct Room* getloc (struct Character * character);
 void setloc(struct Character* character, struct Room* room);
 
 //adding
-void add(struct Character* character, struct Item*item);
+int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
 

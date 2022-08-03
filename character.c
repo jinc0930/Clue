@@ -8,6 +8,7 @@ struct Character* makeChar(char* name){
     character->name = name;
     character->location =NULL;
     character->inventory = NULL;
+    character->inventoryItems = 0;
     return character;
 }
 
@@ -35,11 +36,14 @@ void setloc(struct Character* character, struct Room* room){
     character -> location = room;
 }
 
-//add(character:Character*,item:Item*):void
-//takes character and item as input, add the item to the inventory of the character
-void add(struct Character* character, struct Item*item){
+//add(character:Character*,item:Item*):int
+//takes character and item as input, add the item to the inventory of the character; returns 1 if item is added and 0 if inventory is full
+int add(struct Character* character, struct Item*item) {
+    if (character->inventoryItems >= 3) return 0;
     setNext(item, character->inventory);
-    character->inventory =item;
+    character->inventoryItems++;
+    character->inventory = item;
+    return 1;
 }
 
 //rmv(character:Character*,item:Item*):void
@@ -51,10 +55,12 @@ void rmv(struct Character* character, struct Item*item){
     //if there is only one item in the inventory
     else if((character->inventory ==item) && (character->inventory->next == NULL)){
         character->inventory = NULL;
+        character->inventoryItems = 0;
     } 
     //if there is more than one and the target item is the first item on the inventory list
     else if((character->inventory ==item) && (character->inventory->next != NULL)){
         character->inventory = character->inventory->next;
+        character->inventoryItems--;
     }
     //not first item, and there are multiple items
     else{
@@ -70,5 +76,6 @@ void rmv(struct Character* character, struct Item*item){
             //points the prev item to the next item (after current)
             prev->next = temp->next; 
         }
+        character->inventoryItems--;
     }
 }
