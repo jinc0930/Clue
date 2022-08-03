@@ -118,6 +118,7 @@ int main() {
     //asks for user name 
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple: ");
+    
     struct Character * avatar = makeChar(avatarname);
 
     //spawn avatar in a room with userinputed name
@@ -145,14 +146,14 @@ int main() {
         //if command is help
         if(strcmp(cmd,"help")==0){
             printf(BLD "COMMANDS:\n" RESET);
-            describe("list", "list of all room, character and item names\n");
-            describe("look", "shows current room, items in the room, player's inventory, and the same information for rooms in all directions\n");
+            describe("list", "list all room, character and item names\n");
+            describe("look", "show current room, items in the room, player's inventory, and the name of the rooms surrounding the current room\n");
             describe("go", "move the avatar, you can pick from four directions north, south, west, and east\n");
-            describe("take", "pick up an item and place it in your inventory\n");
-            describe("drop", "drop an item in the room you are currently in\n");
+            describe("take", "pick up an item and place it in player inventory\n");
+            describe("drop", "drop an item from player inventory to the room player is currently in\n");
             describe("inventory", "list all items in your current inventory\n");
-            describe("clue", "make your guess with this call, you can pick from all valid characters\n");
-            describe("help", "shows the list of all commands\n");
+            describe("clue", "make your guess of the murderer, murder room and murder weapon with this call, you can pick from all valid characters\n");
+            describe("help", "show the list of all commands\n");
         }
         //or list
         else if(strcmp(cmd,"list")==0){
@@ -385,6 +386,9 @@ int main() {
                 }
             }
         }
+        else if(strcmp(cmd,"quit")==0){
+            clue = 12;
+        }
         //if command is clue
         else if(startsWith(cmd, "clue")!=0){
             //temperary statement for testing
@@ -502,7 +506,10 @@ int main() {
         }
     }
     //check if user gets all three answers correct
-    if(booroom && booitem && boochara){
+    if(clue==12){
+        printf("Thank you for playing, see you next time!\n");
+    }
+    else if(booroom && booitem && boochara){
         printf("YOU WON\n");
     }
     else{
