@@ -11,15 +11,15 @@
 
 int main() {
     //make nine rooms
-    struct Room * room1 = makeroom("Kitchen");
-    struct Room * room2 = makeroom("Hall");
-    struct Room * room3 = makeroom("Study");
-    struct Room * room4 = makeroom("Bathroom");
-    struct Room * room5 = makeroom("Ballroom");
-    struct Room * room6 = makeroom("Library");
-    struct Room * room7 = makeroom("Lounge");
-    struct Room * room8 = makeroom("Office");
-    struct Room * room9 = makeroom("Bedroom");
+    struct Room * room1 = makeroom("kitchen");
+    struct Room * room2 = makeroom("hall");
+    struct Room * room3 = makeroom("study");
+    struct Room * room4 = makeroom("bathroom");
+    struct Room * room5 = makeroom("ballroom");
+    struct Room * room6 = makeroom("library");
+    struct Room * room7 = makeroom("lounge");
+    struct Room * room8 = makeroom("office");
+    struct Room * room9 = makeroom("bedroom");
     //making arrays for easier manipulation in randomnizing them
     struct Room* roomarr[9] = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
     struct Room* map[9] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -57,28 +57,28 @@ int main() {
     }
 
     //make items
-    struct Item * item1 = makeitem("Butter Knife");
-    struct Item * item2 = makeitem("Bat");
-    struct Item * item3 = makeitem("Wrench");
-    struct Item * item4 = makeitem("Rope");
-    struct Item * item5 = makeitem("Dagger");
-    struct Item * item6 = makeitem("Rifle");
-    struct Item * item7 = makeitem("Hammer");
-    struct Item * item8 = makeitem("Lead Pipe");
-    struct Item * item9 = makeitem("Poison Bottle");
+    struct Item * item1 = makeitem("butter knife");
+    struct Item * item2 = makeitem("bat");
+    struct Item * item3 = makeitem("wrench");
+    struct Item * item4 = makeitem("rope");
+    struct Item * item5 = makeitem("dagger");
+    struct Item * item6 = makeitem("rifle");
+    struct Item * item7 = makeitem("hammer");
+    struct Item * item8 = makeitem("lead pipe");
+    struct Item * item9 = makeitem("poison bottle");
     //item arr for easier access later
     struct Item* itemarr[9] = {item1,item2,item3,item4,item5,item6,item7,item8,item9};
 
     //make characters
-    struct Character * char1 = makeChar("Minh");
-    struct Character * char2 = makeChar("James");
-    struct Character * char3 = makeChar("Ivan");
-    struct Character * char4 = makeChar("Tenzin");
-    struct Character * char5 = makeChar("Edrick");
-    struct Character * char6 = makeChar("Chang");
-    struct Character * char7 = makeChar("Kevin");
-    struct Character * char8 = makeChar("Michael");
-    struct Character * char9 = makeChar("Joey");
+    struct Character * char1 = makeChar("minh");
+    struct Character * char2 = makeChar("james");
+    struct Character * char3 = makeChar("ivan");
+    struct Character * char4 = makeChar("tenzin");
+    struct Character * char5 = makeChar("edrick");
+    struct Character * char6 = makeChar("chang");
+    struct Character * char7 = makeChar("kevin");
+    struct Character * char8 = makeChar("michael");
+    struct Character * char9 = makeChar("joey");
     //arr for easier access later
     struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
     int charnum[9] = {0,0,0,0,0,0,0,0,0};
@@ -156,7 +156,7 @@ int main() {
             printf("This is a list of all rooms, characters and items\n");
             printf("rooms include: kitchen, study, hall, ballroom, library, lounge, bathroom, office, and bedroom\n");
             printf("items include: butter knife, rope, rifle, dagger, hammer, lead pipe, poison bottle, and bat\n");
-            printf("characters include: minh, ivan, tenzin, edrick, and james\n");
+            printf("characters include: minh, ivan, tenzin, edrick, chang, kevin, joey, and james\n");
         }
         //or look
         else if(strcmp(cmd, "look")==0){
@@ -435,9 +435,11 @@ int main() {
                     printf("WRONG ITEM\n");
                 }
                 //check character
+                // int t = sizeof(getloc(chararr));
+                // printf("%s",t);
                 //checked validity above, now check if already in room
-                int h=0;
-                for(int z = 0;z<9;z++){
+                int h = 0;
+                for(int z = 0; z<9;z++){
                     //iterate and check all character in room
                     if(strcmp(getloc(chararr[z])->name, curroom->name)==0){
                         //the desired character is already in the room
