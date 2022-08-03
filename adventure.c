@@ -75,8 +75,12 @@ int main() {
     struct Character * char3 = makeChar("Ivan");
     struct Character * char4 = makeChar("Tenzin");
     struct Character * char5 = makeChar("Edrick");
+    struct Character * char6 = makeChar("Chang");
+    struct Character * char7 = makeChar("Kevin");
+    struct Character * char8 = makeChar("Michael");
+    struct Character * char9 = makeChar("Joey");
     //arr for easier access later
-    struct Character * chararr[5] = {char1,char2,char3,char4,char5};
+    struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
     int charnum[9] = {0,0,0,0,0,0,0,0,0};
 
     //add item to rooms
@@ -96,11 +100,19 @@ int main() {
     setloc(char3, room3);
     setloc(char4, room4);
     setloc(char5, room5);
+    setloc(char6, room6);
+    setloc(char7, room7);
+    setloc(char8, room8);
+    setloc(char9, room9);
     addChar(room1, char1, charnum[0]);
     addChar(room2, char2, charnum[1]);
     addChar(room3, char3, charnum[2]);
     addChar(room4, char4, charnum[3]);
     addChar(room5, char5, charnum[4]);
+    addChar(room6, char6, charnum[5]);
+    addChar(room7, char7, charnum[6]);
+    addChar(room8, char8, charnum[7]);
+    addChar(room9, char9, charnum[8]);
 
     //asks for user name 
     char avatarname[MAX_LINE];
@@ -113,7 +125,7 @@ int main() {
 
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
-    char* targetChar = chararr[rand()%5]->name;
+    char* targetChar = chararr[rand()%9]->name;
     char* targetItem = itemarr[rand()%9]->name;  
 
     //set boolean to check win statement
