@@ -18,6 +18,9 @@
 // print a dimmed text
 void printDimmed(char*str);
 
+// prompt a pretty message and output to out in red
+void promptErr(char out[], char*str);
+
 // prompt a pretty message and output to out
 void prompt(char out[], char*str);
 
@@ -27,14 +30,14 @@ void promptWithLoc(char out[], char*str, char*loc);
 // describe a command but indented and bold
 void describe(char *cmd, char *description);
 
-// return a formatted string cell/room to be used
-const char * cell(char *str);
+// formatted string cell/room to be used
+void cell(char *dest, char *str);
 
 // print a row with 3 columns
 void printRow(char *col1, char *col2, char *col3);
 
-// print a header/footer
-void printHeader();
+// print a border for header/footer/in between
+void rowBorder();
 
 // print all the rooms
-// void printMap(struct Room* map[9]);
+void printMap(struct Room* map[9]);
