@@ -5,6 +5,13 @@
 #define VAL 120
 
 void prompt(char out[], char*str) {
+    printf(CYN "%s\n >>> " RESET, str);
+    fgets(out, VAL, stdin);
+    // remove trailing newline
+    out[strcspn(out, "\n")] = 0;
+}
+
+void promptErr(char out[], char*str) {
     printf(RED "%s\n >>> " RESET, str);
     fgets(out, VAL, stdin);
     // remove trailing newline

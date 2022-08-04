@@ -18,6 +18,9 @@
 // print a dimmed text
 void printDimmed(char*str);
 
+// prompt a pretty message and output to out in red
+void promptErr(char out[], char*str);
+
 // prompt a pretty message and output to out
 void prompt(char out[], char*str);
 

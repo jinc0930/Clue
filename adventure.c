@@ -115,9 +115,23 @@ int main() {
     addChar(room8, char8, charnum[7]);
     addChar(room9, char9, charnum[8]); 
 
-    //asks for user name 
+    //asks for user name
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple: ");
+    for(;;) {
+        int already_exists = 0;
+        for (size_t i = 0; i < 9; i++){
+            if (strcmp(avatarname, getcharname(chararr[i])) == 0) {
+                already_exists = 1;
+                continue;
+            }
+        };
+        if (already_exists == 1) {
+            promptErr(avatarname, "Name already exists, please input an unique name:");
+        } else {
+            break;
+        }
+    }
     
     struct Character * avatar = makeChar(avatarname);
 
