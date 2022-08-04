@@ -23,7 +23,7 @@ int main() {
     struct Room * room9 = makeroom("bedroom");
     //making arrays for easier manipulation in randomnizing them
     struct Room* roomarr[9] = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
-    struct Room* map[9] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    struct Room* map[9] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     //randomnize rooms
     srand(time(0));
@@ -127,7 +127,7 @@ int main() {
     room6->num +=1;
 
     int intarr1[9]={0,1,2,3,4,5,6,7,8};
-    int intarr2[9]={0,1,2,3,4,5,6,7,8};
+    int intarr2[9]={10,10,10,10,10,10,10,10,10};
     //generate answer
     char* targetRoom = roomarr[rand()%9]->name;
     char* targetItem = itemarr[rand()%9]->name; 
@@ -135,10 +135,10 @@ int main() {
     srand(time(0));
     for (int b = 0; b < 9 ; b++){
         int n = rand()%9;
-        if( intarr2[n] != NULL ){
-            while (intarr2[n] != NULL){
+        if( intarr2[n] != 10 ){
+            while (intarr2[n] != 10){
                 n++;
-                if(n > 8 ){n=0;}
+                if(n > 8){n=0;}
             }
             intarr2[n] = intarr1[b];
         }
@@ -158,9 +158,8 @@ int main() {
         else{
             chararr[intarr2[m]]->id = "accuser";
         }
-        
     }
-    
+
     //set boolean to check win statement
     bool booroom;
     bool booitem;
