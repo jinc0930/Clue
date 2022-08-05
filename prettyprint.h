@@ -15,6 +15,9 @@
 // underdeline
 #define UND     "\x1B[4m"
 
+//bg
+#define BLKHB "\e[0;100m"
+
 // print a dimmed text
 void printDimmed(char*str);
 

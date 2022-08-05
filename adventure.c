@@ -117,7 +117,7 @@ int main() {
 
     //asks for user name
     char avatarname[MAX_LINE];
-    prompt(avatarname, "Welcome, please type your name, keep it short and simple: ");
+    prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
     for(;;) {
         int already_exists = 0;
         for (size_t i = 0; i < 9; i++){
