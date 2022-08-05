@@ -23,11 +23,11 @@ void printDimmed(char*str) {
 }
 
 void promptWithLoc(char out[], char*str, char*loc) {
-    // check if loc is empty
-    if ((loc != NULL) && (loc[0] == '\0')) {
-        printf("\n" BLK "%s\n" BLD BLU ">>> " YEL RESET, str);
+    // check if str is empty
+    if ((str != NULL) && (str[0] == '\0')) {
+        printf("\n" BLD BLU "%s >>> " RESET, loc);
     } else {
-        printf("\n" BLK "%s\n" BLD BLU "%s >>> " YEL RESET, str, loc);
+        printf("\n" BLK "%s\n" BLD BLU "%s >>> " RESET, str, loc);
     }
     fgets(out, VAL, stdin);
     // remove trailing newline

@@ -11,7 +11,7 @@ struct Pool {
   int target_index;
 };
 
-// Create a pool of size 7. Skipping target_index that will be the target answer.
+// Create a pool of size 8. Skipping target_index that will be the target answer.
 struct Pool makePool(unsigned int target_index);
 
 // MUST BE CALLED BEFORE takeRandom(); Take 2 exact same index from the pool randomly.
