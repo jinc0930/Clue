@@ -1,37 +1,31 @@
 #ifndef POOL_H
 #define POOL_H
-#define POOL_SIZE 8
+#define MAX_POOL_SIZE 9
 
 /**
- * Used to track hint indexes (item/chars/rooms)
+ * Used for tracking hints / randomize indexes / etc.
  */
 struct Pool {
-  size_t taken[POOL_SIZE];
-  size_t vec[POOL_SIZE];
-  size_t length;
-  size_t exclude_index;
+  int taken[MAX_POOL_SIZE];
+  int vec[MAX_POOL_SIZE];
+  int length;
+  int exclude_index;
+  int max_get;
 };
 
 /**
- * Create a pool of 8 indexes excluding exclude_index.
- * Used for tracking hints. 
- * An index that was taken 2 times will be removed from the pool.
+ * Create a pool of pool_size indexes excluding exclude_index.
+ * Used for tracking hints / randomize indexes / etc.
+ * An index that was taken max_get times will be removed from the pool.
  */
-struct Pool makePool(size_t exclude_index);
+struct Pool makePool(int exclude_index, int pool_size, int max_get);
  
 /**
- * MUST BE CALLED BEFORE takeFromPool();
- * Pick one index randomly and takes 2 times from the pool,
- * that will be removed from the pool.
- * IMPORTANT: Assumes is never called when pool length is 0 otherwise an error is given
- */
-size_t takeTwoFromPool(struct Pool *pool);
-
-/**
  * Pick one index randomly
- * and remove it from the pool if the index was taken before
- * IMPORTANT: Assumes is never called when pool length is 0 otherwise an error is given
+ * and remove the index if the index was taken >= max_get.
+ * quantity arg increment the counter 
+ * If pool is empty it returns -1
  */
-size_t takeFromPool(struct Pool *pool);
+int poolGet(struct Pool *pool, int quantity);
 
 #endif

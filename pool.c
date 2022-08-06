@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include "pool.h"
 
-struct Pool makePool(size_t exclude_index) {
-	struct Pool pool = { .taken = { 0 }, .length = POOL_SIZE, .exclude_index = exclude_index };
-	size_t r = 0;
-	assert(exclude_index < 9);
-	for (size_t i = 0; i < POOL_SIZE; i++){
+struct Pool makePool(int exclude_index, int pool_size, int max_takes) {
+	struct Pool pool = { .taken = { 0 }, .length = pool_size, .max_get = max_takes, .exclude_index = exclude_index };
+	int r = 0;
+	// ensure exclude_index is within the pool size;
+	assert(exclude_index < MAX_POOL_SIZE);
+	for (int i = 0; i < pool_size; i++){
 		if (i == exclude_index) continue;
 		pool.vec[r++] = i;
 		pool.length += 1;
@@ -15,30 +16,15 @@ struct Pool makePool(size_t exclude_index) {
 	return pool;
 }
 
-size_t takeTwoFromPool(struct Pool *pool) {
-	// this function requires pool length > 0;
-	assert(pool->length > 0);
-	size_t take = rand() % pool->length;
-  size_t ref = pool->vec[take];
-	// assumes takeTwoFromPool() is called before takeFromPool();
-	assert(pool->taken[ref] == 0);
-	// shift pool elements to the left
-	for(size_t i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
-	pool->length -= 1;
-	pool->taken[ref] += 2;
-	return ref;
-}
-
-size_t takeFromPool(struct Pool *pool) {
-	// this function require pool length > 0;
-	assert(pool->length > 0);
-	size_t take = rand() % pool->length;
-  size_t ref = pool->vec[take];
-	if (pool->taken[ref] > 1)  {
+int poolGet(struct Pool *pool, int quantity) {
+	// this function requires pool to be length > 0;
+	if (pool->length <= 0) return -1; 
+	int take = rand() % pool->length;
+  	int ref = pool->vec[take];
+	if (pool->taken[ref] += quantity >= pool->max_get)  {
 		// shift pool elements to the left
-		for(size_t i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
-		pool->length -= 1;
-	};
-	pool->taken[ref] += 1;
+		for(int i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
+	}
+	pool->length -= 1;
 	return ref;
 }
