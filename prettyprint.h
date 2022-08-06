@@ -1,4 +1,6 @@
 #include <string.h>
+#ifndef PRETTYPRINT_H
+#define PRETTYPRINT_H
 // colors
 #define BLK     "\x1B[30m"
 #define RED     "\x1B[31m"
@@ -44,3 +46,5 @@ void rowBorder();
 
 // print all the rooms
 void printMap(struct Room* map[9]);
+
+#endif

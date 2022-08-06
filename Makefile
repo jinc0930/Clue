@@ -1,2 +1,2 @@
 final:
-	gcc utils.c character.c rooms.c items.c prettyprint.c adventure.c -o clue
+	gcc utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c -o clue
