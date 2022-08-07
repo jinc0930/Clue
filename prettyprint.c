@@ -69,9 +69,11 @@ void printMap(struct Room* map[9]) {
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
         printRow(getRoomName(map[i]), getRoomName(map[i+1]), getRoomName(map[i+2]));
-        for (size_t j = 0; j < 3; j++)
-        {
-            printRow(getcharname(map[i]->chara[j]), getcharname(map[i+1]->chara[j]), getcharname(map[i+2]->chara[j]));
+        for (size_t j = 0; j < 3; j++) {
+            printRow(
+                map[i]->chara[j] != NULL ? map[i]->chara[j]->name : NULL,
+                map[i+1]->chara[j] != NULL ? map[i+1]->chara[j]->name : NULL,
+                map[i+2]->chara[j] != NULL ? map[i+2]->chara[j]->name : NULL);
         }
         rowBreak();
     }
