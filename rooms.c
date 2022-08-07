@@ -1,5 +1,6 @@
 #include "rooms.h"
 #include "items.h"
+#include "character.h"
 #include <stdbool.h>
 #include <string.h>
 
@@ -136,27 +137,28 @@ void removeItem(struct Room* room, struct Item* item){
 //addChar(room:Room*, character:Character*,num:int):void
 //takes in room, character and integer num, adds given character to the given room
 //num is used to keep track of total number of characters in the room
-void addChar(struct Room * room, struct Character* character,int num){
+void addChar(struct Room * room, struct Character* character,int *num){
   bool in = false;
-  for (int n =0;n<6;n++){
-    if(room -> chara[n] = character){
-      in =true;
+  for (int n =0; n<6; n++){
+    struct Character *c = room->chara[n];
+    if(c != NULL && strcmp(c->name, character->name) == 0) {
+      in = true;
     }
   }
-  if(in = false){
-    room -> chara[num] = character;
-    num++;
+  if(in == false){
+    room -> chara[*num] = character;
+    *num++;
   }
 }
 
 //removeChar(room:Room*,character:Character*,num:int):void
 //takes in room, character and integer num, removes given character to the given room
 //num is used to keep track of total number of characters in the room
-void removeChar(struct Room* room, struct Character* character, int num){
-  for(int i=0;i<num;++i){
+void removeChar(struct Room* room, struct Character* character, int *num){
+  for(int i=0; i < *num;++i){
     if(room->chara[i] == character){
       room->chara[i]=NULL;
-      num--;
+      *num--;
       for(int j=i;j<5;j++){
         room->chara[j]=room->chara[j+1];
       }

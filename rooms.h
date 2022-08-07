@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "character.h"
 #ifndef ROOMS_H
 #define ROOMS_H
 #define MAX_CHARACTER 6
@@ -38,10 +39,10 @@ void freeRoom(struct Room* room);
 
 //adding
 void additem(struct Room* room,struct Item* item);
-void addChar(struct Room * room, struct Character* character, int num);
+void addChar(struct Room * room, struct Character* character, int *num);
 
 //removing
-void removeChar(struct Room* room, struct Character* character, int num);
+void removeChar(struct Room* room, struct Character* character, int *num);
 void removeItem(struct Room* room, struct Item *item);
 
 #endif

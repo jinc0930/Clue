@@ -105,15 +105,15 @@ int main() {
     setloc(char7, room7);
     setloc(char8, room8);
     setloc(char9, room9);
-    addChar(room1, char1, charnum[0]);
-    addChar(room2, char2, charnum[1]);
-    addChar(room3, char3, charnum[2]);
-    addChar(room4, char4, charnum[3]);
-    addChar(room5, char5, charnum[4]);
-    addChar(room6, char6, charnum[5]);
-    addChar(room7, char7, charnum[6]);
-    addChar(room8, char8, charnum[7]);
-    addChar(room9, char9, charnum[8]); 
+    addChar(room1, char1, &charnum[0]);
+    addChar(room2, char2, &charnum[1]);
+    addChar(room3, char3, &charnum[2]);
+    addChar(room4, char4, &charnum[3]);
+    addChar(room5, char5, &charnum[4]);
+    addChar(room6, char6, &charnum[5]);
+    addChar(room7, char7, &charnum[6]);
+    addChar(room8, char8, &charnum[7]);
+    addChar(room9, char9, &charnum[8]); 
 
     //asks for user name
     char avatarname[MAX_LINE];
@@ -134,12 +134,10 @@ int main() {
     }
     
     struct Character * avatar = makeChar(avatarname);
-
     //spawn avatar in a room with userinputed name
     setloc(avatar, room6);
-    addChar(room6, avatar, charnum[5]);
-    room6->num +=1;
-
+    room6->chara[0] = avatar;
+    // room6->num +=1;
     int intarr1[9]={0,1,2,3,4,5,6,7,8};
     int intarr2[9]={10,10,10,10,10,10,10,10,10};
     //generate answer
@@ -178,7 +176,7 @@ int main() {
     bool booroom;
     bool booitem;
     bool boochara;
-    printMap(map);
+    // printMap(map);
     //main game portion with clue counter
     int clue = 0;
     while( clue <= 10 ){
@@ -262,6 +260,7 @@ int main() {
             if(getloc(avatar)->West!=NULL){
                 printf("To your west is %s\n", getloc(avatar)->West->name);
             }
+            printMap(map);
         }
         //if command was go
         else if(startsWith(cmd,"go")!=0){
@@ -279,9 +278,9 @@ int main() {
                 }
                 //otherwise...
                 else{  
-                    removeChar(curroom, avatar, curroom->num);
+                    removeChar(curroom, avatar, &curroom->num);
                     setloc(avatar, target);
-                    addChar(target,avatar,target->num);
+                    addChar(target,avatar,&target->num);
                 }
             }
             else if(strcmp(direction, "south")==0){
@@ -290,9 +289,9 @@ int main() {
                     printf("there is no path in that direction\n");
                 }
                 else{  
-                    removeChar(curroom, avatar, curroom->num);
+                    removeChar(curroom, avatar, &curroom->num);
                     setloc(avatar, target);
-                    addChar(target,avatar,target->num);
+                    addChar(target,avatar,&target->num);
                 }
             }
             else if(strcmp(direction,"west")==0){
@@ -301,9 +300,9 @@ int main() {
                     printf("there is no path in that direction\n");
                 }
                 else{  
-                    removeChar(curroom, avatar, curroom->num);
+                    removeChar(curroom, avatar, &curroom->num);
                     setloc(avatar, target);
-                    addChar(target,avatar,target->num);
+                    addChar(target,avatar,&target->num);
                 }
             }
             else if(strcmp(direction,"east")==0){
@@ -312,9 +311,9 @@ int main() {
                     printf("there is no path in that direction\n");
                 }
                 else{  
-                    removeChar(curroom, avatar, curroom->num);
+                    removeChar(curroom, avatar, &curroom->num);
                     setloc(avatar, target);
-                    addChar(target,avatar,target->num);
+                    addChar(target,avatar,&target->num);
                 }
             }
             else{
@@ -524,7 +523,7 @@ int main() {
                                     break;
                                 }
                             }
-                            addChar(curroom,chararr[z],charnum[temp]);
+                            addChar(curroom,chararr[z],&charnum[temp]);
                             curroom->num+=1;
                             //after adding character to the room, check if it's the correct guess
                             if(strcmp(des,targetChar)==0){
