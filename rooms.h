@@ -13,6 +13,7 @@ struct Room {
     struct Room * East;
     struct Room * West;
     struct Item * itemList;
+    struct Item * itemListHead;
     struct Character* chara[MAX_CHARACTER];
 };
 

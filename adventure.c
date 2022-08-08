@@ -210,43 +210,45 @@ int main() {
             int h=0;
             //get all characters in the room
             printf("with: ");
-            for(int z = 0;z<9;z++){
-                if(strcmp(getloc(chararr[z])->name, curroom->name)==0){
-                    printf("%s ", getcharname(chararr[z]));
+            for (size_t i = 0; i < MAX_CHARACTER; i++){
+                struct Character *ch = curroom->chara[i];
+                if (ch != NULL) {
+                    printf("%s ", getcharname(ch));
                     h = 1;
                 }
-            }
+            };
             if(h!=1){
                 printf("no one");
             }
             printf("\n");
             //items in the room
-            struct Item * temp = getloc(avatar)->itemList;
-            if(getloc(avatar)->itemList!=NULL){
+            struct Item * temp = avatar->location->itemList;
+            // struct Item * prev;
+            if(temp!=NULL){
                 printf("the room has item(s): ");
-                while((getloc(avatar)->itemList)!=NULL){
-                  printf("%s ",(getloc(avatar)->itemList->name));
-                  getloc(avatar)->itemList = getloc(avatar)->itemList->next;
+                while(temp!=NULL){
+                  printf("%s /", temp->name);
+                  temp = temp->next;
                 }
                 printf("\n");
             }
             else{
                 printf("with no items in the room\n");
             }
-            getloc(avatar)->itemList = temp;
+            // getloc(avatar)->itemList = temp;
             //inventory
             if((avatar->inventory) ==NULL){
                   printf("nothing in your inventory\n");
             }
             else{
                 printf("items in your inventory include: ");
-                struct Item* original = avatar->inventory;
-                while (avatar->inventory!=NULL){
-                     printf("%s ",avatar->inventory->name);
-                     avatar->inventory = avatar->inventory->next;
+                struct Item * temp = avatar->inventory;
+                while (temp!=NULL){
+                     printf("%s ",temp->name);
+                     temp = temp->next;
                 }
                 printf("\n");
-                avatar->inventory = original;
+                // avatar->inventory = temp;
             }
             //print rooms in every direction 
             if (getloc(avatar)->North != NULL){
@@ -450,11 +452,11 @@ int main() {
                 boochara = false;
                 //check if room matches the target room
                 if(strcmp(getloc(avatar)->name, targetRoom)==0){
-                    printf("ROOM MATCH\n");
+                    printSucc("ROOM MATCH");
                     booroom = true;
                 }
                 else{
-                    printErr("WRONG ROOM\n");
+                    printErr("WRONG ROOM");
                 }
                 //check if item matches (in the room or on the character)
                 struct Item * inv = avatar ->inventory;
@@ -477,11 +479,11 @@ int main() {
                 }
                 //if item is in either room or inventory
                 if(temp){
-                    printf("ITEM MATCH\n");
+                    printSucc("ITEM MATCH");
                     booitem = true;
                 }
                 else{
-                    printf("WRONG ITEM\n");
+                    printErr("WRONG ITEM");
                 }
                 //checked validity above, now check if already in room
                 int h = 0;
@@ -491,7 +493,7 @@ int main() {
                         //the desired character is already in the room
                         if(strcmp(getcharname(chararr[z]),des)==0){
                             if(strcmp(targetChar,des)==0){
-                                printf("CHARACTER MATCH\n");
+                                printSucc("CHARACTER MATCH");
                                 boochara = true;
                                 h=1;
                             }
@@ -511,11 +513,11 @@ int main() {
                             moveChar(chararr[z]->location, curroom, chararr[z]);
                             //after adding character to the room, check if it's the correct guess
                             if(strcmp(des,targetChar)==0){
-                                printf("CHARACTER MATCH\n");
+                                printSucc("CHARACTER MATCH");
                                 boochara = true;
                             }
                             else{
-                                printf("WRONG CHARACTER\n");
+                                printSucc("WRONG CHARACTER");
                             }
                         }
                     }

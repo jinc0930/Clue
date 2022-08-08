@@ -91,9 +91,9 @@ void freeRoom(struct Room* room){
 //takes room and item as input, adds given item to given room's item list
 void additem(struct Room* room, struct Item* item){
   //if list is empty
-  if(room -> itemList == NULL){
-    room -> itemList = item;
-    item->next =NULL;
+  if(room -> itemListHead == NULL){
+    room->itemList = item;
+    item->next = NULL;
   }
   //if list is not empty
   else{
@@ -101,6 +101,7 @@ void additem(struct Room* room, struct Item* item){
     setNext(item, i);
     room->itemList = item;
   }
+  room->itemListHead = room->itemList;
 }
 
 //removeItem(room:Room*,item:Item*):void
