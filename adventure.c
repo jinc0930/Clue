@@ -227,7 +227,7 @@ int main() {
             if(temp!=NULL){
                 printf("the room has item(s): ");
                 while(temp!=NULL){
-                  printf("%s /", temp->name);
+                  printf("%s / ", temp->name);
                   temp = temp->next;
                 }
                 printf("\n");
@@ -244,7 +244,7 @@ int main() {
                 printf("items in your inventory include: ");
                 struct Item * temp = avatar->inventory;
                 while (temp!=NULL){
-                     printf("%s ",temp->name);
+                     printf("%s / ",temp->name);
                      temp = temp->next;
                 }
                 printf("\n");

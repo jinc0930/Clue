@@ -42,9 +42,20 @@ void setloc(struct Character* character, struct Room* room){
 //takes character and item as input, add the item to the inventory of the character; returns 1 if item is added and 0 if inventory is full
 int add(struct Character* character, struct Item*item) {
     if (character->inventoryItems >= 3) return 0;
-    setNext(item, character->inventory);
+    // somenthing
+    if (character->inventory == NULL) {
+        character->inventory = item;
+    } else {
+        struct Item *temp = character->inventory;
+        for(;;) {
+            if (temp->next == NULL) {
+                temp->next = item;
+                break;
+            }
+            temp = temp->next;
+        }
+    }
     character->inventoryItems++;
-    character->inventory = item;
     return 1;
 }
 
