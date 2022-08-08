@@ -136,7 +136,9 @@ int main() {
     struct Character * avatar = makeChar(avatarname);
     //spawn avatar in a room with userinputed name
     setloc(avatar, room6);
-    room6->chara[0] = avatar;
+    chararr[4] = avatar; // replace
+    room6->chara[0] = avatar; // replace
+    
     int intarr1[9]={0,1,2,3,4,5,6,7,8};
     int intarr2[9]={10,10,10,10,10,10,10,10,10};
     //generate answer
