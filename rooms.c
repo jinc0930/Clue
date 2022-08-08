@@ -16,11 +16,7 @@ struct Room* makeroom(char* roomname){
   room -> chara[0] = NULL;
   room -> chara[1] = NULL;
   room -> chara[2] = NULL;
-  room -> chara[3] = NULL;
-  room -> chara[4] = NULL;
-  room -> chara[5] = NULL;
   room -> itemList = NULL;
-  room -> num = 1;
   return room;
 }
 
@@ -134,34 +130,64 @@ void removeItem(struct Room* room, struct Item* item){
   }
 }
 
-//addChar(room:Room*, character:Character*,num:int):void
-//takes in room, character and integer num, adds given character to the given room
-//num is used to keep track of total number of characters in the room
-void addChar(struct Room * room, struct Character* character,int *num){
-  bool in = false;
-  for (int n =0; n<6; n++){
-    struct Character *c = room->chara[n];
-    if(c != NULL && strcmp(c->name, character->name) == 0) {
-      in = true;
+//addChar(room:Room*, character:Character*):int
+//takes in room, character, adds given character to the given room
+//return -1 if there's no available slots in the room otherwise return the index slot
+int addChar(struct Room * room, struct Character* character){
+  for (size_t i = 0; i < MAX_CHARACTER; i++){
+    struct Character *c = room->chara[i];
+     if (c == NULL) {
+      room->chara[i] = character;
+      character->location = room;
+      return i;
     }
   }
-  if(in == false){
-    room -> chara[*num] = character;
-    *num++;
+  // no slots available
+  return -1;
+}
+
+//move character from one slot to another room
+//return -1 if there's no available slots in the room otherwise return the index slot
+int moveChar(struct Room * from, struct Room * to, struct Character* character){
+  int slot = addChar(to, character);
+  if (slot > -1) {
+    for (size_t i = 0; i < MAX_CHARACTER; i++){
+      struct Character *c = from->chara[i];
+      if(c != NULL && c->name == character->name){
+        from->chara[i] = NULL;
+        character->location = to;
+        break;
+      }
+    }
+    return slot;
+  }
+  // no slots available
+  return -1;
+}
+
+//removeChar(room:Room*,character:Character*):void
+//takes in room, character and integer num, removes given character to the given room
+void removeChar(struct Room* room, struct Character* character) {
+  for (size_t i = 0; i < MAX_CHARACTER; i++){
+    struct Character *c = room->chara[i];
+    if(c != NULL && c->name == character->name){
+      room->chara[i] = NULL;
+      character->location = NULL;
+      // for(int j=i; j<MAX_CHARACTER; j++){
+      //   room->chara[j]=room->chara[j+1];
+      // }
+      break;
+    }
   }
 }
 
-//removeChar(room:Room*,character:Character*,num:int):void
-//takes in room, character and integer num, removes given character to the given room
-//num is used to keep track of total number of characters in the room
-void removeChar(struct Room* room, struct Character* character, int *num){
-  for(int i=0; i < *num;++i){
-    if(room->chara[i] == character){
-      room->chara[i]=NULL;
-      *num--;
-      for(int j=i;j<5;j++){
-        room->chara[j]=room->chara[j+1];
-      }
-    }
+// how many chars in the room
+// no optimization since room size is 3
+int roomCharLength(struct Room* room) {
+  int len = 0;
+  for (size_t i = 0; i < MAX_CHARACTER; i++){
+    struct Character *c = room->chara[i];
+     if (c != NULL) len += 1;
   }
+  return len;
 }

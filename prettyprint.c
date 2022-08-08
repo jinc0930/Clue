@@ -18,6 +18,14 @@ void promptErr(char out[], char*str) {
     out[strcspn(out, "\n")] = 0;
 }
 
+void printErr(char*str) {
+    printf(BLD RED "%s\n" RESET, str);
+}
+
+void printSucc(char*str) {
+    printf(BLD GRN "%s\n" RESET, str);
+}
+
 void printDimmed(char*str) {
     printf(BLK "%s", str);
 }
@@ -42,14 +50,13 @@ void cell(char *dest, char *str) {
     if (str != NULL) {
         strncpy(dest, str, 18);
     } else {
-        strncpy(dest, " ", 18);
+        strncpy(dest, "                 ", 18);
     }
     size_t len = strnlen(dest, 18);
     for (size_t i = len; i < 18; i++) {
         dest[i] = ' ';
     };
     dest[18] = '\0';
-
 }
 
 void printRow(char *col1, char *col2, char *col3) {

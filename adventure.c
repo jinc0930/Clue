@@ -82,7 +82,6 @@ int main() {
     struct Character * char9 = makeChar("joey");
     //arr for easier access later
     struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
-    int charnum[9] = {0,0,0,0,0,0,0,0,0};
 
     //add item to rooms
     additem(room1, item1);
@@ -105,15 +104,16 @@ int main() {
     setloc(char7, room7);
     setloc(char8, room8);
     setloc(char9, room9);
-    addChar(room1, char1, &charnum[0]);
-    addChar(room2, char2, &charnum[1]);
-    addChar(room3, char3, &charnum[2]);
-    addChar(room4, char4, &charnum[3]);
-    addChar(room5, char5, &charnum[4]);
-    addChar(room6, char6, &charnum[5]);
-    addChar(room7, char7, &charnum[6]);
-    addChar(room8, char8, &charnum[7]);
-    addChar(room9, char9, &charnum[8]); 
+    
+    addChar(room1, char1);
+    addChar(room2, char2);
+    addChar(room3, char3);
+    addChar(room4, char4);
+    addChar(room5, char5);
+    addChar(room6, char6);
+    addChar(room7, char7);
+    addChar(room8, char8);
+    addChar(room9, char9); 
 
     //asks for user name
     char avatarname[MAX_LINE];
@@ -137,7 +137,6 @@ int main() {
     //spawn avatar in a room with userinputed name
     setloc(avatar, room6);
     room6->chara[0] = avatar;
-    // room6->num +=1;
     int intarr1[9]={0,1,2,3,4,5,6,7,8};
     int intarr2[9]={10,10,10,10,10,10,10,10,10};
     //generate answer
@@ -275,34 +274,24 @@ int main() {
                 //if invalid direction
                 if(getNorth(curroom)==NULL){
                     printf("there is no path in that direction\n");
-                }
-                //otherwise...
-                else{  
-                    removeChar(curroom, avatar, &curroom->num);
-                    setloc(avatar, target);
-                    addChar(target,avatar,&target->num);
+                } else {  
+                    if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                 }
             }
             else if(strcmp(direction, "south")==0){
                 target = getSouth(curroom);
                 if(getSouth(curroom)==NULL){
                     printf("there is no path in that direction\n");
-                }
-                else{  
-                    removeChar(curroom, avatar, &curroom->num);
-                    setloc(avatar, target);
-                    addChar(target,avatar,&target->num);
+                } else {  
+                    if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                 }
             }
             else if(strcmp(direction,"west")==0){
                 target = getWest(curroom);
                 if(getWest(curroom)==NULL){
                     printf("there is no path in that direction\n");
-                }
-                else{  
-                    removeChar(curroom, avatar, &curroom->num);
-                    setloc(avatar, target);
-                    addChar(target,avatar,&target->num);
+                } else {
+                    if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                 }
             }
             else if(strcmp(direction,"east")==0){
@@ -311,9 +300,7 @@ int main() {
                     printf("there is no path in that direction\n");
                 }
                 else{  
-                    removeChar(curroom, avatar, &curroom->num);
-                    setloc(avatar, target);
-                    addChar(target,avatar,&target->num);
+                    if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                 }
             }
             else{
@@ -447,10 +434,10 @@ int main() {
                 }
             }
             if(rep == 0){
-                printf("not a valid chracter\n");
+                printErr("not a valid chracter");
             }
-            else if((curroom->num)>=3){
-                printf("too many characters in this room already\n");
+            else if(roomCharLength(curroom) >= MAX_CHARACTER){
+                printErr("too many characters in this room already");
             }
             //they do input a valid character
             else{ 
@@ -465,7 +452,7 @@ int main() {
                     booroom = true;
                 }
                 else{
-                    printf("WRONG ROOM\n");
+                    printErr("WRONG ROOM\n");
                 }
                 //check if item matches (in the room or on the character)
                 struct Item * inv = avatar ->inventory;
@@ -523,8 +510,7 @@ int main() {
                                     break;
                                 }
                             }
-                            addChar(curroom,chararr[z],&charnum[temp]);
-                            curroom->num+=1;
+                            addChar(curroom,chararr[z]);
                             //after adding character to the room, check if it's the correct guess
                             if(strcmp(des,targetChar)==0){
                                 printf("CHARACTER MATCH\n");

@@ -3,7 +3,7 @@
 #include "character.h"
 #ifndef ROOMS_H
 #define ROOMS_H
-#define MAX_CHARACTER 6
+#define MAX_CHARACTER 3
 
 //room structure
 struct Room {
@@ -13,7 +13,6 @@ struct Room {
     struct Room * East;
     struct Room * West;
     struct Item * itemList;
-    int num;
     struct Character* chara[MAX_CHARACTER];
 };
 
@@ -39,10 +38,13 @@ void freeRoom(struct Room* room);
 
 //adding
 void additem(struct Room* room,struct Item* item);
-void addChar(struct Room * room, struct Character* character, int *num);
+int addChar(struct Room * room, struct Character* character);
+int moveChar(struct Room * from, struct Room * to, struct Character* character);
 
 //removing
-void removeChar(struct Room* room, struct Character* character, int *num);
+void removeChar(struct Room* room, struct Character* character);
 void removeItem(struct Room* room, struct Item *item);
 
+
+int roomCharLength(struct Room* room);
 #endif

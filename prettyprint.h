@@ -47,4 +47,9 @@ void rowBorder();
 // print all the rooms
 void printMap(struct Room* map[9]);
 
+// print a new line error
+void printErr(char*str);
+
+// print a new line success
+void printSucc(char*str);
 #endif
