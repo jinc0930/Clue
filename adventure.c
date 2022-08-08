@@ -498,10 +498,6 @@ int main() {
                     //valid character, but not in the room
                     if(h!=1){
                         if(strcmp(getcharname(chararr[z]),des)==0){
-                            //check where the called character is and bring character in current room
-                            struct Room* position = getloc(chararr[z]);
-                            //set character to current room
-                            setloc(chararr[z], curroom);
                             //check where character is on the character array
                             int temp = 0;
                             for(int v = 0; v<9;v++){
@@ -510,7 +506,7 @@ int main() {
                                     break;
                                 }
                             }
-                            addChar(curroom,chararr[z]);
+                            moveChar(chararr[z]->location, curroom, chararr[z]);
                             //after adding character to the room, check if it's the correct guess
                             if(strcmp(des,targetChar)==0){
                                 printf("CHARACTER MATCH\n");
