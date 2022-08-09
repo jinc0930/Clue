@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "pool.h"
 
 struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_indexes[], int exclude_indexes_size) {
@@ -9,11 +10,17 @@ struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_i
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
 	for (int i = 0; i < pool_desired_size; i++){
+		bool include = true;
 		for(int j = 0; j < exclude_indexes_size; j++){
-			if(exclude_indexes[j] == i) continue;
+			if(exclude_indexes[j] == i) {
+				include = false;
+				break;
+			};
 		}
-		pool.vec[r++] = i;
-		pool.length += 1;
+		if (include) {
+			pool.vec[r++] = i;
+			pool.length += 1;
+		}
 	}
 	return pool;
 }

@@ -106,6 +106,7 @@ int main() {
     int avatarIdx = rand()%9;
     struct Character * avatar = chararr[avatarIdx];
     avatar->name = avatarname;
+    avatar->id = "avatar";
 
     // pool for distribution of items and chars
     struct Pool poolRoom = makePool(9, 1);
@@ -125,6 +126,8 @@ int main() {
         // add location to the room
         setloc(charChosen, roomarr[i]);
     }
+
+    chararr[avatarIdx]->location->visited = true;
     // exclude avatar
     int exclude[] = {avatarIdx};
 
@@ -133,8 +136,9 @@ int main() {
     struct Pool poolHintsRoom = makePool(9, 2);
     struct Pool poolHintsItem = makePool(9, 2);
 
-    //pick the murder (poolHintsChar size = 7)
+    //pick the murderer (poolHintsChar size = 7)
     int murderIdx = poolTake(&poolHintsChar, 2); 
+    chararr[murderIdx]->id = "murderer";
 
     //generate answer
     char* targetChar = chararr[murderIdx]->name;
@@ -169,7 +173,7 @@ int main() {
         int excludes[] = {avatarIdx, idx};
         // make a new pool excluding current character and player
         struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
-        struct Character * accused = chararr[poolTake(&poolHintsChar, 1)];
+        struct Character * accused = chararr[poolTake(&notMe, 1)];
 
         // todo: set_nice_hint(chararr[idx], itemHint, roomHint, accused);
     }
@@ -180,7 +184,7 @@ int main() {
     // make a new pool excluding murder and player
     int excludesMurd[] = {avatarIdx, murderIdx};
     struct Pool notMe = makePoolExcluding(9, 1, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
-    struct Character * accused = chararr[poolTake(&poolHintsChar, 1)];
+    struct Character * accused = chararr[poolTake(&notMe, 1)];
     
     // todo: set_nice_hint(chararr[murderIdx], itemHint, roomHint, accused);
 
@@ -322,6 +326,7 @@ int main() {
                     printf("there is no path in that direction\n");
                 } else {  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
+                    target->visited = true;
                 }
             }
             else if(strcmp(direction, "south")==0){
@@ -330,6 +335,7 @@ int main() {
                     printf("there is no path in that direction\n");
                 } else {  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
+                    target->visited = true;
                 }
             }
             else if(strcmp(direction,"west")==0){
@@ -338,6 +344,7 @@ int main() {
                     printf("there is no path in that direction\n");
                 } else {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
+                    target->visited = true;
                 }
             }
             else if(strcmp(direction,"east")==0){
@@ -347,6 +354,7 @@ int main() {
                 }
                 else{  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
+                    target->visited = true;
                 }
             }
             else{

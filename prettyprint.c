@@ -58,13 +58,15 @@ void cell(char *dest, char *str) {
     };
     dest[18] = '\0';
 }
+void printCell(char *col, char *modifiers) {
+    char c[18];
+    cell(c, col);
+    printf(BLK "|" RESET);
+    printf("%s" " %s " RESET, modifiers, c);
+}
 
-void printRow(char *col1, char *col2, char *col3) {
-    char c1[18], c2[18], c3[18];
-    cell(c1, col1);
-    cell(c2, col2);
-    cell(c3, col3);
-    printf(BLK "|" RESET " %s "BLK "|" RESET " %s "BLK "|" RESET " %s "BLK "|" RESET "\n", c1, c2, c3);
+void endCells() {
+    printf(BLK "|" RESET "\n");
 }
 
 void rowBreak() {
@@ -75,12 +77,21 @@ void rowBreak() {
 void printMap(struct Room* map[9]) {
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
-        printRow(getRoomName(map[i]), getRoomName(map[i+1]), getRoomName(map[i+2]));
         for (size_t j = 0; j < 3; j++) {
-            printRow(
-                map[i]->chara[j] != NULL ? map[i]->chara[j]->name : NULL,
-                map[i+1]->chara[j] != NULL ? map[i+1]->chara[j]->name : NULL,
-                map[i+2]->chara[j] != NULL ? map[i+2]->chara[j]->name : NULL);
+            if (isAvatarInside(map[i+j])) printCell(map[i+j]->name, BLD CYN);
+            else printCell(map[i+j]->name, BLD);
+        }
+        endCells();
+        for (size_t j = 0; j < 3; j++) {
+            for (size_t k = 0; k < 3; k++) {
+                struct Character * c = map[i+k]->chara[j];
+                if (c != NULL && strcmp(c->id, "avatar") == 0) {
+                    printCell(c->name, CYN);
+                } else {
+                    printCell(c != NULL ? c->name : NULL, "");
+                }
+            }
+            endCells();
         }
         rowBreak();
     }

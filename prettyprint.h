@@ -38,8 +38,11 @@ void describe(char *cmd, char *description);
 // formatted string cell/room to be used
 void cell(char *dest, char *str);
 
+// finish current row
+void endCells();
+
 // print a row with 3 columns
-void printRow(char *col1, char *col2, char *col3);
+void printCell(char *col, char *modifiers);
 
 // print a border for header/footer/in between
 void rowBorder();

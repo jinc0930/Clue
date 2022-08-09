@@ -191,3 +191,11 @@ int roomCharLength(struct Room* room) {
   }
   return len;
 }
+
+bool isAvatarInside(struct Room* room) {
+  for (size_t i = 0; i < MAX_CHARACTER; i++){
+    struct Character *c = room->chara[i];
+     if (c != NULL && c->id != NULL && strcmp(c->id, "avatar") == 0) return true;
+  }
+  return false;
+}

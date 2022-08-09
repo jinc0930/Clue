@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "character.h"
 #ifndef ROOMS_H
 #define ROOMS_H
@@ -14,6 +15,7 @@ struct Room {
     struct Room * West;
     struct Item * itemList;
     struct Character* chara[MAX_CHARACTER];
+    bool visited;
 };
 
 //makeroom
@@ -35,6 +37,9 @@ void setWest(struct Room* room,struct Room* newroom);
 
 //freeroom
 void freeRoom(struct Room* room);
+
+//checks
+bool isAvatarInside(struct Room * room);
 
 //adding
 void additem(struct Room* room,struct Item* item);
