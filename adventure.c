@@ -85,6 +85,18 @@ int main() {
     //arr for easier access later
     struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
 
+    char instructions[MAX_LINE];
+    prompt(instructions, "First time playing? y/n");
+
+    if(strcmp(instructions,"y")==0){
+        printf("Welcome! This is a game of clue!\nThe game begins by asking user to input their name, and sets given name as the avatar name.");
+        printf("Then, it asks for user to input commands for gameplay, there are many commands, type help to view a list of them.\n");
+        printf("The game will end when the user wins or loses, the user can win by guessing the answer correctly, which consist of the correct room, murder weapon, and muderer.\n");
+        printf("The 8 npcs spawned randomly will give out hints to the player.\n");
+        printf("There are two types of npcs, the hint givers gives out three guarenteed accurate hints that eliminates the suspision while the accusers prompt suspision on possible room, item and person, however - these accusassions are not guarenteed to be correct.\n");
+        printf("If the user fails to guess all three correctly with one clue call, they can try again - when clue is called at the eleventh time, the game will end. \n");
+    }
+
     //asks for user name
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
