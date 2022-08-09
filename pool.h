@@ -6,26 +6,31 @@
  * Used for tracking hints / randomize indexes / etc.
  */
 struct Pool {
-  int taken[MAX_POOL_SIZE];
+  int take_counter[MAX_POOL_SIZE];
   int vec[MAX_POOL_SIZE];
   int length;
-  int exclude_index;
-  int max_get;
+  int max_take;
 };
 
 /**
- * Create a pool of pool_size indexes excluding exclude_index.
+ * Create a pool of pool_desired_size indexes excluding exclude_indexes[].
+ * Final length will be pool_desired_size - lenght of exclude_indexes[].
  * Used for tracking hints / randomize indexes / etc.
- * An index that was taken max_get times will be removed from the pool.
+ * An index that was taken max_take times will be removed from the pool.
  */
-struct Pool makePool(int exclude_index, int pool_size, int max_get);
- 
+struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_indexes[], int exclude_indexes_size);
+
+// Convenient method for makePoolExcluding() to create a pool without excluding
+struct Pool makePool(int pool_desired_size, int max_take);
+
 /**
- * Pick one index randomly
- * and remove the index if the index was taken >= max_get.
- * quantity arg increment the counter 
+ * Pick one index randomly and remove the index if the index was taken >= max_take.
+ * Increment counter by quantity
  * If pool is empty it returns -1
  */
-int poolGet(struct Pool *pool, int quantity);
+int poolTake(struct Pool *pool, int quantity_take);
 
+
+// Choose one index randomly, but it won't remove from the pool and it won't count as take;
+int poolChoose(struct Pool *pool);
 #endif

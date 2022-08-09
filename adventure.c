@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "character.h"
 #include "items.h"
+#include "pool.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +12,8 @@
 #define MAX_LINE 100
 
 int main() {
+    // a random seed
+    srand(time(0));
     //make nine rooms
     struct Room * room1 = makeroom("kitchen");
     struct Room * room2 = makeroom("hall");
@@ -26,7 +29,6 @@ int main() {
     struct Room* map[9] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     //randomnize rooms
-    srand(time(0));
     for (int i = 0; i < 9 ; i++){
         int j = rand()%9;
         if( map[j] != NULL ){
@@ -83,38 +85,6 @@ int main() {
     //arr for easier access later
     struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
 
-    //add item to rooms
-    additem(room1, item1);
-    additem(room2, item2);
-    additem(room3, item3);
-    additem(room4, item4);
-    additem(room5, item5);
-    additem(room6, item6);
-    additem(room7, item7);
-    additem(room8, item8);
-    additem(room9, item9);
-
-    //set chracter locations
-    setloc(char1, room1);
-    setloc(char2, room2);
-    setloc(char3, room3);
-    setloc(char4, room4);
-    setloc(char5, room5);
-    setloc(char6, room6);
-    setloc(char7, room7);
-    setloc(char8, room8);
-    setloc(char9, room9);
-    
-    addChar(room1, char1);
-    addChar(room2, char2);
-    addChar(room3, char3);
-    addChar(room4, char4);
-    addChar(room5, char5);
-    addChar(room6, char6);
-    addChar(room7, char7);
-    addChar(room8, char8);
-    addChar(room9, char9); 
-
     //asks for user name
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
@@ -132,52 +102,124 @@ int main() {
             break;
         }
     }
-    
-    struct Character * avatar = makeChar(avatarname);
-    //spawn avatar in a room with userinputed name
-    setloc(avatar, room6);
-    chararr[4] = avatar; // replace
-    room6->chara[0] = avatar; // replace
-    
-    int intarr1[9]={0,1,2,3,4,5,6,7,8};
-    int intarr2[9]={10,10,10,10,10,10,10,10,10};
-    //generate answer
-    char* targetRoom = roomarr[rand()%9]->name;
-    char* targetItem = itemarr[rand()%9]->name; 
-    //shuffle character array 
-    srand(time(0));
-    for (int b = 0; b < 9 ; b++){
-        int n = rand()%9;
-        if( intarr2[n] != 10 ){
-            while (intarr2[n] != 10){
-                n++;
-                if(n > 8){n=0;}
-            }
-            intarr2[n] = intarr1[b];
-        }
-        else{
-            intarr2[n] = intarr1[b];
-        }
+    // randomly select one character to be the player (avatar)
+    int avatarIdx = rand()%9;
+    struct Character * avatar = chararr[avatarIdx];
+    avatar->name = avatarname;
+
+    // pool for distribution of items and chars
+    struct Pool poolRoom = makePool(9, 1);
+    struct Pool poolChar = makePool(9, 1);
+    struct Pool poolItem = makePool(9, 1);
+
+    for (size_t i = 0; i < 9; i++) {
+        // add a random item to the room
+        additem(roomarr[i], itemarr[poolTake(&poolItem, 1)]);
+
+        // take a random character from pool
+        struct Character * charChosen = chararr[poolTake(&poolChar, 1)];
+        
+        // add character to the room
+        addChar(roomarr[i], charChosen);
+
+        // add location to the room
+        setloc(charChosen, roomarr[i]);
     }
-    //asign murderer
-    char* targetChar = chararr[intarr2[0]]->name;
-    chararr[intarr2[0]]->id = "murderer";
+    // exclude avatar
+    int exclude[] = {avatarIdx};
+
+    // pools for generating: answers and hints
+    struct Pool poolHintsChar = makePoolExcluding(9, 2, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
+    struct Pool poolHintsRoom = makePool(9, 2);
+    struct Pool poolHintsItem = makePool(9, 2);
+
+    //pick the murder (poolHintsChar size = 7)
+    int murderIdx = poolTake(&poolHintsChar, 2); 
+
+    //generate answer
+    char* targetChar = chararr[murderIdx]->name;
+    char* targetRoom = roomarr[poolTake(&poolHintsRoom, 2)]->name;
+    char* targetItem = itemarr[poolTake(&poolHintsItem, 2)]->name;
+
+    // pool for distributing the ids
+    int excludes[] = {murderIdx, avatarIdx};
+    struct Pool poolChars = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0])); // size 7
+
+    // generate 4 hint-givers and set hints
+    for (size_t i = 0; i < 4; i++){
+        int idx = poolTake(&poolChars, 1);
+        chararr[idx]->id = "hint giver";
+
+        // take hints
+        struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
+        struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
+        struct Character * charHint = chararr[poolTake(&poolHintsChar, 1)];
+
+        // todo:
+        // set_nice_hint(chararr[idx], itemHint, roomHint, charHint);
+    }
+    
+    // generate 3 accusers and set hints
+    for (size_t i = 0; i < 3; i++){
+        int idx = poolTake(&poolChars, 1);
+        chararr[idx]->id = "accuser";
+        struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
+        struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
+
+        int excludes[] = {avatarIdx, idx};
+        // make a new pool excluding current character and player
+        struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
+        struct Character * accused = chararr[poolTake(&poolHintsChar, 1)];
+
+        // todo: set_nice_hint(chararr[idx], itemHint, roomHint, accused);
+    }
+
+    // hints for the murderer
+    struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
+    struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
+    // make a new pool excluding murder and player
+    int excludesMurd[] = {avatarIdx, murderIdx};
+    struct Pool notMe = makePoolExcluding(9, 1, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
+    struct Character * accused = chararr[poolTake(&poolHintsChar, 1)];
+    
+    // todo: set_nice_hint(chararr[murderIdx], itemHint, roomHint, accused);
+
+    // (old good way)
+    //shuffle character array
+    // int intarr1[9]={0,1,2,3,4,5,6,7,8};
+    // int intarr2[9]={10,10,10,10,10,10,10,10,10};
+    // for (int b = 0; b < 9 ; b++){
+    //     int n = rand()%9;
+    //     if( intarr2[n] != 10 ){
+    //         while (intarr2[n] != 10){
+    //             n++;
+    //             if(n > 8){n=0;}
+    //         }
+    //         intarr2[n] = intarr1[b];
+    //     }
+    //     else{
+    //         intarr2[n] = intarr1[b];
+    //     }
+    // }
+    // //asign murderer
+    // char* targetChar = chararr[intarr2[0]]->name;
+    // chararr[intarr2[0]]->id = "murderer";
 
     //assign id to all characters, 5 being hint giver and 3 being accuser
-    for(int m=1;m<9;m++){
-        if(m<6){
-            chararr[intarr2[m]]->id = "hint giver";
-        }
-        else{
-            chararr[intarr2[m]]->id = "accuser";
-        }
-    }
+    // for(int m=1;m<9;m++){
+    //     if(m<6){
+    //         chararr[intarr2[m]]->id = "hint giver";
+    //     }
+    //     else{
+    //         chararr[intarr2[m]]->id = "accuser";
+    //     }
+    // }
 
     //set boolean to check win statement
     bool booroom;
     bool booitem;
     bool boochara;
-    // printMap(map);
+    printMap(map);
     //main game portion with clue counter
     int clue = 0;
     while( clue <= 10 ){

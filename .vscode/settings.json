@@ -15,7 +15,12 @@
     "prettyprint.h": "c",
     "typeinfo": "c",
     "*.tcc": "c",
-    "string": "c"
+    "string": "c",
+    "cstdio": "c",
+    "deque": "c",
+    "vector": "c",
+    "functional": "c",
+    "pool.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
