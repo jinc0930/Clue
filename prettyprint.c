@@ -78,8 +78,17 @@ void printMap(struct Room* map[9]) {
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
-            if (isAvatarInside(map[i+j])) printCell(map[i+j]->name, BLD CYN);
-            else printCell(map[i+j]->name, BLD);
+            if (map[i+j]->visited) {
+                if (isInside(map[i+j], "avatar")) {
+                    char checkmark[18];
+                    sprintf(checkmark,"%s *", map[i+j]->name);
+                    printCell(checkmark, BLD CYN);
+                } else {
+                    printCell(map[i+j]->name, BLK);
+                }
+            } else {
+                printCell(map[i+j]->name, BLD);
+            }
         }
         endCells();
         for (size_t j = 0; j < 3; j++) {
@@ -87,6 +96,46 @@ void printMap(struct Room* map[9]) {
                 struct Character * c = map[i+k]->chara[j];
                 if (c != NULL && strcmp(c->id, "avatar") == 0) {
                     printCell(c->name, CYN);
+                } else {
+                    printCell(c != NULL ? c->name : NULL, "");
+                }
+            }
+            endCells();
+        }
+        rowBreak();
+    }
+}
+
+// for testing purposes
+void debugMap(struct Room* map[9]) {
+    puts(BLD "\nDEBUG MAP:" RESET);
+    rowBreak();
+    for (size_t i = 0; i < 9; i = i+3) {
+        for (size_t j = 0; j < 3; j++) {
+            if (map[i+j]->visited) {
+                if (isInside(map[i+j], "avatar")) {
+                    char checkmark[18];
+                    sprintf(checkmark,"%s *", map[i+j]->name);
+                    printCell(checkmark, BLD CYN);
+                } else {
+                    printCell(map[i+j]->name, BLK);
+                }
+            } else {
+                printCell(map[i+j]->name, BLD);
+            }
+        }
+        endCells();
+        for (size_t j = 0; j < 3; j++) {
+            for (size_t k = 0; k < 3; k++) {
+                struct Character * c = map[i+k]->chara[j];
+                if (c != NULL && strcmp(c->id, "avatar") == 0) {
+                    printCell(c->name, CYN);
+                } else if (c != NULL && strcmp(c->id, "murderer") == 0){
+                    printCell(c->name, RED);
+                } else if (c != NULL && strcmp(c->id, "hint giver") == 0){
+                    printCell(c->name, GRN);
+                } else if (c != NULL && strcmp(c->id, "accuser") == 0){
+                    printCell(c->name, YEL);
                 } else {
                     printCell(c != NULL ? c->name : NULL, "");
                 }

@@ -50,6 +50,9 @@ void rowBorder();
 // print all the rooms
 void printMap(struct Room* map[9]);
 
+// debug map for testing purposes
+void debugMap(struct Room* map[9]);
+
 // print a new line error
 void printErr(char*str);
 

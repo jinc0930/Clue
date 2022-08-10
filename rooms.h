@@ -39,7 +39,7 @@ void setWest(struct Room* room,struct Room* newroom);
 void freeRoom(struct Room* room);
 
 //checks
-bool isAvatarInside(struct Room * room);
+bool isInside(struct Room* room, char * id);
 
 //adding
 void additem(struct Room* room,struct Item* item);
