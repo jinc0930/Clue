@@ -27,11 +27,10 @@ struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_i
 
 struct Pool makePool(int pool_desired_size, int max_take) {
 	struct Pool pool = { .take_counter = { 0 }, .max_take = max_take };
-	int r = 0;
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
 	for (int i = 0; i < pool_desired_size; i++){
-		pool.vec[r++] = i;
+		pool.vec[i] = i;
 		pool.length += 1;
 	}
 	return pool;
@@ -42,11 +41,12 @@ int poolTake(struct Pool *pool, int quantity_take) {
 	if (pool->length <= 0) return -1; 
 	int take = rand() % pool->length;
   	int ref = pool->vec[take];
-	if (pool->take_counter[ref] += quantity_take >= pool->max_take)  {
+	pool->take_counter[ref] += quantity_take;
+	if (pool->take_counter[ref] >= pool->max_take)  {
 		// shift pool elements to the left
 		for(int i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
+		pool->length -= 1;
 	}
-	pool->length -= 1;
 	return ref;
 }
 

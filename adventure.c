@@ -144,9 +144,9 @@ int main() {
     int exclude[] = {avatarIdx};
 
     // pools for generating: answers and hints
-    struct Pool poolHintsChar = makePoolExcluding(9, 2, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
-    struct Pool poolHintsRoom = makePool(9, 2);
-    struct Pool poolHintsItem = makePool(9, 2);
+    struct Pool poolHintsChar = makePoolExcluding(9, 1, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
+    struct Pool poolHintsRoom = makePool(9, 1);
+    struct Pool poolHintsItem = makePool(9, 1);
 
     //pick the murderer (poolHintsChar size = 7)
     int murderIdx = poolTake(&poolHintsChar, 2); 
@@ -176,16 +176,24 @@ int main() {
     }
     
     // generate 3 accusers and set hints
+    int probabilities[] = {16, 32, 64};
     for (size_t i = 0; i < 3; i++){
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "accuser";
         struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
         struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
 
-        int excludes[] = {avatarIdx, idx};
-        // make a new pool excluding current character and player
-        struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
-        struct Character * accused = chararr[poolTake(&notMe, 1)];
+        struct Character * accused;
+        // check if is going to accuse the correct answer
+        if ((rand() % 100) < probabilities[i]) {
+            // printf("some accuser is accusing correctly!\n");
+            accused = chararr[murderIdx];
+        } else {
+            // select a random one excluding avatar and self
+            int excludes[] = {avatarIdx, idx};
+            struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
+            accused = chararr[poolTake(&notMe, 1)];
+        }
 
         // todo: set_nice_hint(chararr[idx], itemHint, roomHint, accused);
     }
