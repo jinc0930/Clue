@@ -508,7 +508,9 @@ int main() {
             //printf("%s,%s,%s\n",targetRoom,targetChar,targetItem);
             char des[MAX_LINE];
             slice(cmd, des, strlen("clue "), MAX_LINE);
-            // prompt(des, "Who is the murderer?");
+            if (strcmp(des, "") == 0) {
+                prompt(des, "Who is the murderer");
+            }
             //check if user input a valid character
             int rep = 0;
             for(int r = 0; r<9;r++){
