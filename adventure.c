@@ -188,6 +188,8 @@ int main() {
     
     // todo: set_nice_hint(chararr[murderIdx], itemHint, roomHint, accused);
 
+    // printf("hints omitted: C:%d I:%d R:%d\n", poolHintsChar.length, poolHintsItem.length, poolHintsRoom.length); // debug
+    
     // (old good way)
     //shuffle character array
     // int intarr1[9]={0,1,2,3,4,5,6,7,8};
@@ -224,6 +226,8 @@ int main() {
     bool booitem;
     bool boochara;
     printMap(map);
+    // debugMap(map);
+    
     //main game portion with clue counter
     int clue = 0;
     while( clue <= 10 ){
@@ -258,7 +262,7 @@ int main() {
             printf("with: ");
             for (size_t i = 0; i < MAX_CHARACTER; i++){
                 struct Character *ch = curroom->chara[i];
-                if (ch != NULL) {
+                if (ch != NULL && strcmp(ch->id, "avatar") != 0) {
                     printf("%s ", getcharname(ch));
                     h = 1;
                 }
@@ -312,53 +316,57 @@ int main() {
             printMap(map);
         }
         //if command was go
-        else if(startsWith(cmd,"go")!=0){
+        else if(startsWith("go", cmd)){
             // printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
             char direction[MAX_LINE];
             slice(cmd, direction, strlen("go "), MAX_LINE);
             struct Room *curroom = avatar->location;
             struct Room *target;
             //cases for each direction
-            if(strcmp(direction, "north")==0){
+            if(startsWith(direction, "north")){
                 target = getNorth(curroom);
                 //if invalid direction
                 if(getNorth(curroom)==NULL){
-                    printf("there is no path in that direction\n");
+                    printErr("there is no path in that direction");
                 } else {  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
+                    printMap(map);
                 }
             }
-            else if(strcmp(direction, "south")==0){
+            else if(startsWith(direction, "south")){
                 target = getSouth(curroom);
                 if(getSouth(curroom)==NULL){
-                    printf("there is no path in that direction\n");
+                    printErr("there is no path in that direction");
                 } else {  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
+                    printMap(map);
                 }
             }
-            else if(strcmp(direction,"west")==0){
+            else if(startsWith(direction,"west")){
                 target = getWest(curroom);
                 if(getWest(curroom)==NULL){
-                    printf("there is no path in that direction\n");
+                    printErr("there is no path in that direction");
                 } else {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
+                    printMap(map);
                 }
             }
-            else if(strcmp(direction,"east")==0){
+            else if(startsWith(direction,"east")){
                 target = getEast(curroom);
                 if(getEast(curroom)==NULL){
-                    printf("there is no path in that direction\n");
+                    printErr("there is no path in that direction");
                 }
                 else{  
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
+                    printMap(map);
                 }
             }
             else{
-                printf("invalid direction\n");
+                printErr("invalid direction\n");
             }
         }
         //if command was inventory
@@ -378,37 +386,40 @@ int main() {
             }
         }
         //take item command
-        else if(startsWith(cmd, "take") != 0){
+        else if(startsWith("take", cmd)){
             char *arr[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             char description[MAX_LINE];
             slice(cmd, description, strlen("take "), MAX_LINE);
+            if (strcmp(description, "") == 0) {
+                prompt(description, "What item do you like to take?");
+            }
             curroom = getloc(avatar);
             //iterate to see if such item exist in the game
             bool c = false;
             for (int t=0;t<9;t++){
-                if (startsWith(getItemName(itemarr[t]), description)==0){
+                if (startsWith(description, getItemName(itemarr[t]))){
                     c = true;
                 }
             }
             if(!c){
-                printf("that item does not exist\n");
+                printErr("that item does not exist");
             }
             else{
                 struct Item * m;
                 //if current room has no items
                 if(curroom->itemList == NULL){
-                    printf("sorry, there is nothing in this room\n");
+                    printErr("sorry, there is nothing in this room");
                 }
                 //if it has more than one items
                 else if((curroom->itemList!=NULL)&&(curroom->itemList->next !=NULL)){
                     m = curroom->itemList;
                     while(m != NULL){
-                        if (startsWith(m->name, description) != 0){
+                        if (startsWith(description, m->name)){
                             if (add(avatar,m) != 0) {
                                 removeItem(curroom, m);
-                                printf("you took the %s\n", description);
+                                printf(YEL "you took the %s\n" RESET, m->name);
                             } else {
-                                printf("sorry, your inventory is full\n");
+                                printErr("sorry, your inventory is full");
                             }
                             break;
                         }
@@ -420,7 +431,7 @@ int main() {
                     m =curroom->itemList;
                     if (add(avatar,m) != 0) {
                         removeItem(curroom,m);
-                        printf("you took the %s\n", description);
+                        printf(YEL "you took the %s\n", m->name);
                     } else {
                         printf("sorry, your inventory is full\n");
                     }
@@ -428,10 +439,13 @@ int main() {
             }                
         }
         //if command was drop
-        else if(startsWith(cmd, "drop") != 0){
+        else if(startsWith("drop", cmd)){
             char *arr1[9] = {"bat","rope","butter knife","dagger","rifle","wrench","hammer","lead pipe","poison bottle"};
             char description[MAX_LINE];
             slice(cmd, description, strlen("drop "), MAX_LINE);
+            if (strcmp(description, "") == 0) {
+                prompt(description, "What item do you like to drop?");
+            }
             curroom = getloc(avatar);
             //loop through array of item list to check if input item is valid
             bool c = false;
@@ -441,14 +455,14 @@ int main() {
                 }
             }
             if(!c){
-                printf("that item does not exist\n");
+                printErr("that item does not exist");
             }
             //if it does exist, check if it's in the inventory of the user
             else{
                 struct Item * m;
                 //if user inventory is empty
                 if(avatar->inventory ==NULL){
-                    printf("you do not carry any item at the moment");
+                    printErr("you do not carry any item at the moment");
                 }
                 //if user inventory has more than one item
                 else if((avatar->inventory !=NULL)&&(avatar->inventory->next !=NULL)){
@@ -457,6 +471,8 @@ int main() {
                         if (strcmp(getItemName(m),description)==0){
                             rmv(avatar, m);
                             additem(curroom,m);
+                            printf(YEL "you dropped the %s\n" RESET, m->name);
+                            break;
                         }
                         m  = getNext(m);
                     }
@@ -466,14 +482,16 @@ int main() {
                     m = avatar->inventory;
                     rmv(avatar, m);
                     additem(curroom, m);
+                    printf(YEL "you dropped the %s\n" RESET, m->name);
                 }
+                
             }
         }
         else if(strcmp(cmd,"quit")==0){
             clue = 12;
         }
         //if command is clue
-        else if(startsWith(cmd, "clue")!=0){
+        else if(startsWith("clue", cmd)){
             //temperary statement for testing
             //printf("%s,%s,%s\n",targetRoom,targetChar,targetItem);
             char des[MAX_LINE];
@@ -567,7 +585,7 @@ int main() {
                                 boochara = true;
                             }
                             else{
-                                printSucc("WRONG CHARACTER");
+                                printErr("WRONG CHARACTER");
                             }
                         }
                     }
