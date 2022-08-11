@@ -149,13 +149,13 @@ int main() {
     struct Pool poolHintsItem = makePool(9, 1);
 
     //pick the murderer (poolHintsChar size = 7)
-    int murderIdx = poolTake(&poolHintsChar, 2); 
+    int murderIdx = poolTake(&poolHintsChar, 1); 
     chararr[murderIdx]->id = "murderer";
 
     //generate answer
     char* targetChar = chararr[murderIdx]->name;
-    char* targetRoom = roomarr[poolTake(&poolHintsRoom, 2)]->name;
-    char* targetItem = itemarr[poolTake(&poolHintsItem, 2)]->name;
+    char* targetRoom = roomarr[poolTake(&poolHintsRoom, 1)]->name;
+    char* targetItem = itemarr[poolTake(&poolHintsItem, 1)]->name;
 
     // pool for distributing the ids
     int excludes[] = {murderIdx, avatarIdx};
@@ -180,7 +180,6 @@ int main() {
     for (size_t i = 0; i < 3; i++){
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "accuser";
-        struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
         struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
 
         struct Character * accused;
@@ -195,7 +194,17 @@ int main() {
             accused = chararr[poolTake(&notMe, 1)];
         }
 
-        // todo: set_nice_hint(chararr[idx], itemHint, roomHint, accused);
+        // omit 1 or 2 hints about the item
+        if (i > 1 && rand() % 2 == 0) {
+            // omit hint
+        } else {
+            struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
+            // set_item_hint(chararr[idx], itemHint);
+        }
+
+        // FIXME
+        // set_room_hint(chararr[idx], roomHint);
+        // set_char_hint(chararr[idx], accused);
     }
 
     // hints for the murderer
