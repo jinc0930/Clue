@@ -84,7 +84,9 @@ void printMap(struct Room* map[9]) {
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, BLD CYN);
                 } else {
-                    printCell(map[i+j]->name, BLK);
+                    char checkmark[18];
+                    sprintf(checkmark,"%s *", map[i+j]->name);
+                    printCell(checkmark, BLK);
                 }
             } else {
                 printCell(map[i+j]->name, BLD);
@@ -93,20 +95,20 @@ void printMap(struct Room* map[9]) {
         endCells();
         for (size_t j = 0; j < 3; j++) {
             for (size_t k = 0; k < 3; k++) {
-                // if (map[i+k]->visited) {
+                if (map[i+k]->visited) {
                     struct Character * c = map[i+k]->chara[j];
                     if (c != NULL && strcmp(c->id, "avatar") == 0) {
                         printCell(c->name, CYN);
                     } else {
                         printCell(c != NULL ? c->name : NULL, "");
                     }
-                // } else {
-                //     if (map[i+k]->chara[j] != NULL) {
-                //         printCell("******", BLK);
-                //     } else {
-                //         printCell(NULL, "");
-                //     }
-                // }
+                } else {
+                    if (map[i+k]->chara[j] != NULL) {
+                        printCell("******", BLK);
+                    } else {
+                        printCell(NULL, "");
+                    }
+                }
             }
             endCells();
         }
