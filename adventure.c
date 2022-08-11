@@ -89,12 +89,15 @@ int main() {
     prompt(instructions, "First time playing? y/n");
 
     if(strcmp(instructions,"y")==0){
-        printf("Welcome! This is a game of clue!\nThe game begins by asking user to input their name, and sets given name as the avatar name.");
-        printf("Then, it asks for user to input commands for gameplay, there are many commands, type help to view a list of them.\n");
-        printf("The game will end when the user wins or loses, the user can win by guessing the answer correctly, which consist of the correct room, murder weapon, and muderer.\n");
-        printf("The 8 npcs spawned randomly will give out hints to the player.\n");
-        printf("There are two types of npcs, the hint givers gives out three guarenteed accurate hints that eliminates the suspision while the accusers prompt suspision on possible room, item and person, however - these accusassions are not guarenteed to be correct.\n");
-        printf("If the user fails to guess all three correctly with one clue call, they can try again - when clue is called at the eleventh time, the game will end. \n");
+        printf("Welcome! This is a game of clue!\nThe game begins by asking player to input name, and sets given name as the avatar name.");
+        printf("Then, it asks for user to input commands for gameplay, there are many commands, input help to view a list of them.\n");
+        printf("The game will end when the user wins or loses\n");
+        printf("The player can win by guessing the answer correctly, which consist of the correct room, murder weapon, and muderer.\n");
+        printf("To make the game more winnable, 8 npcs will spawn randomly will give out hints to the player.\n");
+        printf("There are two types of npcs, hint givers gives out three guarenteed accurate hints that eliminates the suspision of a room, weapon, and person\n");
+        printf("The accusers, on the other hand, prompt suspision on possible room, weapon and muderder, however - these accusassions are not guarenteed to be correct.\n");
+        printf("If the truth potion, a hidden item is found by the player, they can use it on one npc where the npc will give out one guarenteed correct accusion\n");
+        printf("If the user fails to guess all three correctly, they can try again until clue is called at the eleventh time, where the game will end.\n");
     }
 
     //asks for user name
