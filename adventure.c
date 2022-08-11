@@ -269,6 +269,7 @@ int main() {
             printf(BLD "COMMANDS:\n" RESET);
             describe("list", "list all room, character and item names\n");
             describe("look", "show current room, items in the room, player's inventory, and the name of the rooms surrounding the current room\n");
+            describe("map", "show the map\n");
             describe("go", "move the avatar, you can pick from four directions north, south, west, and east\n");
             describe("take", "pick up an item and place it in player inventory\n");
             describe("drop", "drop an item from player inventory to the room player is currently in\n");
@@ -282,6 +283,9 @@ int main() {
             printf("rooms include: kitchen, study, hall, ballroom, library, lounge, bathroom, office, and bedroom\n");
             printf("items include: butter knife, rope, rifle, dagger, hammer, lead pipe, poison bottle, and bat\n");
             printf("characters include: minh, ivan, tenzin, edrick, chang, kevin, joey, and james\n");
+        }
+        else if(startsWith("talk", cmd)){
+            // todo
         }
         //or look
         else if(strcmp(cmd, "look")==0){
@@ -342,7 +346,6 @@ int main() {
             if(getloc(avatar)->West!=NULL){
                 printf("To your west is %s\n", getloc(avatar)->West->name);
             }
-            printMap(map);
         }
         //if command was go
         else if(startsWith("go", cmd)){
@@ -518,6 +521,10 @@ int main() {
         }
         else if(strcmp(cmd,"quit")==0){
             clue = 12;
+        }
+        //or map
+        else if(strcmp(cmd,"map")==0){
+            printMap(roomarr);
         }
         //if command is clue
         else if(startsWith("clue", cmd)){
