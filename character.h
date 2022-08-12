@@ -12,6 +12,7 @@ struct Character{
     char* id;
     int inventoryItems;
     char* hints[3];
+    char* prefix[3];
 };
 
 //make character

@@ -1,5 +1,6 @@
 #include "character.h"
 #include "items.h"
+#include "rooms.h"
 #include<stdio.h>
 
 //makeChar(name:char*): struct character *
@@ -12,6 +13,7 @@ struct Character* makeChar(char* name){
     character->inventoryItems = 0;
     character->id = NULL;
     character->hints[3];
+    character->prefix[3];
     return character;
 }
 
@@ -96,28 +98,36 @@ void rmv(struct Character* character, struct Item*item){
 
 //takes character and item, gives the character that hint
 void set_item_hint(struct Character* character, struct Item* itemHint){
+    
+    
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
-        character->hints[0] = ("I'm not sure, but I think the murder weapon is %s", itemHint->name);
+        character->hints[0] = (itemHint->name);
+        character->prefix[0] = ("I'm not sure, but I think the murder weapon is");
     }
     else{
-        character->hints[0] = ("The murder weapon is not %s", itemHint->name);
+        character->hints[0] = (itemHint->name);
+        character->prefix[0] = ("The murder weapon is not");
     }
 }
 
 void set_room_hint(struct Character* character, struct Room* roomHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
-        character->hints[0] = ("I'm not sure, but I think the murder happened in %s", getname(roomHint));
+        character->hints[1] = (getRoomName(roomHint));
+        character->prefix[1] = ("I'm not sure, but I think the murder happened in the");
     }
     else{
-        character->hints[0] = ("The murder did not happen in %s", getname(roomHint));
+        character->hints[1] = (getRoomName(roomHint));
+        character->prefix[1] = ("The murder did not happen in the");
     }
 }
 
 void set_char_hint(struct Character* character, struct Character* accused){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
-        character->hints[0] = ("I'm not sure, but I think the murder is %s", accused->name);
+        character->hints[2] = (accused->name);
+        character->prefix[2] = ("I'm not sure, but I think the murderer is");
     }
     else{
-        character->hints[0] = ("The murderer is not %s", accused->name);
+        character->hints[2] = (accused->name);
+        character->prefix[2] =("The murderer is not");
     }
 }

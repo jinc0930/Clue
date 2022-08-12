@@ -278,20 +278,20 @@ int main() {
                 prompt(description, "Who do you want to talk to?");
             }
 
-            bool check;
+            bool check= false;
             //check if character input is valid(that character exists)
             for(int a =0;a<9;a++){
                 if((strcmp(description,chararr[a]->name)==0)&&(strcmp(description,avatar->name)!=0)&& (strcmp(getloc(avatar)->name,getloc(chararr[a])->name)==0)){
-                    printf("%s\n",chararr[a]->hints[0]);
-                    printf("%s\n",chararr[a]->hints[1]);
-                    printf("%s\n",chararr[a]->hints[2]);
+                    printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
+                    printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
+                    printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
                     check = true;
                     break;
                 }
             }
 
             if(check!=true){
-                printf("Invalid talk target. Note: You cannot talk to npcs not in the same room\n");
+                printErr("Invalid talk target. Note: You cannot talk to npcs not in the same room");
             }
         }
         //or look
