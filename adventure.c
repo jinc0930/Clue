@@ -132,6 +132,15 @@ int main() {
     avatar->name = avatarname;
     avatar->id = "avatar";
 
+    // make a string of all current characters in game
+    char ingame[500];
+    strcpy(ingame, "");
+    for (size_t i = 0; i < 9; i++){
+        if (avatarIdx == i) continue;
+        if (i != 0) strcat(ingame, ", ");
+        strcat(ingame, chararr[i]->name);
+    }
+
     // pool for distribution of items and chars
     struct Pool poolRoom = makePool(9, 1);
     struct Pool poolChar = makePool(9, 1);
@@ -277,7 +286,7 @@ int main() {
             printf("This is a list of all rooms, characters and items\n");
             printf("rooms include: kitchen, study, hall, ballroom, library, lounge, bathroom, office, and bedroom\n");
             printf("items include: butter knife, rope, rifle, dagger, hammer, lead pipe, poison bottle, and bat\n");
-            printf("characters include: minh, ivan, tenzin, edrick, kevin, joey, chang, and james\n");
+            printf("characters include: %s.\n", ingame);
         }
         else if(startsWith("talk", cmd)){
             // todo

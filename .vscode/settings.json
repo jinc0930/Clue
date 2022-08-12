@@ -8,7 +8,9 @@
     "string.h": "c",
     "character.h": "c",
     "prettyprint.h": "c",
-    "pool.h": "c"
+    "pool.h": "c",
+    "sstream": "c",
+    "functional": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
