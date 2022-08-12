@@ -193,10 +193,18 @@ int roomCharLength(struct Room* room) {
   return len;
 }
 
-bool isInside(struct Room* room, char * id) {
+bool isIdInside(struct Room* room, char * id) {
   for (size_t i = 0; i < MAX_CHARACTER; i++){
     struct Character *c = room->chara[i];
      if (c != NULL && c->id != NULL && strcmp(c->id, id) == 0) return true;
+  }
+  return false;
+}
+
+bool isCharInside(struct Room* room, char * name) {
+  for (size_t i = 0; i < MAX_CHARACTER; i++){
+    struct Character *c = room->chara[i];
+    if (c != NULL && c->name != NULL && strcmp(c->name, name) == 0) return true;
   }
   return false;
 }

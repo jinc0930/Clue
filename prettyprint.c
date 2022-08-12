@@ -82,7 +82,7 @@ void printMap(struct Room* map[9]) {
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
             if (map[i+j]->visited == true) {
-                if (isInside(map[i+j], "avatar")) {
+                if (isIdInside(map[i+j], "avatar")) {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, BLD CYN);
@@ -127,12 +127,14 @@ void debugMap(struct Room* map[9]) {
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
             if (map[i+j]->visited == true) {
-                if (isInside(map[i+j], "avatar")) {
+                if (isIdInside(map[i+j], "avatar")) {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, BLD CYN);
                 } else {
-                    printCell(map[i+j]->name, BLK);
+                    char checkmark[18];
+                    sprintf(checkmark,"%s *", map[i+j]->name);
+                    printCell(checkmark, BLK);
                 }
             } else {
                 printCell(map[i+j]->name, BLD);

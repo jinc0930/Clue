@@ -88,7 +88,7 @@ int main() {
     char instructions[MAX_LINE];
     prompt(instructions, "First time playing? y/n");
 
-    if(strcmp(instructions,"y")==0){
+    if(strcasecmp(instructions,"y")==0){
         printf("Welcome! This is a game of clue!\nThe game begins by asking player to input name, and sets given name as the avatar name.");
         printf("Then, it asks for user to input commands for gameplay, there are many commands, input help to view a list of them.\n");
         printf("The game will end when the user wins or loses\n");
@@ -197,20 +197,20 @@ int main() {
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "accuser";
 
-        struct Character * accused;
-        struct Item * accused_item;
-        struct Room * accused_room;
+        struct Character * accused = NULL;
+        struct Item * accused_item = NULL;
+        struct Room * accused_room = NULL;
 
         // accuse correct item?
         if ((rand() % 100 < probabilities[i])) {
-            printf("accusing right item");
+            // printf("accusing right item\n");
             accused_item = itemarr[itemIdx];
         } else {
             accused_item = itemarr[poolTake(&poolHintsItem, 1)];
         }
         // accuse correct room?
         if ((rand() % 100 < probabilities[i])) {
-            printf("accusing right room");
+            // printf("accusing right room\n");
             accused_room = roomarr[roomIdx];
         } else {
             accused_room = roomarr[poolTake(&poolHintsRoom, 1)];
@@ -218,7 +218,7 @@ int main() {
 
         // accuse correct char?
         if ((rand() % 100) < probabilities[i]) {
-            printf("accusing right char");
+            // printf("accusing right char\n");
             accused = chararr[murderIdx];
         } else {
             // select a random one excluding avatar and self
@@ -227,7 +227,6 @@ int main() {
             accused = chararr[poolTake(&notMe, 1)];
         }
 
-        // FIXME
         set_item_hint(chararr[idx], accused_item);
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
@@ -482,7 +481,7 @@ int main() {
                         removeItem(curroom,m);
                         printf(YEL "you took the %s\n", m->name);
                     } else {
-                        printf("sorry, your inventory is full\n");
+                        printErr("sorry, your inventory is full\n");
                     }
                 }
             }                
@@ -553,15 +552,15 @@ int main() {
                 prompt(des, "Who is the murderer");
             }
             //check if user input a valid character
-            int rep = 0;
+            struct Character * clueChar = NULL;
             for(int r = 0; r<9;r++){
-                //case insensitive
-                if(strcasecmp(chararr[r]->name,des)==0){
-                    rep = 1;
+                if(strcmp(chararr[r]->name, des) == 0 && strcmp(chararr[r]->id, avatar->id) != 0){
+                    clueChar = chararr[r];
+                    break;
                 }
             }
-            if(rep == 0){
-                printErr("not a valid chracter");
+            if(clueChar == NULL){
+                printErr("not a valid character");
             }
             else if(roomCharLength(curroom) >= MAX_CHARACTER){
                 printErr("too many characters in this room already");
@@ -582,25 +581,26 @@ int main() {
                     printErr("WRONG ROOM");
                 }
                 //check if item matches (in the room or on the character)
-                struct Item * inv = avatar ->inventory;
-                struct Item * roominv = curroom->itemList;
+                struct Item * inv = avatar->inventory;
+                // struct Item * roominv = curroom->itemList; // not needed;
                 //set boolean (find item or not)
                 bool temp = false;
                 //loop through user inventory and see if item is there
                 while(inv!=NULL){
                     if(strcmp(inv->name,targetItem)==0){
                         temp=true;
+                        break;
                     }
                     inv = inv->next;
                 }
-                //loop through room itemList and see if item is there
-                while(roominv!=NULL){
-                    if(strcmp(roominv->name,targetItem)==0){
-                        temp=true;
-                    }
-                    roominv = roominv->next;
-                }
-                //if item is in either room or inventory
+                // //loop through room itemList and see if item is there
+                // while(roominv!=NULL){
+                //     if(strcmp(roominv->name,targetItem)==0){
+                //         temp=true;
+                //     }
+                //     roominv = roominv->next;
+                // }
+                //if item is in inventory
                 if(temp){
                     printSucc("ITEM MATCH");
                     booitem = true;
@@ -608,52 +608,31 @@ int main() {
                 else{
                     printErr("WRONG ITEM");
                 }
-                //checked validity above, now check if already in room
-                int h = 0;
-                for(int z = 0; z<9;z++){
-                    //iterate and check all character in room
-                    if(strcmp(getloc(chararr[z])->name, curroom->name)==0){
-                        //the desired character is already in the room
-                        if(strcmp(getcharname(chararr[z]),des)==0){
-                            if(strcmp(targetChar,des)==0){
-                                printSucc("CHARACTER MATCH");
-                                boochara = true;
-                                h=1;
-                            }
-                        }
-                    }
-                    //valid character, but not in the room
-                    if(h!=1){
-                        if(strcmp(getcharname(chararr[z]),des)==0){
-                            //check where character is on the character array
-                            int temp = 0;
-                            for(int v = 0; v<9;v++){
-                                if(strcmp(roomarr[v]->name,curroom->name)==0){
-                                    temp = v;
-                                    break;
-                                }
-                            }
-                            moveChar(chararr[z]->location, curroom, chararr[z]);
-                            //after adding character to the room, check if it's the correct guess
-                            if(strcmp(des,targetChar)==0){
-                                printSucc("CHARACTER MATCH");
-                                boochara = true;
-                            }
-                            else{
-                                printErr("WRONG CHARACTER");
-                            }
-                        }
-                    }
-                    //check if guesses correctly
-                    if(booroom && booitem && boochara){
-                        //breaks gaming loop
-                        clue = 11;
-                    }
-                }               
+                // move char
+                moveChar(clueChar->location, curroom, clueChar);
+                
+                // is the target char
+                if (strcmp(clueChar->name, targetChar) == 0) {
+                    printSucc("CHARACTER MATCH");
+                    boochara = true;
+                }
+                // is inside the room?
+                else if (isCharInside(curroom, targetChar)) {
+                    printSucc("CHARACTER MATCH");
+                    boochara = true;
+                } else {
+                    printErr("WRONG CHARACTER");
+                }
+                
+                //check if guesses correctly
+                if(booroom && booitem && boochara){
+                    //breaks gaming loop
+                    clue = 11;
+                }
             }
         }
         else{
-            printf("Please input a valid command\n");
+            printErr("Please input a valid command\n");
         }
     }
     //check if user gets all three answers correct
@@ -661,10 +640,10 @@ int main() {
         printf("Thank you for playing, see you next time!\n");
     }
     else if(booroom && booitem && boochara){
-        printf("YOU WON\n");
+        printSucc("YOU WON\n");
     }
     else{
-        printf("YOU LOST\n");
+        printErr("YOU LOST\n");
     }
     //free everything
     //fress rooms
