@@ -115,7 +115,7 @@ int main() {
     bool already_exists = false;
     int avatarIdx;
     for (size_t i = 0; i < 9; i++){
-        if (strcmp(avatarname, getcharname(chararr[i])) == 0) {
+        if (strcasecmp(avatarname, getcharname(chararr[i])) == 0) {
             already_exists = true;
             avatarIdx = i;
             break;
