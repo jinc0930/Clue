@@ -17,6 +17,7 @@ struct Room* makeroom(char* roomname){
   room -> chara[1] = NULL;
   room -> chara[2] = NULL;
   room -> itemList = NULL;
+  room -> visited = false;
   return room;
 }
 

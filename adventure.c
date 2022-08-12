@@ -203,12 +203,14 @@ int main() {
 
         // accuse correct item?
         if ((rand() % 100 < probabilities[i])) {
+            printf("accusing right item");
             accused_item = itemarr[itemIdx];
         } else {
             accused_item = itemarr[poolTake(&poolHintsItem, 1)];
         }
         // accuse correct room?
         if ((rand() % 100 < probabilities[i])) {
+            printf("accusing right room");
             accused_room = roomarr[roomIdx];
         } else {
             accused_room = roomarr[poolTake(&poolHintsRoom, 1)];
@@ -216,6 +218,7 @@ int main() {
 
         // accuse correct char?
         if ((rand() % 100) < probabilities[i]) {
+            printf("accusing right char");
             accused = chararr[murderIdx];
         } else {
             // select a random one excluding avatar and self
@@ -243,14 +246,12 @@ int main() {
     set_room_hint(chararr[murderIdx], roomHint);
     set_char_hint(chararr[murderIdx], accused);
 
-    // printf("hints omitted: C:%d I:%d R:%d\n", poolHintsChar.length, poolHintsItem.length, poolHintsRoom.length); // debug
-
     //set boolean to check win statement
     bool booroom;
     bool booitem;
     bool boochara;
     printMap(map);
-    // debugMap(map);
+    // printMap(map);
     
     //main game portion with clue counter
     int clue = 0;

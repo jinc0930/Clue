@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "prettyprint.h"
 #define VAL 120
+// #define DEBUG_MAP 1;
 
 void prompt(char out[], char*str) {
     printf(CYN "%s\n>>> " RESET, str);
@@ -72,13 +73,15 @@ void endCells() {
 void rowBreak() {
     printf(BLK "+--------------------+--------------------+--------------------+\n" RESET);
 }
-
 // print all the rooms
 void printMap(struct Room* map[9]) {
+    #if defined DEBUG_MAP
+    debugMap(map);
+    #else
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
-            if (map[i+j]->visited) {
+            if (map[i+j]->visited == true) {
                 if (isInside(map[i+j], "avatar")) {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);
@@ -95,7 +98,7 @@ void printMap(struct Room* map[9]) {
         endCells();
         for (size_t j = 0; j < 3; j++) {
             for (size_t k = 0; k < 3; k++) {
-                if (map[i+k]->visited) {
+                if (map[i+k]->visited == true) {
                     struct Character * c = map[i+k]->chara[j];
                     if (c != NULL && strcmp(c->id, "avatar") == 0) {
                         printCell(c->name, CYN);
@@ -114,6 +117,7 @@ void printMap(struct Room* map[9]) {
         }
         rowBreak();
     }
+    #endif
 }
 
 // for testing purposes
@@ -122,7 +126,7 @@ void debugMap(struct Room* map[9]) {
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
-            if (map[i+j]->visited) {
+            if (map[i+j]->visited == true) {
                 if (isInside(map[i+j], "avatar")) {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);

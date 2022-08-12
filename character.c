@@ -100,29 +100,29 @@ void rmv(struct Character* character, struct Item*item){
 void set_item_hint(struct Character* character, struct Item* itemHint){
     
     
-    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[0] = (itemHint->name);
-        character->prefix[0] = ("I'm not sure, but I think the murder weapon is");
+        character->prefix[0] = ("I'm not sure, but I think the murderer weapon is");
     }
     else{
         character->hints[0] = (itemHint->name);
-        character->prefix[0] = ("The murder weapon is not");
+        character->prefix[0] = ("The murderer weapon is not");
     }
 }
 
 void set_room_hint(struct Character* character, struct Room* roomHint){
-    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[1] = (getRoomName(roomHint));
-        character->prefix[1] = ("I'm not sure, but I think the murder happened in the");
+        character->prefix[1] = ("I'm not sure, but I think the murderer happened in the");
     }
     else{
         character->hints[1] = (getRoomName(roomHint));
-        character->prefix[1] = ("The murder did not happen in the");
+        character->prefix[1] = ("The murderer did not happen in the");
     }
 }
 
 void set_char_hint(struct Character* character, struct Character* accused){
-    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[2] = (accused->name);
         character->prefix[2] = ("I'm not sure, but I think the murderer is");
     }
