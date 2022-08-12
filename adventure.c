@@ -103,22 +103,31 @@ int main() {
     //asks for user name
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
+
     for(;;) {
-        int already_exists = 0;
-        for (size_t i = 0; i < 9; i++){
-            if (strcmp(avatarname, getcharname(chararr[i])) == 0) {
-                already_exists = 1;
-                continue;
-            }
-        };
-        if (already_exists == 1) {
-            promptErr(avatarname, "Name already exists, please input an unique name:");
+        if (strlen(avatarname) == 0) {
+            promptErr(avatarname, "Name is blank, please input a name:");
         } else {
             break;
         }
     }
-    // randomly select one character to be the player (avatar)
-    int avatarIdx = rand()%9;
+    
+    bool already_exists = false;
+    int avatarIdx;
+    for (size_t i = 0; i < 9; i++){
+        if (strcmp(avatarname, getcharname(chararr[i])) == 0) {
+            already_exists = true;
+            avatarIdx = i;
+            break;
+        }
+    };
+
+    // check there is no conflict
+    if (!already_exists) {
+        // then choose a random one
+        avatarIdx = rand()%9;
+    }
+
     struct Character * avatar = chararr[avatarIdx];
     avatar->name = avatarname;
     avatar->id = "avatar";
