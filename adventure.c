@@ -263,6 +263,7 @@ int main() {
     
     //main game portion with clue counter
     int clue = 0;
+    int attempts = 0;
     while( clue <= 10 ){
         struct Room* curroom = avatar ->location;
         char cmd[MAX_LINE];
@@ -576,6 +577,7 @@ int main() {
             }
             //they do input a valid character
             else{ 
+                attempts++;
                 clue++;
                 //satisfy all three conditions to win
                 booroom = false;
@@ -649,10 +651,11 @@ int main() {
         printf("Thank you for playing, see you next time!\n");
     }
     else if(booroom && booitem && boochara){
-        printSucc("YOU WON\n");
+        printSucc("YOU WON!");
+        printf(BLK "Attempts: %d\n", attempts);
     }
     else{
-        printErr("YOU LOST\n");
+        printErr("YOU LOST");
     }
     //free everything
     //fress rooms
