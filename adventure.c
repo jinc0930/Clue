@@ -177,7 +177,9 @@ int main() {
         struct Character * charHint = chararr[poolTake(&poolHintsChar, 1)];
 
         // todo:
-        // set_nice_hint(chararr[idx], itemHint, roomHint, charHint);
+        set_item_hint(chararr[idx], itemHint);
+        set_room_hint(chararr[idx], roomHint);
+        set_char_hint(chararr[idx], charHint);
     }
     
     // generate 3 accusers and set hints
@@ -214,8 +216,9 @@ int main() {
         }
 
         // FIXME
-        // set_room_hint(chararr[idx], roomHint);
-        // set_char_hint(chararr[idx], accused);
+        set_item_hint(chararr[idx], accused_item);
+        set_room_hint(chararr[idx], accused_room);
+        set_char_hint(chararr[idx], accused);
     }
 
     // hints for the murderer
@@ -226,7 +229,10 @@ int main() {
     struct Pool notMe = makePoolExcluding(9, 1, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
     struct Character * accused = chararr[poolTake(&notMe, 1)];
     
-    // todo: set_nice_hint(chararr[murderIdx], itemHint, roomHint, accused);
+    // todo: 
+    set_item_hint(chararr[murderIdx], itemHint);
+    set_room_hint(chararr[murderIdx], roomHint);
+    set_char_hint(chararr[murderIdx], accused);
 
     // printf("hints omitted: C:%d I:%d R:%d\n", poolHintsChar.length, poolHintsItem.length, poolHintsRoom.length); // debug
 
@@ -287,7 +293,6 @@ int main() {
             if(check!=true){
                 printf("Invalid talk target. Note: You cannot talk to npcs not in the same room\n");
             }
-            
         }
         //or look
         else if(strcmp(cmd, "look")==0){
