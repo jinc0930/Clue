@@ -154,11 +154,13 @@ int main() {
     //pick the murderer (poolHintsChar size = 7)
     int murderIdx = poolTake(&poolHintsChar, 1); 
     chararr[murderIdx]->id = "murderer";
+    int roomIdx = poolTake(&poolHintsRoom, 1);
+    int itemIdx = poolTake(&poolHintsItem, 1);
 
     //generate answer
     char* targetChar = chararr[murderIdx]->name;
-    char* targetRoom = roomarr[poolTake(&poolHintsRoom, 1)]->name;
-    char* targetItem = itemarr[poolTake(&poolHintsItem, 1)]->name;
+    char* targetRoom = roomarr[roomIdx]->name;
+    char* targetItem = itemarr[itemIdx]->name;
 
     // pool for distributing the ids
     int excludes[] = {murderIdx, avatarIdx};
@@ -183,26 +185,32 @@ int main() {
     for (size_t i = 0; i < 3; i++){
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "accuser";
-        struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
 
         struct Character * accused;
-        // check if is going to accuse the correct answer
+        struct Item * accused_item;
+        struct Room * accused_room;
+
+        // accuse correct item?
+        if ((rand() % 100 < probabilities[i])) {
+            accused_item = itemarr[itemIdx];
+        } else {
+            accused_item = itemarr[poolTake(&poolHintsItem, 1)];
+        }
+        // accuse correct room?
+        if ((rand() % 100 < probabilities[i])) {
+            accused_room = roomarr[roomIdx];
+        } else {
+            accused_room = roomarr[poolTake(&poolHintsRoom, 1)];
+        }
+
+        // accuse correct char?
         if ((rand() % 100) < probabilities[i]) {
-            // printf("some accuser is accusing correctly!\n");
             accused = chararr[murderIdx];
         } else {
             // select a random one excluding avatar and self
             int excludes[] = {avatarIdx, idx};
             struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
             accused = chararr[poolTake(&notMe, 1)];
-        }
-
-        // omit 1 or 2 hints about the item
-        if (i > 1 && rand() % 2 == 0) {
-            // omit hint
-        } else {
-            struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
-            // set_item_hint(chararr[idx], itemHint);
         }
 
         // FIXME
