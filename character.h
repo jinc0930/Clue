@@ -11,6 +11,7 @@ struct Character{
     struct Room * location;
     char* id;
     int inventoryItems;
+    char* hints[3];
 };
 
 //make character
@@ -31,4 +32,9 @@ int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
 
+
+
+void set_item_hint(struct Character* character, struct Item* itemHint);
+void set_room_hint(struct Character* character, struct Room* roomHint);
+void set_char_hint(struct Character* character, struct Character* accused);
 #endif

@@ -11,6 +11,7 @@ struct Character* makeChar(char* name){
     character->inventory = NULL;
     character->inventoryItems = 0;
     character->id = NULL;
+    character->hints[3];
     return character;
 }
 
@@ -90,5 +91,33 @@ void rmv(struct Character* character, struct Item*item){
             prev->next = temp->next; 
         }
         character->inventoryItems--;
+    }
+}
+
+//takes character and item, gives the character that hint
+void set_item_hint(struct Character* character, struct Item* itemHint){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+        character->hints[0] = ("I'm not sure, but I think the murder weapon is %s", itemHint->name);
+    }
+    else{
+        character->hints[0] = ("The murder weapon is not %s", itemHint->name);
+    }
+}
+
+void set_room_hint(struct Character* character, struct Room* roomHint){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+        character->hints[0] = ("I'm not sure, but I think the murder happened in %s", getname(roomHint));
+    }
+    else{
+        character->hints[0] = ("The murder did not happen in %s", getname(roomHint));
+    }
+}
+
+void set_char_hint(struct Character* character, struct Character* accused){
+    if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"muderder")==0)){
+        character->hints[0] = ("I'm not sure, but I think the murder is %s", accused->name);
+    }
+    else{
+        character->hints[0] = ("The murderer is not %s", accused->name);
     }
 }

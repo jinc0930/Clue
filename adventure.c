@@ -221,37 +221,6 @@ int main() {
     // todo: set_nice_hint(chararr[murderIdx], itemHint, roomHint, accused);
 
     // printf("hints omitted: C:%d I:%d R:%d\n", poolHintsChar.length, poolHintsItem.length, poolHintsRoom.length); // debug
-    
-    // (old good way)
-    //shuffle character array
-    // int intarr1[9]={0,1,2,3,4,5,6,7,8};
-    // int intarr2[9]={10,10,10,10,10,10,10,10,10};
-    // for (int b = 0; b < 9 ; b++){
-    //     int n = rand()%9;
-    //     if( intarr2[n] != 10 ){
-    //         while (intarr2[n] != 10){
-    //             n++;
-    //             if(n > 8){n=0;}
-    //         }
-    //         intarr2[n] = intarr1[b];
-    //     }
-    //     else{
-    //         intarr2[n] = intarr1[b];
-    //     }
-    // }
-    // //asign murderer
-    // char* targetChar = chararr[intarr2[0]]->name;
-    // chararr[intarr2[0]]->id = "murderer";
-
-    //assign id to all characters, 5 being hint giver and 3 being accuser
-    // for(int m=1;m<9;m++){
-    //     if(m<6){
-    //         chararr[intarr2[m]]->id = "hint giver";
-    //     }
-    //     else{
-    //         chararr[intarr2[m]]->id = "accuser";
-    //     }
-    // }
 
     //set boolean to check win statement
     bool booroom;
@@ -285,10 +254,32 @@ int main() {
             printf("This is a list of all rooms, characters and items\n");
             printf("rooms include: kitchen, study, hall, ballroom, library, lounge, bathroom, office, and bedroom\n");
             printf("items include: butter knife, rope, rifle, dagger, hammer, lead pipe, poison bottle, and bat\n");
-            printf("characters include: minh, ivan, tenzin, edrick, chang, kevin, joey, and james\n");
+            printf("characters include: minh, ivan, tenzin, edrick, kevin, joey, chang, and james\n");
         }
         else if(startsWith("talk", cmd)){
             // todo
+            char description[MAX_LINE];
+            slice(cmd, description, strlen("talk "), MAX_LINE);
+            if (strcmp(description, "") == 0) {
+                prompt(description, "Who do you want to talk to?");
+            }
+
+            bool check;
+            //check if character input is valid(that character exists)
+            for(int a =0;a<9;a++){
+                if((strcmp(description,chararr[a]->name)==0)&&(strcmp(description,avatar->name)!=0)&& (strcmp(getloc(avatar)->name,getloc(chararr[a])->name)==0)){
+                    printf("%s\n",chararr[a]->hints[0]);
+                    printf("%s\n",chararr[a]->hints[1]);
+                    printf("%s\n",chararr[a]->hints[2]);
+                    check = true;
+                    break;
+                }
+            }
+
+            if(check!=true){
+                printf("Invalid talk target. Note: You cannot talk to npcs not in the same room\n");
+            }
+            
         }
         //or look
         else if(strcmp(cmd, "look")==0){
