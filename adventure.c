@@ -668,6 +668,13 @@ int main() {
         printf(BLK "Attempts: %d\n", attempts);
     }
     else{
+        puts("    /\\_____/\\");
+        puts("   /  o   o  \\");
+        puts("  ( ==  ^  == )");
+        puts("   )         (");
+        puts("  (           )");
+        puts(" ( (  )   (  ) )");
+        puts("(__(__)___(__)__)");
         printErr("YOU LOST");
     }
     //free everything
