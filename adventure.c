@@ -272,8 +272,8 @@ int main() {
     bool booitem;
     bool boochara;
     printMap(map);
-    // printMap(map);
-    
+    printRoomItems(avatar->location);
+
     //main game portion with clue counter
     int clue = 0;
     int attempts = 0;
@@ -331,47 +331,26 @@ int main() {
             printf("You are currently in the %s\n", getloc(avatar)->name);
             int h=0;
             //get all characters in the room
-            printf("with: ");
+            printf("With: ");
             for (size_t i = 0; i < MAX_CHARACTER; i++){
                 struct Character *ch = curroom->chara[i];
                 if (ch != NULL && strcmp(ch->id, "avatar") != 0) {
-                    printf("%s ", getcharname(ch));
+                    if (h == 1) {
+                        printf(", %s", getcharname(ch));
+                    } else {
+                        printf("%s", getcharname(ch));
+                    }
                     h = 1;
                 }
             };
             if(h!=1){
-                printf("no one");
+                printf("no one.");
             }
             printf("\n");
-            //items in the room
-            struct Item * temp = avatar->location->itemList;
-            // struct Item * prev;
-            if(temp!=NULL){
-                printf("the room has item(s): ");
-                while(temp!=NULL){
-                  printf("%s / ", temp->name);
-                  temp = temp->next;
-                }
-                printf("\n");
-            }
-            else{
-                printf("with no items in the room\n");
-            }
-            // getloc(avatar)->itemList = temp;
+            // room items
+            printRoomItems(curroom);
             //inventory
-            if((avatar->inventory) ==NULL){
-                  printf("nothing in your inventory\n");
-            }
-            else{
-                printf("items in your inventory include: ");
-                struct Item * temp = avatar->inventory;
-                while (temp!=NULL){
-                     printf("%s / ",temp->name);
-                     temp = temp->next;
-                }
-                printf("\n");
-                // avatar->inventory = temp;
-            }
+            printInventory(avatar);
             //print rooms in every direction 
             if (getloc(avatar)->North != NULL){
                 printf("To your north is %s\n",getloc(avatar)->North->name);
@@ -403,6 +382,7 @@ int main() {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
                     printMap(map);
+                    printRoomItems(target);
                 }
             }
             else if(startsWith(direction, "south")){
@@ -413,6 +393,7 @@ int main() {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
                     printMap(map);
+                    printRoomItems(target);
                 }
             }
             else if(startsWith(direction,"west")){
@@ -423,6 +404,7 @@ int main() {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
                     printMap(map);
+                    printRoomItems(target);
                 }
             }
             else if(startsWith(direction,"east")){
@@ -434,6 +416,7 @@ int main() {
                     if (moveChar(curroom, target, avatar) == -1) exit(1); // one slot is always available
                     target->visited = true;
                     printMap(map);
+                    printRoomItems(target);
                 }
             }
             else{
@@ -442,19 +425,7 @@ int main() {
         }
         //if command was inventory
         else if(strcmp(cmd,"inventory")==0){
-            if((avatar->inventory) ==NULL){
-                  printf("nothing in your inventory\n");
-            }
-            else{
-                printf("items in your inventory include: ");
-                struct Item* original = avatar->inventory;
-                while (avatar->inventory!=NULL){
-                     printf("%s ",avatar->inventory->name);
-                     avatar->inventory = avatar->inventory->next;
-                }
-                printf("\n");
-                avatar->inventory = original;
-            }
+            printInventory(avatar);
         }
         //take item command
         else if(startsWith("take", cmd)){
@@ -564,6 +535,8 @@ int main() {
         //or map
         else if(strcmp(cmd,"map")==0){
             printMap(roomarr);
+            printInventory(avatar);
+            printRoomItems(curroom);
         }
         //if command is clue
         else if(startsWith("clue", cmd)){

@@ -1,6 +1,7 @@
 #include "character.h"
 #include "items.h"
 #include "rooms.h"
+#include "prettyprint.h"
 #include<stdio.h>
 
 //makeChar(name:char*): struct character *
@@ -145,31 +146,31 @@ void set_char_hint(struct Character* character, struct Character* accused){
         // character->prefix[2] =("The murderer is not");
         character->prefix[2] = "I don't know who the muderer is, but I know it is not";
         if (strcmp(accused->name, "chang") == 0) {
-           character->hints[2] = ("Chang because she was with me when the murder happened");
+           character->hints[2] = (BLU"Chang"RESET" because she was with me when the murder happened");
         } 
         else if (strcmp(accused ->name, "kevin") == 0) {
-           character->hints[2] = ("Kevin because he is always coding");
+           character->hints[2] = (BLU"Kevin"RESET" because he is always coding");
         }
         else if (strcmp(accused ->name, "james") == 0) {
-            character->hints[2] = ("James because he is the nicest man I have ever seen");
+            character->hints[2] = (BLU"James"RESET" because he is the nicest man I have ever seen");
         }
         else if (strcmp(accused ->name, "tenzin") == 0) {
-            character->hints[2] = ("Tenzin because he was playing videogames the time of the murder.");
+            character->hints[2] = (BLU"Tenzin"RESET" because he was playing videogames the time of the murder.");
         }
         else if (strcmp(accused ->name, "minh") == 0) {
-            character->hints[2] = ("Minh because he is such a nice person");
+            character->hints[2] = (BLU"Minh"RESET" because he is such a nice person");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
-            character->hints[2] = ("Michael because he is the victim's bestfriend");
+            character->hints[2] = (BLU"Michael"RESET" because he is the victim's bestfriend");
         }
         else if (strcmp(accused ->name, "ivan") == 0) {
-            character->hints[2] = ("Ivan because he was working the whole day");
+            character->hints[2] = (BLU"Ivan"RESET" because he was working the whole day");
         }
         else if (strcmp(accused ->name, "edrick") == 0) {
-            character->hints[2] = ("Edrick because he was busy studying");
+            character->hints[2] = (BLU"Edrick"RESET" because he was busy studying");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
-            character->hints[2] = ("Joey because he was working out at the gym");
+            character->hints[2] = (BLU"Joey"RESET" because he was working out at the gym");
         }
     }
 }

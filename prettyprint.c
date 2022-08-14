@@ -1,5 +1,6 @@
 #include "rooms.h"
 #include "character.h"
+#include "items.h"
 #include <stdio.h>
 #include "prettyprint.h"
 #define VAL 120
@@ -118,6 +119,44 @@ void printMap(struct Room* map[9]) {
         rowBreak();
     }
     #endif
+}
+
+void printInventory(struct Character * avatar) {
+    struct Item * temp = avatar->inventory;
+    if(temp!=NULL) {
+        int i = 0;
+        printf(BLK "Inventory: " RESET "[");
+        while(temp!=NULL) {
+            if (i++ == 0) {
+                printf(YEL "%s" RESET, temp->name);
+            } else {
+                printf(", "YEL "%s" RESET, temp->name);
+            }
+            temp = temp->next;
+        }
+        printf("]\n");
+    } else {
+        printf(BLK "Inventory: " RESET "nothing.\n");
+    }
+}
+
+void printRoomItems(struct Room * room) {
+    struct Item * temp = room->itemList;
+    if(temp!=NULL) {
+        int i = 0;
+        printf(BLK "Room items: " RESET "[");
+        while(temp!=NULL) {
+            if (i++ == 0) {
+                printf(YEL "%s" RESET, temp->name);
+            } else {
+                printf("," YEL " %s" RESET, temp->name);
+            }
+            temp = temp->next;
+        }
+        printf("]\n");
+    } else {
+        printf(BLK "Room items: " RESET "nothing.\n");
+    }
 }
 
 // for testing purposes

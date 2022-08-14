@@ -58,4 +58,10 @@ void printErr(char*str);
 
 // print a new line success
 void printSucc(char*str);
+
+// print all items in the iventory
+void printInventory(struct Character* avatar);
+
+// print all items in the room
+void printRoomItems(struct Room* room);
 #endif
