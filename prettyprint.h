@@ -64,4 +64,7 @@ void printInventory(struct Character* avatar);
 
 // print all items in the room
 void printRoomItems(struct Room* room);
+
+// simulate typing
+void printTyping(char *msg);
 #endif

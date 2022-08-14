@@ -3,6 +3,7 @@
 #include "items.h"
 #include <stdio.h>
 #include "prettyprint.h"
+#include <time.h>
 #define VAL 120
 // #define DEBUG_MAP 1;
 
@@ -157,6 +158,17 @@ void printRoomItems(struct Room * room) {
     } else {
         printf(BLK "Room items: " RESET "nothing.\n");
     }
+}
+
+// 32 milliseconds
+struct timespec remaining, request = {0, 32000000};
+void printTyping(char *msg) {
+    int i = 0;
+    while ( msg[i] != '\0') {
+        printf("%c", msg[i++]);
+        fflush(stdout);
+        nanosleep(&request, &remaining);
+    };
 }
 
 // for testing purposes

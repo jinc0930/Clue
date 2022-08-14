@@ -164,7 +164,6 @@ int main() {
     struct Pool poolRoom = makePool(9, 1);
     struct Pool poolChar = makePool(9, 1);
     struct Pool poolItem = makePool(9, 1);
-
     DEBUG_PRINT(("DEBUG: distribute item and chars\n"));
     for (size_t i = 0; i < 9; i++) {
         // add a random item to the room
@@ -334,9 +333,19 @@ int main() {
             //check if character input is valid(that character exists)
             for(int a =0;a<9;a++){
                 if((strcmp(description,chararr[a]->name)==0)&&(strcmp(description,avatar->name)!=0)&& (strcmp(getloc(avatar)->name,getloc(chararr[a])->name)==0)){
-                    printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
-                    printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
-                    printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
+                    // experimental typing
+                    char str[100];
+                    sprintf(str, "%s %s.\n", chararr[a]->prefix[0], chararr[a]->hints[0]);
+                    printTyping(str);
+                    sprintf(str, "%s %s.\n", chararr[a]->prefix[1], chararr[a]->hints[1]);
+                    printTyping(str);
+                    sprintf(str, "%s %s.\n", chararr[a]->prefix[2], chararr[a]->hints[2]);
+                    printTyping(str);
+
+                    // old way
+                    // printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
+                    // printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
+                    // printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
                     check = true;
                     break;
                 }
