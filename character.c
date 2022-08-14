@@ -121,13 +121,55 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
     }
 }
 
+//old way
+// void set_char_hint(struct Character* character, struct Character* accused){
+//     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
+//         character->hints[2] = (accused->name);
+//         character->prefix[2] = ("I'm not sure, but I think the murderer is");
+//     }
+//     else{
+//         character->hints[2] = (accused->name);
+//         character->prefix[2] =("The murderer is not");
+//     }
+// }
+
+// //working on this
 void set_char_hint(struct Character* character, struct Character* accused){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[2] = (accused->name);
         character->prefix[2] = ("I'm not sure, but I think the murderer is");
     }
     else{
-        character->hints[2] = (accused->name);
-        character->prefix[2] =("The murderer is not");
+        //standard
+        // character->hints[2] = (accused->name);
+        // character->prefix[2] =("The murderer is not");
+        character->prefix[2] = "I don't know who the muderer is, but I know it is not";
+        if (strcmp(accused->name, "chang") == 0) {
+           character->hints[2] = ("Chang because she was with me when the murder happened");
+        } 
+        else if (strcmp(accused ->name, "kevin") == 0) {
+           character->hints[2] = ("Kevin because he is always coding");
+        }
+        else if (strcmp(accused ->name, "james") == 0) {
+            character->hints[2] = ("James because he is the nicest man I have ever seen");
+        }
+        else if (strcmp(accused ->name, "tenzin") == 0) {
+            character->hints[2] = ("Tenzin because he was playing videogames the time of the murder.");
+        }
+        else if (strcmp(accused ->name, "minh") == 0) {
+            character->hints[2] = ("Minh because he is such a nice person");
+        }
+        else if (strcmp(accused ->name, "michael") == 0) {
+            character->hints[2] = ("Michael because he is the victim's bestfriend");
+        }
+        else if (strcmp(accused ->name, "ivan") == 0) {
+            character->hints[2] = ("Ivan because he was working the whole day");
+        }
+        else if (strcmp(accused ->name, "edrick") == 0) {
+            character->hints[2] = ("Edrick because he was busy studying");
+        }
+        else if (strcmp(accused ->name, "joey") == 0) {
+            character->hints[2] = ("Joey because he was working out at the gym");
+        }
     }
 }
