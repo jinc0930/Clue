@@ -10,10 +10,17 @@
 #include <string.h>
 #include <stdbool.h>
 #define MAX_LINE 100
+#define DEBUG 1 // debug, comment this
+
+#ifdef DEBUG
+# define DEBUG_PRINT(x) printf x
+#else
+# define DEBUG_PRINT(x) do {} while (0)
+#endif
 
 int main() {
     // a random seed
-    srand(time(0));
+    srand(time(NULL));
     //make nine rooms
     struct Room * room1 = makeroom("kitchen");
     struct Room * room2 = makeroom("hall");
@@ -42,7 +49,7 @@ int main() {
             map[j] = roomarr[i];
         }
     }
-
+    
     //set (pointers) directions of rooms
     for (int p = 0; p < 9; p++ ){
         if( p > 2 ){
@@ -111,6 +118,7 @@ int main() {
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
 
+    DEBUG_PRINT(("DEBUG: check name\n"));
     for(;;) {
         if (strlen(avatarname) == 0) {
             promptErr(avatarname, "Name is blank, please input a name:");
@@ -120,7 +128,7 @@ int main() {
     }
     
     bool already_exists = false;
-    int avatarIdx;
+    int avatarIdx = 0;
     for (size_t i = 0; i < 9; i++){
         if (strcasecmp(avatarname, getcharname(chararr[i])) == 0) {
             already_exists = true;
@@ -129,17 +137,20 @@ int main() {
         }
     };
 
+    DEBUG_PRINT(("DEBUG: check if name already exists\n"));
     // check there is no conflict
     if (!already_exists) {
         // then choose a random one
         avatarIdx = rand()%9;
     }
 
+    DEBUG_PRINT(("DEBUG: set new character\n"));
     struct Character * avatar = chararr[avatarIdx];
     avatar->name = avatarname;
     avatar->id = "avatar";
 
     // make a string of all current characters in game
+    DEBUG_PRINT(("DEBUG: create string of current characters\n"));
     char ingame[500];
     strcpy(ingame, "");
     for (size_t i = 0; i < 9; i++){
@@ -148,11 +159,13 @@ int main() {
         strcat(ingame, chararr[i]->name);
     }
 
+    DEBUG_PRINT(("DEBUG: make 3 pools for distribution\n"));
     // pool for distribution of items and chars
     struct Pool poolRoom = makePool(9, 1);
     struct Pool poolChar = makePool(9, 1);
     struct Pool poolItem = makePool(9, 1);
 
+    DEBUG_PRINT(("DEBUG: distribute item and chars\n"));
     for (size_t i = 0; i < 9; i++) {
         // add a random item to the room
         additem(roomarr[i], itemarr[poolTake(&poolItem, 1)]);
@@ -170,12 +183,13 @@ int main() {
     chararr[avatarIdx]->location->visited = true;
     // exclude avatar
     int exclude[] = {avatarIdx};
-
+    DEBUG_PRINT(("DEBUG: create pool hints\n"));
     // pools for generating: answers and hints
     struct Pool poolHintsChar = makePoolExcluding(9, 1, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
     struct Pool poolHintsRoom = makePool(9, 1);
     struct Pool poolHintsItem = makePool(9, 1);
 
+    DEBUG_PRINT(("DEBUG: generate answer\n"));
     //pick the murderer (poolHintsChar size = 7)
     int murderIdx = poolTake(&poolHintsChar, 1); 
     chararr[murderIdx]->id = "murderer";
@@ -192,6 +206,7 @@ int main() {
     struct Pool poolChars = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0])); // size 7
 
     // generate 4 hint-givers and set hints
+    DEBUG_PRINT(("DEBUG: generate hint givers\n"));
     for (size_t i = 0; i < 4; i++){
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "hint giver";
@@ -201,13 +216,14 @@ int main() {
         struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
         struct Character * charHint = chararr[poolTake(&poolHintsChar, 1)];
 
-        // todo:
+        DEBUG_PRINT(("DEBUG: set hints for a hint giver\n"));
         set_item_hint(chararr[idx], itemHint);
         set_room_hint(chararr[idx], roomHint);
         set_char_hint(chararr[idx], charHint);
     }
     
     // generate 3 accusers and set hints
+    DEBUG_PRINT(("DEBUG: shuffle accusers proababilities\n"));
     int prob_rooms[] = {12, 24, 55}; //rooms easier
     shuffle(prob_rooms, sizeof(prob_rooms)/sizeof(prob_rooms[0]));
     int prob_items[] = {12, 24, 55}; //items a little harder
@@ -215,6 +231,7 @@ int main() {
     int prob_chars[] = {12, 24, 45}; //chars a little harder
     shuffle(prob_chars, sizeof(prob_chars)/sizeof(prob_chars[0]));
 
+    DEBUG_PRINT(("DEBUG: generate accusers\n"));
     for (size_t i = 0; i < 3; i++){
         int idx = poolTake(&poolChars, 1);
         chararr[idx]->id = "accuser";
@@ -249,12 +266,14 @@ int main() {
             accused = chararr[poolTake(&notMe, 1)];
         }
 
+        DEBUG_PRINT(("DEBUG: set hints for an accuser\n"));
         set_item_hint(chararr[idx], accused_item);
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
     }
 
     // hints for the murderer
+    DEBUG_PRINT(("DEBUG: generate hints for the murderer\n"));
     struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
     struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
     // make a new pool excluding murder and player
@@ -262,11 +281,12 @@ int main() {
     struct Pool notMe = makePoolExcluding(9, 1, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
     struct Character * accused = chararr[poolTake(&notMe, 1)];
     
-    // todo: 
+    DEBUG_PRINT(("DEBUG: set hints for an accuser\n"));
     set_item_hint(chararr[murderIdx], itemHint);
     set_room_hint(chararr[murderIdx], roomHint);
     set_char_hint(chararr[murderIdx], accused);
 
+    DEBUG_PRINT(("DEBUG: start the game\n"));
     //set boolean to check win statement
     bool booroom;
     bool booitem;
