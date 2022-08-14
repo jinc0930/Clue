@@ -88,16 +88,23 @@ int main() {
     char instructions[MAX_LINE];
     prompt(instructions, "First time playing? y/n");
 
-    if(strcasecmp(instructions,"y")==0){
-        printf("Welcome! This is a game of clue!\nThe game begins by asking player to input name, and sets given name as the avatar name.");
-        printf("Then, it asks for user to input commands for gameplay, there are many commands, input help to view a list of them.\n");
-        printf("The game will end when the user wins or loses\n");
-        printf("The player can win by guessing the answer correctly, which consist of the correct room, murder weapon, and muderer.\n");
-        printf("To make the game more winnable, 8 npcs will spawn randomly will give out hints to the player.\n");
-        printf("There are two types of npcs, hint givers gives out three guarenteed accurate hints that eliminates the suspision of a room, weapon, and person\n");
-        printf("The accusers, on the other hand, prompt suspision on possible room, weapon and muderder, however - these accusassions are not guarenteed to be correct.\n");
-        printf("If the truth potion, a hidden item is found by the player, they can use it on one npc where the npc will give out one guarenteed correct accusion\n");
-        printf("If the user fails to guess all three correctly, they can try again until clue is called at the eleventh time, where the game will end.\n");
+    for(;;) {
+        if(strcasecmp(instructions,"y")==0 || startsWith("y", instructions) || startsWith("Y", instructions)){
+            printf("Welcome! This is a game of clue!\nThe game begins by asking player to input name, and sets given name as the avatar name.");
+            printf("Then, it asks for user to input commands for gameplay, there are many commands, input help to view a list of them.\n");
+            printf("The game will end when the user wins or loses\n");
+            printf("The player can win by guessing the answer correctly, which consist of the correct room, murder weapon, and muderer.\n");
+            printf("To make the game more winnable, 8 npcs will spawn randomly will give out hints to the player.\n");
+            printf("There are two types of npcs, hint givers gives out three guarenteed accurate hints that eliminates the suspision of a room, weapon, and person\n");
+            printf("The accusers, on the other hand, prompt suspision on possible room, weapon and muderder, however - these accusassions are not guarenteed to be correct.\n");
+            printf("If the truth potion, a hidden item is found by the player, they can use it on one npc where the npc will give out one guarenteed correct accusion\n");
+            printf("If the user fails to guess all three correctly, they can try again until clue is called at the eleventh time, where the game will end.\n");
+            break;
+        } else if (strcasecmp(instructions,"n")==0 || startsWith("n", instructions) || startsWith("N", instructions)){
+            break;
+        } else{
+            promptErr(instructions, "First time playing? y/n");
+        }
     }
 
     //asks for user name
