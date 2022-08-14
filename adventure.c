@@ -223,12 +223,8 @@ int main() {
     
     // generate 3 accusers and set hints
     DEBUG_PRINT(("DEBUG: shuffle accusers proababilities\n"));
-    int prob_rooms[] = {12, 24, 55}; //rooms easier
-    shuffle(prob_rooms, sizeof(prob_rooms)/sizeof(prob_rooms[0]));
-    int prob_items[] = {12, 24, 55}; //items a little harder
-    shuffle(prob_items, sizeof(prob_items)/sizeof(prob_items[0]));
-    int prob_chars[] = {12, 24, 45}; //chars a little harder
-    shuffle(prob_chars, sizeof(prob_chars)/sizeof(prob_chars[0]));
+    int probs[] = {0, 0, 0, 0, 2, 4, 8, 16, 64};
+    shuffle(probs, sizeof(probs)/sizeof(probs[0]));
 
     DEBUG_PRINT(("DEBUG: generate accusers\n"));
     for (size_t i = 0; i < 3; i++){
@@ -240,14 +236,14 @@ int main() {
         struct Room * accused_room = NULL;
 
         // accuse correct item?
-        if ((rand() % 100 < prob_items[i])) {
+        if ((rand() % 100 < probs[i*3])) {
             // printf("accusing right item\n");
             accused_item = itemarr[itemIdx];
         } else {
             accused_item = itemarr[poolTake(&poolHintsItem, 1)];
         }
         // accuse correct room?
-        if ((rand() % 100 < prob_rooms[i])) {
+        if ((rand() % 100 < probs[i*3+1])) {
             // printf("accusing right room\n");
             accused_room = roomarr[roomIdx];
         } else {
@@ -255,7 +251,7 @@ int main() {
         }
 
         // accuse correct char?
-        if ((rand() % 100) < prob_chars[i]) {
+        if ((rand() % 100) < probs[i*3+2]) {
             // printf("accusing right char\n");
             accused = chararr[murderIdx];
         } else {
