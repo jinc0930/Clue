@@ -10,8 +10,7 @@
 #include <string.h>
 #include <stdbool.h>
 #define MAX_LINE 100
-#define DEBUG 1 // debug, comment this
-
+// #define DEBUG 1 // or just use: make debug
 #ifdef DEBUG
 # define DEBUG_PRINT(x) printf x
 #else
@@ -92,6 +91,7 @@ int main() {
     //arr for easier access later
     struct Character * chararr[9] = {char1,char2,char3,char4,char5,char6,char7,char8,char9};
 
+    #ifndef TEST
     char instructions[MAX_LINE];
     prompt(instructions, "First time playing? y/n");
 
@@ -113,7 +113,9 @@ int main() {
             promptErr(instructions, "First time playing? y/n");
         }
     }
-
+    #endif
+    
+    #ifndef TEST
     //asks for user name
     char avatarname[MAX_LINE];
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
@@ -126,9 +128,10 @@ int main() {
             break;
         }
     }
-    
+    #endif
     bool already_exists = false;
     int avatarIdx = 0;
+    #ifndef TEST
     for (size_t i = 0; i < 9; i++){
         if (strcasecmp(avatarname, getcharname(chararr[i])) == 0) {
             already_exists = true;
@@ -136,6 +139,7 @@ int main() {
             break;
         }
     };
+    #endif
 
     DEBUG_PRINT(("DEBUG: check if name already exists\n"));
     // check there is no conflict
@@ -146,8 +150,12 @@ int main() {
 
     DEBUG_PRINT(("DEBUG: set new character\n"));
     struct Character * avatar = chararr[avatarIdx];
-    avatar->name = avatarname;
     avatar->id = "avatar";
+    #ifndef TEST
+    avatar->name = avatarname;
+    #else
+    avatar->name = "tester";
+    #endif
 
     // make a string of all current characters in game
     DEBUG_PRINT(("DEBUG: create string of current characters\n"));
@@ -292,6 +300,7 @@ int main() {
     //main game portion with clue counter
     int clue = 0;
     int attempts = 0;
+    #ifndef TEST
     while( clue <= 10 ){
         struct Room* curroom = avatar ->location;
         char cmd[MAX_LINE];
@@ -657,6 +666,7 @@ int main() {
             printErr("Please input a valid command\n");
         }
     }
+    #endif
     //check if user gets all three answers correct
     if(clue==12){
         printf("Thank you for playing, see you next time!\n");
