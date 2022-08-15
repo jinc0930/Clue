@@ -3,6 +3,9 @@ SOURCES = utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c
 final:
 	gcc utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c -o clue
 
+final-windows:
+	gcc $(SOURCES) -o clue.exe
+
 debug:
 	gcc -g -DDEBUG=1 $(SOURCES) -o clue
 
