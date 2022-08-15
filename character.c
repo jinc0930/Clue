@@ -106,8 +106,36 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
         character->prefix[0] = ("I'm not sure, but I think the murderer weapon is");
     }
     else{
-        character->hints[0] = (itemHint->name);
+        // character->hints[0] = (itemHint->name);
         character->prefix[0] = ("The murderer weapon is not");
+
+        if (strcmp(itemHint->name, "butter knife") == 0) {
+           character->hints[0] = (BLU"butter knife"RESET" because ..");
+        } 
+        else if (strcmp(itemHint->name, "bat") == 0) {
+           character->hints[0] = (BLU"bat,"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "wrench") == 0) {
+            character->hints[0] = (BLU"wrench"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "rope") == 0) {
+            character->hints[0] = (BLU"rope"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "dagger") == 0) {
+            character->hints[0] = (BLU"dagger"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "rifle") == 0) {
+            character->hints[0] = (BLU"rifle"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "hammer") == 0) {
+            character->hints[0] = (BLU"hammer"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "lead pipe") == 0) {
+            character->hints[0] = (BLU"lead"RESET" because ..");
+        }
+        else if (strcmp(itemHint->name, "poison bottle") == 0) {
+            character->hints[0] = (BLU"poison"RESET" because ..");
+        }
     }
 }
 
@@ -117,8 +145,35 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
         character->prefix[1] = ("I'm not sure, but I think the murderer happened in the");
     }
     else{
-        character->hints[1] = (getRoomName(roomHint));
+        // character->hints[1] = (getRoomName(roomHint));
         character->prefix[1] = ("The murderer did not happen in the");
+        if (strcmp(roomHint->name, "kitchen") == 0) {
+           character->hints[1] = (BLU"kitchen"RESET" because ..");
+        } 
+        else if (strcmp(roomHint->name, "hall") == 0) {
+           character->hints[1] = (BLU"name,"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "study") == 0) {
+            character->hints[1] = (BLU"study"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "bathroom") == 0) {
+            character->hints[1] = (BLU"bathroom"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "ballroom") == 0) {
+            character->hints[1] = (BLU"ballroom"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "library") == 0) {
+            character->hints[1] = (BLU"library"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "lounge") == 0) {
+            character->hints[1] = (BLU"lounge"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "office") == 0) {
+            character->hints[1] = (BLU"office"RESET" because ..");
+        }
+        else if (strcmp(roomHint->name, "bedroom") == 0) {
+            character->hints[1] = (BLU"bedroom"RESET" because ..");
+        }
     }
 }
 
