@@ -7,16 +7,13 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
-        run: make
+        run: make final-windows
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: clue
+          files: clue.exe
