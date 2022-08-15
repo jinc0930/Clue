@@ -171,6 +171,15 @@ void printTyping(char *msg) {
     };
 }
 
+void printClue() {
+    puts(" ______     __         __  __     ______    ");
+    puts("/\\  ___\\   /\\ \\       /\\ \\/\\ \\   /\\  ___\\   ");
+    puts("\\ \\ \\____  \\ \\ \\____  \\ \\ \\_\\ \\  \\ \\  __\\   ");
+    puts(" \\ \\_____\\  \\ \\_____\\  \\ \\_____\\  \\ \\_____\\ ");
+    puts("  \\/_____/   \\/_____/   \\/_____/   \\/_____/ ");
+    puts("");
+}
+
 // for testing purposes
 void debugMap(struct Room* map[9]) {
     puts(BLD "\nDEBUG MAP:" RESET);

@@ -67,4 +67,7 @@ void printRoomItems(struct Room* room);
 
 // simulate typing
 void printTyping(char *msg);
+
+// print asci clue characters
+void printClue();
 #endif

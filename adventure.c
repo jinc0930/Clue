@@ -18,6 +18,7 @@
 #endif
 
 int main() {
+    printClue();
     // a random seed
     srand(time(NULL));
     //make nine rooms
@@ -672,6 +673,13 @@ int main() {
         printf("Thank you for playing, see you next time!\n");
     }
     else if(booroom && booitem && boochara){
+        puts("    /\\_____/\\");
+        puts("   /  o   o  \\");
+        puts("  ( ==  v  == )");
+        puts("   )         (");
+        puts("  (           )");
+        puts(" ( (  )   (  ) )");
+        puts("(__(__)___(__)__)");
         printSucc("YOU WON!");
         printf(BLK "Attempts: %d\n", attempts);
     }
