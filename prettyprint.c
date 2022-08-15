@@ -5,7 +5,6 @@
 #include "prettyprint.h"
 #include <time.h>
 #define VAL 120
-// #define DEBUG_MAP 1;
 
 void prompt(char out[], char*str) {
     printf(CYN "%s\n>>> " RESET, str);
@@ -77,7 +76,7 @@ void rowBreak() {
 }
 // print all the rooms
 void printMap(struct Room* map[9]) {
-    #if defined DEBUG_MAP
+    #if defined DEBUG
     debugMap(map);
     #else
     rowBreak();
@@ -180,6 +179,7 @@ void printClue() {
     puts("");
 }
 
+#if defined DEBUG
 // for testing purposes
 void debugMap(struct Room* map[9]) {
     puts(BLD "\nDEBUG MAP:" RESET);
@@ -221,3 +221,4 @@ void debugMap(struct Room* map[9]) {
         rowBreak();
     }
 }
+#endif
