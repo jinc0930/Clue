@@ -614,7 +614,7 @@ int main() {
                 }
                 //check if item matches (in the room or on the character)
                 struct Item * inv = avatar->inventory;
-                // struct Item * roominv = curroom->itemList; // not needed;
+                struct Item * roominv = curroom->itemList; 
                 //set boolean (find item or not)
                 bool temp = false;
                 //loop through user inventory and see if item is there
@@ -626,12 +626,12 @@ int main() {
                     inv = inv->next;
                 }
                 // //loop through room itemList and see if item is there
-                // while(roominv!=NULL){
-                //     if(strcmp(roominv->name,targetItem)==0){
-                //         temp=true;
-                //     }
-                //     roominv = roominv->next;
-                // }
+                while(roominv!=NULL){
+                    if(strcmp(roominv->name,targetItem)==0){
+                        temp=true;
+                    }
+                    roominv = roominv->next;
+                }
                 //if item is in inventory
                 if(temp){
                     printSucc("ITEM MATCH");
