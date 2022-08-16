@@ -103,7 +103,7 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
     
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[0] = (itemHint->name);
-        character->prefix[0] = ("I'm not sure, but I think the murderer weapon is");
+        character->prefix[0] = ("I'm not sure, but I think the murder weapon is");
     }
     else{
         // character->hints[0] = (itemHint->name);
@@ -142,7 +142,7 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
 void set_room_hint(struct Character* character, struct Room* roomHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->hints[1] = (getRoomName(roomHint));
-        character->prefix[1] = ("I'm not sure, but I think the murderer happened in the");
+        character->prefix[1] = ("I'm not sure, but I think the murder happened in the");
     }
     else{
         // character->hints[1] = (getRoomName(roomHint));
