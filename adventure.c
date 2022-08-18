@@ -170,16 +170,16 @@ int main() {
 
     DEBUG_PRINT(("DEBUG: make 3 pools for distribution\n"));
     // pool for distribution of items and chars
-    struct Pool poolRoom = makePool(9, 1);
-    struct Pool poolChar = makePool(9, 1);
-    struct Pool poolItem = makePool(9, 1);
+    struct Pool poolRoom = makePool(9);
+    struct Pool poolChar = makePool(9);
+    struct Pool poolItem = makePool(9);
     DEBUG_PRINT(("DEBUG: distribute item and chars\n"));
     for (size_t i = 0; i < 9; i++) {
         // add a random item to the room
-        additem(roomarr[i], itemarr[poolTake(&poolItem, 1)]);
+        additem(roomarr[i], itemarr[poolTake(&poolItem)]);
 
         // take a random character from pool
-        struct Character * charChosen = chararr[poolTake(&poolChar, 1)];
+        struct Character * charChosen = chararr[poolTake(&poolChar)];
         
         // add character to the room
         addChar(roomarr[i], charChosen);
@@ -193,16 +193,16 @@ int main() {
     int exclude[] = {avatarIdx};
     DEBUG_PRINT(("DEBUG: create pool hints\n"));
     // pools for generating: answers and hints
-    struct Pool poolHintsChar = makePoolExcluding(9, 1, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
-    struct Pool poolHintsRoom = makePool(9, 1);
-    struct Pool poolHintsItem = makePool(9, 1);
+    struct Pool poolHintsChar = makePoolExcluding(9, exclude, sizeof(exclude)/sizeof(exclude[0])); //size 8
+    struct Pool poolHintsRoom = makePool(9);
+    struct Pool poolHintsItem = makePool(9);
 
     DEBUG_PRINT(("DEBUG: generate answer\n"));
     //pick the murderer (poolHintsChar size = 7)
-    int murderIdx = poolTake(&poolHintsChar, 1); 
+    int murderIdx = poolTake(&poolHintsChar); 
     chararr[murderIdx]->id = "murderer";
-    int roomIdx = poolTake(&poolHintsRoom, 1);
-    int itemIdx = poolTake(&poolHintsItem, 1);
+    int roomIdx = poolTake(&poolHintsRoom);
+    int itemIdx = poolTake(&poolHintsItem);
 
     //generate answer
     char* targetChar = chararr[murderIdx]->name;
@@ -211,18 +211,18 @@ int main() {
 
     // pool for distributing the ids
     int excludes[] = {murderIdx, avatarIdx};
-    struct Pool poolChars = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0])); // size 7
+    struct Pool poolChars = makePoolExcluding(9, excludes, sizeof(excludes)/sizeof(excludes[0])); // size 7
 
     // generate 4 hint-givers and set hints
     DEBUG_PRINT(("DEBUG: generate hint givers\n"));
     for (size_t i = 0; i < 4; i++){
-        int idx = poolTake(&poolChars, 1);
+        int idx = poolTake(&poolChars);
         chararr[idx]->id = "hint giver";
 
         // take hints
-        struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
-        struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
-        struct Character * charHint = chararr[poolTake(&poolHintsChar, 1)];
+        struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
+        struct Room * roomHint = roomarr[poolTake(&poolHintsRoom)];
+        struct Character * charHint = chararr[poolTake(&poolHintsChar)];
 
         DEBUG_PRINT(("DEBUG: set hints for a hint giver\n"));
         set_item_hint(chararr[idx], itemHint);
@@ -237,7 +237,7 @@ int main() {
 
     DEBUG_PRINT(("DEBUG: generate accusers\n"));
     for (size_t i = 0; i < 3; i++){
-        int idx = poolTake(&poolChars, 1);
+        int idx = poolTake(&poolChars);
         chararr[idx]->id = "accuser";
 
         struct Character * accused = NULL;
@@ -249,14 +249,14 @@ int main() {
             // printf("accusing right item\n");
             accused_item = itemarr[itemIdx];
         } else {
-            accused_item = itemarr[poolTake(&poolHintsItem, 1)];
+            accused_item = itemarr[poolTake(&poolHintsItem)];
         }
         // accuse correct room?
         if ((rand() % 100 < probs[i*3+1])) {
             // printf("accusing right room\n");
             accused_room = roomarr[roomIdx];
         } else {
-            accused_room = roomarr[poolTake(&poolHintsRoom, 1)];
+            accused_room = roomarr[poolTake(&poolHintsRoom)];
         }
 
         // accuse correct char?
@@ -266,8 +266,8 @@ int main() {
         } else {
             // select a random one excluding avatar and self
             int excludes[] = {avatarIdx, idx};
-            struct Pool notMe = makePoolExcluding(9, 1, excludes, sizeof(excludes)/sizeof(excludes[0]));
-            accused = chararr[poolTake(&notMe, 1)];
+            struct Pool notMe = makePoolExcluding(9, excludes, sizeof(excludes)/sizeof(excludes[0]));
+            accused = chararr[poolTake(&notMe)];
         }
 
         DEBUG_PRINT(("DEBUG: set hints for an accuser\n"));
@@ -278,12 +278,12 @@ int main() {
 
     // hints for the murderer
     DEBUG_PRINT(("DEBUG: generate hints for the murderer\n"));
-    struct Item * itemHint = itemarr[poolTake(&poolHintsItem, 1)];
-    struct Room * roomHint = roomarr[poolTake(&poolHintsRoom, 1)];
+    struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
+    struct Room * roomHint = roomarr[poolTake(&poolHintsRoom)];
     // make a new pool excluding murder and player
     int excludesMurd[] = {avatarIdx, murderIdx};
-    struct Pool notMe = makePoolExcluding(9, 1, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
-    struct Character * accused = chararr[poolTake(&notMe, 1)];
+    struct Pool notMe = makePoolExcluding(9, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
+    struct Character * accused = chararr[poolTake(&notMe)];
     
     DEBUG_PRINT(("DEBUG: set hints for an accuser\n"));
     set_item_hint(chararr[murderIdx], itemHint);

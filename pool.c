@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include "pool.h"
 
-struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_indexes[], int exclude_indexes_size) {
-	struct Pool pool = { .take_counter = { 0 }, .max_take = max_take };
+struct Pool makePoolExcluding(int pool_desired_size, int exclude_indexes[], int exclude_indexes_size) {
+	struct Pool pool = {};
 	int r = 0;
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
@@ -25,8 +25,8 @@ struct Pool makePoolExcluding(int pool_desired_size, int max_take, int exclude_i
 	return pool;
 }
 
-struct Pool makePool(int pool_desired_size, int max_take) {
-	struct Pool pool = { .take_counter = { 0 }, .max_take = max_take };
+struct Pool makePool(int pool_desired_size) {
+	struct Pool pool = {};
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
 	for (int i = 0; i < pool_desired_size; i++){
@@ -36,17 +36,13 @@ struct Pool makePool(int pool_desired_size, int max_take) {
 	return pool;
 }
 
-int poolTake(struct Pool *pool, int quantity_take) {
+int poolTake(struct Pool *pool) {
 	// this function requires pool to be length > 0;
 	if (pool->length <= 0) return -1; 
 	int take = rand() % pool->length;
   	int ref = pool->vec[take];
-	pool->take_counter[ref] += quantity_take;
-	if (pool->take_counter[ref] >= pool->max_take)  {
-		// shift pool elements to the left
-		for(int i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
-		pool->length -= 1;
-	}
+	for(int i = take; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
+	pool->length -= 1;
 	return ref;
 }
 
