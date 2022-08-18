@@ -177,18 +177,6 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
     }
 }
 
-//old way
-// void set_char_hint(struct Character* character, struct Character* accused){
-//     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
-//         character->hints[2] = (accused->name);
-//         character->prefix[2] = ("I'm not sure, but I think the murderer is");
-//     }
-//     else{
-//         character->hints[2] = (accused->name);
-//         character->prefix[2] =("The murderer is not");
-//     }
-// }
-
 // //working on this
 void set_char_hint(struct Character* character, struct Character* accused){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){

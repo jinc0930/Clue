@@ -11,7 +11,7 @@ randomnized with the defined structure pool, which manipulates arrays and random
 
 There are a total of nine items and nine characters(including the player's avatar) in the game, they will spawn into random rooms at the beginning of the game. Each item consist of a name and a pointer called next while each
 character has name, inventory(a linked list of items), and location(indicating the room it's in).
-The 8 npcs, however, are tagged with an ID, they can either be a "hint giver" or an "accuser", and ofcourse, one of the npcs will be the "murderer". The "hint givers" will give the user three guarenteed accurate hints (one about each category: room, item, person) that eliminates the suspicsion. The "accuser" will give the user three accusations (one of each category) that are not guarenteed to be true, the chance of it being true varies from one accuser to another. The "murderer" accuses things like an accuser, but is guranteed to be incorrect.
+The 8 npcs, however, are tagged with an ID, they can either be a "hint giver" or an "accuser", and of course, one of the npcs will be the "murderer". The "hint givers" will give the user three guarenteed accurate hints (one about each category: room, item, person) that eliminates the suspicsion. The "accuser" will give the user three accusations (one of each category) that are not guarenteed to be true, the chance of it being true varies from one accuser to another. The "murderer" will blend in and act either as a "hint giver" or an "accuser".
 
 Commands include "help","list","go","take","drop","inventory","look","talk", and "clue".
 The game uses scanf() to gather user input, and allow commands with secondary inputs. Players can enter a direction

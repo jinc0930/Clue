@@ -33,8 +33,7 @@ int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
 
-
-
+//setting hints the npcs will give out
 void set_item_hint(struct Character* character, struct Item* itemHint);
 void set_room_hint(struct Character* character, struct Room* roomHint);
 void set_char_hint(struct Character* character, struct Character* accused);
