@@ -190,7 +190,7 @@ void debugMap(struct Room* map[9]) {
                 } else {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);
-                    printCell(checkmark, BLK);
+                    printCell(checkmark, "");
                 }
             } else {
                 printCell(map[i+j]->name, BLD);
