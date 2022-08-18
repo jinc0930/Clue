@@ -134,7 +134,7 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
             character->hints[0] = (BLU"lead pipe"RESET" because we shipped it to a fixing company");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
-            character->hints[0] = (BLU"poison"RESET" because it was locked in the lab");
+            character->hints[0] = (BLU"poison bottle"RESET" because it was locked in the lab");
         }
     }
 }
