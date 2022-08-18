@@ -681,7 +681,9 @@ int main() {
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
         printSucc("YOU WON!");
-        printf(BLK "Attempts: %d\n", attempts);
+        printf("Attempts: %d\n", attempts);
+        printf("Press ENTER key to quit the game\n");
+        getchar(); // prevent cmd to close when running from exe
     }
     else{
         puts("    /\\_____/\\");
@@ -692,6 +694,8 @@ int main() {
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
         printErr("YOU LOST");
+        printf("Press ENTER key to quit the game\n");
+        getchar(); // prevent cmd to close when running from exe
     }
     //free everything
     //fress rooms

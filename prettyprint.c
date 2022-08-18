@@ -28,16 +28,12 @@ void printSucc(char*str) {
     printf(BLD GRN "%s\n" RESET, str);
 }
 
-void printDimmed(char*str) {
-    printf(BLK "%s", str);
-}
-
 void promptWithLoc(char out[], char*str, char*loc) {
     // check if str is empty
     if ((str != NULL) && (str[0] == '\0')) {
         printf("\n" BLD BLU "%s >>> " RESET, loc);
     } else {
-        printf("\n" BLK "%s\n" BLD BLU "%s >>> " RESET, str, loc);
+        printf("\n%s\n" BLD BLU "%s >>> " RESET, str, loc);
     }
     fgets(out, VAL, stdin);
     // remove trailing newline
@@ -63,16 +59,16 @@ void cell(char *dest, char *str) {
 void printCell(char *col, char *modifiers) {
     char c[18];
     cell(c, col);
-    printf(BLK "|" RESET);
+    printf("|");
     printf("%s" " %s " RESET, modifiers, c);
 }
 
 void endCells() {
-    printf(BLK "|" RESET "\n");
+    printf("|\n");
 }
 
 void rowBreak() {
-    printf(BLK "+--------------------+--------------------+--------------------+\n" RESET);
+    printf("+--------------------+--------------------+--------------------+\n");
 }
 // print all the rooms
 void printMap(struct Room* map[9]) {
@@ -90,7 +86,7 @@ void printMap(struct Room* map[9]) {
                 } else {
                     char checkmark[18];
                     sprintf(checkmark,"%s *", map[i+j]->name);
-                    printCell(checkmark, BLK);
+                    printCell(checkmark, "");
                 }
             } else {
                 printCell(map[i+j]->name, BLD);
@@ -108,7 +104,7 @@ void printMap(struct Room* map[9]) {
                     }
                 } else {
                     if (map[i+k]->chara[j] != NULL) {
-                        printCell("******", BLK);
+                        printCell("******", "");
                     } else {
                         printCell(NULL, "");
                     }
@@ -125,7 +121,7 @@ void printInventory(struct Character * avatar) {
     struct Item * temp = avatar->inventory;
     if(temp!=NULL) {
         int i = 0;
-        printf(BLK "Inventory: " RESET "[");
+        printf("Inventory: [");
         while(temp!=NULL) {
             if (i++ == 0) {
                 printf(YEL "%s" RESET, temp->name);
@@ -136,7 +132,7 @@ void printInventory(struct Character * avatar) {
         }
         printf("]\n");
     } else {
-        printf(BLK "Inventory: " RESET "nothing.\n");
+        printf("Inventory: nothing.\n");
     }
 }
 
@@ -144,7 +140,7 @@ void printRoomItems(struct Room * room) {
     struct Item * temp = room->itemList;
     if(temp!=NULL) {
         int i = 0;
-        printf(BLK "Room items: " RESET "[");
+        printf("Room items: [");
         while(temp!=NULL) {
             if (i++ == 0) {
                 printf(YEL "%s" RESET, temp->name);
@@ -155,7 +151,7 @@ void printRoomItems(struct Room * room) {
         }
         printf("]\n");
     } else {
-        printf(BLK "Room items: " RESET "nothing.\n");
+        printf("Room items: nothing.\n");
     }
 }
 
