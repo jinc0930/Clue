@@ -685,6 +685,7 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
+        puts("https://www.youtube.com/watch?v=PHgc8Q6qTjc");
         printSucc("YOU WON!");
         printf("Attempts: %d\n", attempts);
         printf("Press ENTER key to quit the game\n");
@@ -698,6 +699,7 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
+        puts("https://www.youtube.com/watch?v=PS_cV18z67Y");
         printErr("YOU LOST");
         printf("Press ENTER key to quit the game\n");
         getchar(); // prevent cmd to close when running from exe
