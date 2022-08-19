@@ -1,0 +1,32 @@
+== ITEMS ==
+[ ] butter knife
+[ ] bat
+[ ] wrench
+[ ] rope
+[ ] dagger
+[ ] rifle
+[ ] hammer
+[ ] lead pipe
+[ ] poison bottle
+
+== ROOMS ==
+[ ] kitchen
+[ ] hall
+[ ] study
+[ ] bathroom
+[ ] ballroom
+[ ] library
+[ ] lounge
+[ ] office
+[ ] bedroom
+
+== Characters ==
+[ ] Chang
+[ ] Kevin
+[ ] James
+[ ] Tenzin
+[ ] Minh
+[ ] Michael
+[ ] Ivan
+[ ] Edrick
+[ ] Joey
