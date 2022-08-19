@@ -347,11 +347,6 @@ int main() {
                     printTyping(str);
                     sprintf(str, "%s %s.\n", chararr[a]->prefix[2], chararr[a]->hints[2]);
                     printTyping(str);
-
-                    // old way
-                    // printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
-                    // printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
-                    // printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
                     check = true;
                     break;
                 }
@@ -655,7 +650,6 @@ int main() {
                 } else {
                     printErr("WRONG CHARACTER");
                 }
-                
                 //check if guesses correctly
                 if(booroom && booitem && boochara){
                     //breaks gaming loop
@@ -680,6 +674,7 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
+        puts("https://www.youtube.com/watch?v=PHgc8Q6qTjc");
         printSucc("YOU WON!");
         printf("Attempts: %d\n", attempts);
         printf("Press ENTER key to quit the game\n");
@@ -693,6 +688,7 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
+        puts("https://www.youtube.com/watch?v=PS_cV18z67Y");
         printErr("YOU LOST");
         printf("Press ENTER key to quit the game\n");
         getchar(); // prevent cmd to close when running from exe
@@ -712,6 +708,5 @@ int main() {
     }
     //and avatar
     // free(avatar);
-
     return 0;
 }
