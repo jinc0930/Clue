@@ -278,9 +278,9 @@ int main() {
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
     }
-    DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
-    DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
-    DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
+    // DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
+    // DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
+    // DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
     // hints for the murderer
     DEBUG_PRINT(("DEBUG: generate hints for the murderer\n"));
     struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
@@ -352,6 +352,11 @@ int main() {
                     printTyping(str);
                     sprintf(str, "%s %s.\n", chararr[a]->prefix[2], chararr[a]->hints[2]);
                     printTyping(str);
+
+                    // old way
+                    // printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
+                    // printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
+                    // printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
                     check = true;
                     break;
                 }
@@ -655,6 +660,7 @@ int main() {
                 } else {
                     printErr("WRONG CHARACTER");
                 }
+                
                 //check if guesses correctly
                 if(booroom && booitem && boochara){
                     //breaks gaming loop
@@ -679,7 +685,6 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
-        puts("https://www.youtube.com/watch?v=PHgc8Q6qTjc");
         printSucc("YOU WON!");
         printf("Attempts: %d\n", attempts);
         printf("Press ENTER key to quit the game\n");
@@ -693,7 +698,6 @@ int main() {
         puts("  (           )");
         puts(" ( (  )   (  ) )");
         puts("(__(__)___(__)__)");
-        puts("https://www.youtube.com/watch?v=PS_cV18z67Y");
         printErr("YOU LOST");
         printf("Press ENTER key to quit the game\n");
         getchar(); // prevent cmd to close when running from exe
@@ -713,5 +717,6 @@ int main() {
     }
     //and avatar
     // free(avatar);
+
     return 0;
 }
