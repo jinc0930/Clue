@@ -102,31 +102,31 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->prefix[0] = ("I'm not sure, but I think the murder weapon is");
         if (strcmp(itemHint->name, "butter knife") == 0) {
-           character->hints[0] = (BLU"butter knife"RESET" because it had blood on it");
+           character->hints[0] = (RED"butter knife"RESET" because it had blood on it");
         } 
         else if (strcmp(itemHint->name, "bat") == 0) {
-           character->hints[0] = (BLU"bat,"RESET" because I couldn't find it yesterday");
+           character->hints[0] = (RED"bat,"RESET" because I couldn't find it yesterday");
         }
         else if (strcmp(itemHint->name, "wrench") == 0) {
-            character->hints[0] = (BLU"wrench"RESET" because it was missing for a couple of days");
+            character->hints[0] = (RED"wrench"RESET" because it was missing for a couple of days");
         }
         else if (strcmp(itemHint->name, "rope") == 0) {
-            character->hints[0] = (BLU"rope"RESET" because it has scratch marks on it");
+            character->hints[0] = (RED"rope"RESET" because it has scratch marks on it");
         }
         else if (strcmp(itemHint->name, "dagger") == 0) {
-            character->hints[0] = (BLU"dagger"RESET" because it is bloody");
+            character->hints[0] = (RED"dagger"RESET" because it is bloody");
         }
         else if (strcmp(itemHint->name, "rifle") == 0) {
-            character->hints[0] = (BLU"rifle"RESET" because three bullets went missing");
+            character->hints[0] = (RED"rifle"RESET" because three bullets went missing");
         }
         else if (strcmp(itemHint->name, "hammer") == 0) {
-            character->hints[0] = (BLU"hammer"RESET" because it's sticky");
+            character->hints[0] = (RED"hammer"RESET" because it's sticky");
         }
         else if (strcmp(itemHint->name, "lead pipe") == 0) {
-            character->hints[0] = (BLU"lead pipe"RESET" because it looks like someone ripped it off the building");
+            character->hints[0] = (RED"lead pipe"RESET" because it looks like someone ripped it off the building");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
-            character->hints[0] = (BLU"poison bottle"RESET" because the floor was corroded");
+            character->hints[0] = (RED"poison bottle"RESET" because the floor was corroded");
         }
     }
     else{
@@ -166,31 +166,31 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->prefix[1] = ("I'm not sure, but I think the murder happened in the");
         if (strcmp(roomHint->name, "kitchen") == 0) {
-           character->hints[1] = (BLU"kitchen"RESET" because I heard weird noises last night");
+           character->hints[1] = (RED"kitchen"RESET" because I heard weird noises last night");
         } 
         else if (strcmp(roomHint->name, "hall") == 0) {
-           character->hints[1] = (BLU"hall"RESET" because the sensor lights were triggered");
+           character->hints[1] = (RED"hall"RESET" because the sensor lights were triggered");
         }
         else if (strcmp(roomHint->name, "study") == 0) {
-            character->hints[1] = (BLU"study"RESET" because the lights was on");
+            character->hints[1] = (RED"study"RESET" because the lights was on");
         }
         else if (strcmp(roomHint->name, "bathroom") == 0) {
-            character->hints[1] = (BLU"bathroom"RESET" because someone was using it for a couple of hours straight");
+            character->hints[1] = (RED"bathroom"RESET" because someone was using it for a couple of hours straight");
         }
         else if (strcmp(roomHint->name, "ballroom") == 0) {
-            character->hints[1] = (BLU"ballroom"RESET" because creepy music was blasting for the whole night");
+            character->hints[1] = (RED"ballroom"RESET" because creepy music was blasting for the whole night");
         }
         else if (strcmp(roomHint->name, "library") == 0) {
-            character->hints[1] = (BLU"library"RESET" because the shelves were flipped on the floor");
+            character->hints[1] = (RED"library"RESET" because the shelves were flipped on the floor");
         }
         else if (strcmp(roomHint->name, "lounge") == 0) {
-            character->hints[1] = (BLU"lounge"RESET" because the sofa had blood stains");
+            character->hints[1] = (RED"lounge"RESET" because the sofa had blood stains");
         }
         else if (strcmp(roomHint->name, "office") == 0) {
-            character->hints[1] = (BLU"office"RESET" because noone ever goes there");
+            character->hints[1] = (RED"office"RESET" because noone ever goes there");
         }
         else if (strcmp(roomHint->name, "bedroom") == 0) {
-            character->hints[1] = (BLU"bedroom"RESET" because the pillow is missing");
+            character->hints[1] = (RED"bedroom"RESET" because the pillow is missing");
         }
     }
     else{
@@ -231,31 +231,31 @@ void set_char_hint(struct Character* character, struct Character* accused){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         character->prefix[2] = ("I'm not sure, but I think the murderer is");
         if (strcmp(accused->name, "chang") == 0) {
-           character->hints[2] = (BLU"Chang"RESET" because she is always passive-aggressive");
+           character->hints[2] = (RED"Chang"RESET" because she is always passive-aggressive");
         } 
         else if (strcmp(accused ->name, "kevin") == 0) {
-           character->hints[2] = (BLU"Kevin"RESET" because he was acting suspicious");
+           character->hints[2] = (RED"Kevin"RESET" because he was acting suspicious");
         }
         else if (strcmp(accused ->name, "james") == 0) {
-            character->hints[2] = (BLU"James"RESET" because he used the bathroom for a couple of hours");
+            character->hints[2] = (RED"James"RESET" because he used the bathroom for a couple of hours");
         }
         else if (strcmp(accused ->name, "tenzin") == 0) {
-            character->hints[2] = (BLU"Tenzin"RESET" because he loves to play violent videogames.");
+            character->hints[2] = (RED"Tenzin"RESET" because he loves to play violent videogames.");
         }
         else if (strcmp(accused ->name, "minh") == 0) {
-            character->hints[2] = (BLU"Minh"RESET" because he is so fake, he acts nice but bad mouths you behind your back");
+            character->hints[2] = (RED"Minh"RESET" because he is so fake, he acts nice but bad mouths you behind your back");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
-            character->hints[2] = (BLU"Michael"RESET" because he and the victim's are enemies");
+            character->hints[2] = (RED"Michael"RESET" because he and the victim's are enemies");
         }
         else if (strcmp(accused ->name, "ivan") == 0) {
-            character->hints[2] = (BLU"Ivan"RESET" because he was off for the whole day and stayed in");
+            character->hints[2] = (RED"Ivan"RESET" because he was off for the whole day and stayed in");
         }
         else if (strcmp(accused ->name, "edrick") == 0) {
-            character->hints[2] = (BLU"Edrick"RESET" because he was acting weird and didn't study that night");
+            character->hints[2] = (RED"Edrick"RESET" because he was acting weird and didn't study that night");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
-            character->hints[2] = (BLU"Joey"RESET" because he did not go work out at the gym that day");
+            character->hints[2] = (RED"Joey"RESET" because he did not go work out at the gym that day");
         }
     }
     else{
