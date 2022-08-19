@@ -220,13 +220,17 @@ int main() {
         chararr[idx]->id = "hint giver";
 
         // take hints
+        DEBUG_PRINT(("DEBUG: taking hints\n"));
         struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
         struct Room * roomHint = roomarr[poolTake(&poolHintsRoom)];
         struct Character * charHint = chararr[poolTakeExcluding(&poolHintsChar, idx)];
 
         DEBUG_PRINT(("DEBUG: set hints for a hint giver\n"));
+        DEBUG_PRINT(("DEBUG: set item hint: %s\n", itemHint->name));
         set_item_hint(chararr[idx], itemHint);
+        DEBUG_PRINT(("DEBUG: set room hint: %s\n", roomHint->name));
         set_room_hint(chararr[idx], roomHint);
+        DEBUG_PRINT(("DEBUG: set charHint hint: %s\n", charHint->name));
         set_char_hint(chararr[idx], charHint);
     }
     DEBUG_PRINT(("DEBUG: 1 poolHintsChar size: %d\n", poolHintsItem.length));
@@ -278,9 +282,9 @@ int main() {
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
     }
-    // DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
-    // DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
-    // DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
+    DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
+    DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
+    DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
     // hints for the murderer
     DEBUG_PRINT(("DEBUG: generate hints for the murderer\n"));
     struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];

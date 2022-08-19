@@ -53,8 +53,7 @@ int poolTakeExcluding(struct Pool *pool, int exlude) {
 	int size = 0;
 	for(int j = 0; j < pool->length; j++){
 		if(pool->vec[j] != exlude) {
-			temp[j] = j;
-			size++;
+			temp[size++] = j;
 		};
 	}
 
