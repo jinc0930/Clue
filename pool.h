@@ -32,7 +32,7 @@ int poolTake(struct Pool *pool);
  * If pool is empty it returns -1
  * WIP
  */
-// int poolTakeExcluding(struct Pool *pool, int exclude_idx); 
+int poolTakeExcluding(struct Pool *pool, int exclude_idx); 
 
 // Choose one index randomly, but it won't remove from the pool and it won't count as take;
 int poolChoose(struct Pool *pool);

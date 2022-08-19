@@ -46,6 +46,25 @@ int poolTake(struct Pool *pool) {
 	return ref;
 }
 
+int poolTakeExcluding(struct Pool *pool, int exlude) {
+	// this function requires pool to be length > 0;
+	if (pool->length <= 0) return -1; 
+	int temp[MAX_POOL_SIZE];
+	int size = 0;
+	for(int j = 0; j < pool->length; j++){
+		if(pool->vec[j] != exlude) {
+			temp[j] = j;
+			size++;
+		};
+	}
+
+	int take = rand() % size;
+  	int ref = pool->vec[temp[take]];
+	for(int i = temp[take]; i < pool->length - 1; i++) pool->vec[i] = pool->vec[i + 1];
+	pool->length -= 1;
+	return ref;
+}
+
 int poolChoose(struct Pool *pool) {
 	// this function requires pool to be length > 0;
 	if (pool->length <= 0) return -1; 

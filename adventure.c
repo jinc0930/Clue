@@ -222,13 +222,16 @@ int main() {
         // take hints
         struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
         struct Room * roomHint = roomarr[poolTake(&poolHintsRoom)];
-        struct Character * charHint = chararr[poolTake(&poolHintsChar)];
+        struct Character * charHint = chararr[poolTakeExcluding(&poolHintsChar, idx)];
 
         DEBUG_PRINT(("DEBUG: set hints for a hint giver\n"));
         set_item_hint(chararr[idx], itemHint);
         set_room_hint(chararr[idx], roomHint);
         set_char_hint(chararr[idx], charHint);
     }
+    DEBUG_PRINT(("DEBUG: 1 poolHintsChar size: %d\n", poolHintsItem.length));
+    DEBUG_PRINT(("DEBUG: 1 poolHintsRoom size: %d\n", poolHintsRoom.length));
+    DEBUG_PRINT(("DEBUG: 1 poolHintsItem size: %d\n", poolHintsChar.length));
     
     // generate 3 accusers and set hints
     DEBUG_PRINT(("DEBUG: shuffle accusers proababilities\n"));
@@ -275,7 +278,9 @@ int main() {
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
     }
-
+    DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
+    DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
+    DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
     // hints for the murderer
     DEBUG_PRINT(("DEBUG: generate hints for the murderer\n"));
     struct Item * itemHint = itemarr[poolTake(&poolHintsItem)];
