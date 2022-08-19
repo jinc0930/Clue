@@ -352,11 +352,6 @@ int main() {
                     printTyping(str);
                     sprintf(str, "%s %s.\n", chararr[a]->prefix[2], chararr[a]->hints[2]);
                     printTyping(str);
-
-                    // old way
-                    // printf("%s %s.\n",chararr[a]->prefix[0],chararr[a]->hints[0]);
-                    // printf("%s %s.\n",chararr[a]->prefix[1],chararr[a]->hints[1]);
-                    // printf("%s %s.\n",chararr[a]->prefix[2],chararr[a]->hints[2]);
                     check = true;
                     break;
                 }
@@ -688,6 +683,7 @@ int main() {
         puts("https://www.youtube.com/watch?v=PHgc8Q6qTjc");
         printSucc("YOU WON!");
         printf("Attempts: %d\n", attempts);
+        printf("The correct answer was %s, %s, %s\n", targetRoom, targetChar, targetItem);
         printf("Press ENTER key to quit the game\n");
         getchar(); // prevent cmd to close when running from exe
     }
@@ -701,6 +697,7 @@ int main() {
         puts("(__(__)___(__)__)");
         puts("https://www.youtube.com/watch?v=PS_cV18z67Y");
         printErr("YOU LOST");
+        printf("The correct answer was %s, %s, %s\n", targetRoom, targetChar, targetItem);
         printf("Press ENTER key to quit the game\n");
         getchar(); // prevent cmd to close when running from exe
     }
