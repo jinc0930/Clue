@@ -238,10 +238,13 @@ int main() {
     DEBUG_PRINT(("DEBUG: 1 poolHintsItem size: %d\n", poolHintsChar.length));
     
     // generate 3 accusers and set hints
-    DEBUG_PRINT(("DEBUG: shuffle accusers proababilities\n"));
-    int probs[] = {0, 0, 0, 0, 2, 4, 8, 16, 64};
+    DEBUG_PRINT(("DEBUG: shuffle accusers probabilities\n"));
+    int probs[] = {0, 0, 0, 0, 5, 10, 25, 55, 80};
+    bool ok_item = false;
+    bool ok_char = false;
+    bool ok_room = false;
+    
     shuffle(probs, sizeof(probs)/sizeof(probs[0]));
-
     DEBUG_PRINT(("DEBUG: generate accusers\n"));
     for (size_t i = 0; i < 3; i++){
         int idx = poolTake(&poolChars);
@@ -253,23 +256,38 @@ int main() {
 
         // accuse correct item?
         if ((rand() % 100 < probs[i*3])) {
-            // printf("accusing right item\n");
-            accused_item = itemarr[itemIdx];
+            if (!ok_item) { // no previous correct accusations
+                accused_item = itemarr[itemIdx];
+                ok_item = true;
+            } else {
+                accused_item = itemarr[poolTake(&poolHintsItem)];            }
         } else {
             accused_item = itemarr[poolTake(&poolHintsItem)];
         }
         // accuse correct room?
         if ((rand() % 100 < probs[i*3+1])) {
             // printf("accusing right room\n");
-            accused_room = roomarr[roomIdx];
+            if (!ok_room) { // no previous correct accusations
+                accused_room = roomarr[roomIdx];
+                ok_room = true;
+            } else {
+                accused_room = roomarr[poolTake(&poolHintsRoom)];
+            }
         } else {
             accused_room = roomarr[poolTake(&poolHintsRoom)];
         }
 
         // accuse correct char?
         if ((rand() % 100) < probs[i*3+2]) {
-            // printf("accusing right char\n");
-            accused = chararr[murderIdx];
+            if (!ok_char) { // no previous correct accusations
+                accused = chararr[murderIdx];
+                ok_char = true;
+            } else {
+                // select a random one excluding avatar and self
+                int excludes[] = {avatarIdx, idx};
+                struct Pool notMe = makePoolExcluding(9, excludes, sizeof(excludes)/sizeof(excludes[0]));
+                accused = chararr[poolTake(&notMe)];
+            }
         } else {
             // select a random one excluding avatar and self
             int excludes[] = {avatarIdx, idx};
@@ -282,6 +300,7 @@ int main() {
         set_room_hint(chararr[idx], accused_room);
         set_char_hint(chararr[idx], accused);
     }
+    DEBUG_PRINT(("DEBUG: correct accusations: %d, %d, %d\n", ok_item, ok_room, ok_char));
     DEBUG_PRINT(("DEBUG: 2 poolHintsChar size: %d\n", poolHintsItem.length));
     DEBUG_PRINT(("DEBUG: 2 poolHintsRoom size: %d\n", poolHintsRoom.length));
     DEBUG_PRINT(("DEBUG: 2 poolHintsItem size: %d\n", poolHintsChar.length));
