@@ -751,6 +751,10 @@ int main() {
     }
     //free characters
     for(int j=0;j<9;j++){
+        for (size_t i = 0; i < 3; i++) {
+            free(chararr[j]->hints[i]);
+            free(chararr[j]->prefix[i]);
+        }
         free(chararr[j]);
     }
     //and avatar
