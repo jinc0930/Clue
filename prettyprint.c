@@ -46,18 +46,18 @@ void describe(char *cmd, char *description) {
 
 void cell(char *dest, char *str) {
     if (str != NULL) {
-        strncpy(dest, str, 18);
+        strncpy(dest, str, 17);
     } else {
-        strncpy(dest, "                 ", 18);
+        strncpy(dest, "                 ", 17);
     }
-    size_t len = strnlen(dest, 18);
-    for (size_t i = len; i < 18; i++) {
+    size_t len = strnlen(dest, 17);
+    for (size_t i = len; i < 17; i++) {
         dest[i] = ' ';
     };
-    dest[18] = '\0';
+    dest[17] = '\0';
 }
 void printCell(char *col, char *modifiers) {
-    char c[18];
+    char c[18] = {0};
     cell(c, col);
     printf("|");
     printf("%s" " %s " RESET, modifiers, c);
@@ -68,7 +68,7 @@ void endCells() {
 }
 
 void rowBreak() {
-    printf("+--------------------+--------------------+--------------------+\n");
+    printf("+-------------------+-------------------+-------------------+\n");
 }
 // print all the rooms
 void printMap(struct Room* map[9]) {
@@ -79,12 +79,12 @@ void printMap(struct Room* map[9]) {
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
             if (map[i+j]->visited == true) {
-                if (isIdInside(map[i+j], "avatar")) {
-                    char checkmark[18];
+                if (isIdInside(map[i+j], "avatar") == true) {
+                    char checkmark[18] = {0};
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, BLD CYN);
                 } else {
-                    char checkmark[18];
+                    char checkmark[18] = {0};
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, "");
                 }
@@ -183,12 +183,12 @@ void debugMap(struct Room* map[9]) {
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
             if (map[i+j]->visited == true) {
-                if (isIdInside(map[i+j], "avatar")) {
-                    char checkmark[18];
+                if (isIdInside(map[i+j], "avatar") == true) {
+                    char checkmark[18] = {0};
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, BLD CYN);
                 } else {
-                    char checkmark[18];
+                    char checkmark[18] = {0};
                     sprintf(checkmark,"%s *", map[i+j]->name);
                     printCell(checkmark, "");
                 }

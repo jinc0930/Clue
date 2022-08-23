@@ -3,7 +3,9 @@
 #include <stdlib.h>
 
 bool startsWith(const char *prefix, const char *str) {
-    return strncmp(prefix, str, strlen(prefix)) == 0;
+    bool starts = false;
+    if (strncmp(prefix, str, strlen(prefix)) == 0) starts = true;
+    return starts;
 }
 
 void slice(const char *str, char *result, size_t start, size_t end) {
