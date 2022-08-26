@@ -48,7 +48,7 @@ void cell(char *dest, char *str) {
     if (str != NULL) {
         strncpy(dest, str, 17);
     } else {
-        strncpy(dest, "                 ", 17);
+        strncpy(dest, "                ", 17);
     }
     size_t len = strnlen(dest, 17);
     for (size_t i = len; i < 17; i++) {

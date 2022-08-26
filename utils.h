@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdbool.h>
 #ifndef UTILS_H
 #define UTILS_H
 // check if string starts with prefix and remove the trailing \n
