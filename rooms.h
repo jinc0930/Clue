@@ -8,7 +8,7 @@
 
 //room structure
 struct Room {
-    char* name;
+    const char* name;
     struct Room * North;
     struct Room * South;
     struct Room * East;
@@ -22,14 +22,14 @@ struct Room {
 struct Room* makeroom(char* roomname);
 
 //getters
-char* getRoomName(struct Room* room);
+const char* getRoomName(struct Room* room);
 struct Room* getNorth(struct Room* room);
 struct Room* getSouth(struct Room* room);
 struct Room* getEast(struct Room* room);
 struct Room* getWest(struct Room* room);
 
 //setters
-void setname(struct Room* room, char* name);
+void setname(struct Room* room, const char* name);
 void setNorth(struct Room *room,struct Room* newroom);
 void setSouth(struct Room *room,struct Room* newroom);
 void setEast(struct Room* room,struct Room* newroom);
@@ -39,8 +39,8 @@ void setWest(struct Room* room,struct Room* newroom);
 void freeRoom(struct Room* room);
 
 //checks
-bool isIdInside(struct Room* room, char * id);
-bool isCharInside(struct Room* room, char * name);
+bool isIdInside(struct Room* room, const char * id);
+bool isCharInside(struct Room* room, const char * name);
 
 //adding
 void additem(struct Room* room,struct Item* item);

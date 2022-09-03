@@ -21,28 +21,28 @@
 #define BLKHB "\e[0;100m"
 
 // print a dimmed text
-void printDimmed(char*str);
+void printDimmed(const char*str);
 
 // prompt a pretty message and output to out in red
-void promptErr(char out[], char*str);
+void promptErr(char out[], const char*str);
 
 // prompt a pretty message and output to out
-void prompt(char out[], char*str);
+void prompt(char out[], const char*str);
 
 // prompt a pretty message and output to out with some localization
-void promptWithLoc(char out[], char*str, char*loc);
+void promptWithLoc(char out[], const char*str, const char*loc);
 
 // describe a command but indented and bold
-void describe(char *cmd, char *description);
+void describe(const char *cmd, const char *description);
 
 // formatted string cell/room to be used
-void cell(char *dest, char *str);
+void cell(char *dest, const char *str);
 
 // finish current row
 void endCells();
 
 // print a row with 3 columns
-void printCell(char *col, char *modifiers);
+void printCell(const char *col, const char *modifiers);
 
 // print a border for header/footer/in between
 void rowBorder();
@@ -54,10 +54,10 @@ void printMap(struct Room* map[9]);
 void debugMap(struct Room* map[9]);
 
 // print a new line error
-void printErr(char*str);
+void printErr(const char*str);
 
 // print a new line success
-void printSucc(char*str);
+void printSucc(const char*str);
 
 // print all items in the iventory
 void printInventory(struct Character* avatar);
@@ -66,7 +66,7 @@ void printInventory(struct Character* avatar);
 void printRoomItems(struct Room* room);
 
 // simulate typing
-void printTyping(char *msg);
+void printTyping(const char *msg);
 
 // print asci clue characters
 void printClue();

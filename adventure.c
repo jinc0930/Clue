@@ -171,7 +171,7 @@ int main() {
     #ifndef TEST
     avatar->name = avatarname;
     #else
-    avatar->name = "tester";
+    avatar->name = "tester big on purpose 1234567890";
     #endif
 
     // make a string of all current characters in game
@@ -221,9 +221,9 @@ int main() {
     int itemIdx = poolTake(&poolHintsItem);
 
     //generate answer
-    char* targetChar = chararr[murderIdx]->name;
-    char* targetRoom = roomarr[roomIdx]->name;
-    char* targetItem = itemarr[itemIdx]->name;
+    const char* targetChar = chararr[murderIdx]->name;
+    const char* targetRoom = roomarr[roomIdx]->name;
+    const char* targetItem = itemarr[itemIdx]->name;
 
     // pool for distributing the ids
     int excludes[] = {murderIdx, avatarIdx};

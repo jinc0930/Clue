@@ -24,7 +24,7 @@ struct Room* makeroom(char* roomname){
 //getters
 //getRoomName(room:Room*):char*
 //gets the name of the room, takes room as input and return the name as output
-char* getRoomName(struct Room* room){
+const char* getRoomName(struct Room* room){
   return room->name;
 }
 
@@ -54,7 +54,7 @@ struct Room* getWest(struct Room* room){
 //setters
 //setName(room:Room*,name:char*):void
 //takes room and name as input, sets the given name as the room's name
-void setname(struct Room* room, char* name){
+void setname(struct Room* room, const char* name){
   room->name = name;
 }
 
@@ -193,7 +193,7 @@ int roomCharLength(struct Room* room) {
   return len;
 }
 
-bool isIdInside(struct Room* room, char * id) {
+bool isIdInside(struct Room* room, const char * id) {
   bool x = false;
   for (size_t i = 0; i < MAX_CHARACTER; i++){
     struct Character *c = room->chara[i];
@@ -202,7 +202,7 @@ bool isIdInside(struct Room* room, char * id) {
   return x;
 }
 
-bool isCharInside(struct Room* room, char * name) {
+bool isCharInside(struct Room* room, const char * name) {
   bool x = false;
   for (size_t i = 0; i < MAX_CHARACTER; i++){
     struct Character *c = room->chara[i];

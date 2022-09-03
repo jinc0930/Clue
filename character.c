@@ -6,7 +6,7 @@
 
 //makeChar(name:char*): struct character *
 //takes name as input, gives out a character as output
-struct Character* makeChar(char* name){
+struct Character* makeChar(const char* name){
     struct Character * character = (struct Character*) malloc (sizeof(struct Character));
     character->name = name;
     character->location =NULL;
@@ -33,7 +33,7 @@ void freechar(struct Character* character){
 
 //getcharname(character:Character *):char*
 //takes chracter as input and outputs the name of the given character
-char* getcharname(struct Character* character){
+const char* getcharname(struct Character* character){
     return character -> name;
 }
 

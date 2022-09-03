@@ -6,23 +6,23 @@
 
 //character structure
 struct Character{
-    char* name;
+    const char* name;
     struct Item * inventory;
     struct Room * location;
-    char* id;
+    const char* id;
     int inventoryItems;
     char* hints[3];
     char* prefix[3];
 };
 
 //make character
-struct Character* makeChar(char* name);
+struct Character* makeChar(const char* name);
 
 //free character
 void freechar(struct Character* character);
 
 //getters
-char* getcharname(struct Character* character);
+const char* getcharname(struct Character* character);
 struct Room* getloc (struct Character * character);
 
 //setters

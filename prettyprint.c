@@ -6,29 +6,29 @@
 #include <time.h>
 #define VAL 120
 
-void prompt(char out[], char*str) {
+void prompt(char out[], const char*str) {
     printf(CYN "%s\n>>> " RESET, str);
     fgets(out, VAL, stdin);
     // remove trailing newline
     out[strcspn(out, "\n")] = 0;
 }
 
-void promptErr(char out[], char*str) {
+void promptErr(char out[], const char*str) {
     printf(RED "%s\n>>> " RESET, str);
     fgets(out, VAL, stdin);
     // remove trailing newline
     out[strcspn(out, "\n")] = 0;
 }
 
-void printErr(char*str) {
+void printErr(const char*str) {
     printf(BLD RED "%s\n" RESET, str);
 }
 
-void printSucc(char*str) {
+void printSucc(const char*str) {
     printf(BLD GRN "%s\n" RESET, str);
 }
 
-void promptWithLoc(char out[], char*str, char*loc) {
+void promptWithLoc(char out[], const char*str, const char*loc) {
     // check if str is empty
     if ((str != NULL) && (str[0] == '\0')) {
         printf("\n" BLD BLU "%s >>> " RESET, loc);
@@ -40,11 +40,11 @@ void promptWithLoc(char out[], char*str, char*loc) {
     out[strcspn(out, "\n")] = 0;
 }
 
-void describe(char *cmd, char *description) {
+void describe(const char *cmd, const char *description) {
     printf(BLD "   %s: " RESET "%s", cmd, description);
 }
 
-void cell(char *dest, char *str) {
+void cell(char *dest, const char *str) {
     if (str != NULL) {
         strncpy(dest, str, 17);
     } else {
@@ -56,7 +56,7 @@ void cell(char *dest, char *str) {
     };
     dest[17] = '\0';
 }
-void printCell(char *col, char *modifiers) {
+void printCell(const char *col, const char *modifiers) {
     char c[18] = {0};
     cell(c, col);
     printf("|");
@@ -157,7 +157,7 @@ void printRoomItems(struct Room * room) {
 
 // 32 milliseconds
 struct timespec remaining, request = {0, 32000000};
-void printTyping(char *msg) {
+void printTyping(const char *msg) {
     int i = 0;
     while ( msg[i] != '\0') {
         printf("%c", msg[i++]);
