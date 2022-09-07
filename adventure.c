@@ -608,7 +608,7 @@ int main() {
         }
         //or map
         else if(strcmp(cmd,"map")==0){
-            printMap(roomarr);
+            printMap(map);
             printInventory(avatar);
             printRoomItems(curroom);
         }
