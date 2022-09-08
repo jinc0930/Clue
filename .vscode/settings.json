@@ -9,7 +9,8 @@
     "character.h": "c",
     "prettyprint.h": "c",
     "pool.h": "c",
-    "game.h": "c"
+    "game.h": "c",
+    "utils.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
