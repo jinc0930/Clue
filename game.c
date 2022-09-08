@@ -15,17 +15,16 @@ struct Game makeGame() {
     };
 
     // INIT: ROOMS, CHARACTERS, ITEMS
+    struct Pool a = makePool(N), b = makePool(N), c = makePool(N);
     for (size_t i = 0; i < N; i++) {
-        game.map[i] = makeroom(ROOMS[i]);
-        game.items[i] = makeitem(ITEMS[i]);
-        game.characters[i] = makeroom(CHARACTERS[i]);
+        game.map[poolTake(&a)] = makeroom(ROOMS[i]);
+        game.items[poolTake(&b)] = makeitem(ITEMS[i]);
+        game.characters[poolTake(&c)] = makeChar(CHARACTERS[i]);
     }
+    // making sure pools are consumed
+    assert(a.length == 0 && b.length == 0 && c.length == 0);
 
-    shuffle(game.map, N);
-    shuffle(game.items, N);
-    shuffle(game.characters, N);
-
-    // ROOM CONNECTIONS
+    // SET: ROOM CONNECTIONS
     for (int p = 0; p < N; p++ ){
         if( p > 2 ){
             setNorth(game.map[p], game.map[p-3]);
@@ -40,7 +39,6 @@ struct Game makeGame() {
             setEast(game.map[p], game.map[p+1]);
         }
     }
-
     return game;
 }
 

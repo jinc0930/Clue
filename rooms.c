@@ -6,7 +6,7 @@
 
 //makeroom(roomname:char*):Room*
 //initializes room, takes a roomname as input and outputs a room
-struct Room* makeroom(char* roomname){
+struct Room* makeroom(const char* roomname){
   struct Room * room = (struct Room*) malloc (sizeof(struct Room));
   room -> name = roomname;
   room -> North = NULL;

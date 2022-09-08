@@ -2,7 +2,7 @@
 
 //makeitem(name:char*):Item*
 //takes an item and a "string" as input, set given string as given item's name
-struct Item * makeitem(char*name){
+struct Item * makeitem(const char*name){
     struct Item * item = (struct Item*) malloc (sizeof(struct Item));
     item -> name = name;
     item -> next = NULL;
@@ -17,7 +17,7 @@ struct Item * getNext(struct Item* item){
 }
 //getItemName(item:Item*):char*
 //takes item as input, gets the name of given item
-char* getItemName(struct Item* item){
+const char* getItemName(struct Item* item){
     return item->name;
 }
 

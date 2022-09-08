@@ -19,7 +19,7 @@ struct Room {
 };
 
 //makeroom
-struct Room* makeroom(char* roomname);
+struct Room* makeroom(const char* roomname);
 
 //getters
 const char* getRoomName(struct Room* room);

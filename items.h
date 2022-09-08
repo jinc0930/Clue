@@ -5,15 +5,15 @@
 
 //item structure
 struct Item{
-    char* name;
+    const char* name;
     struct Item* next;
 };
 
 //initiator
-struct Item * makeitem(char* name);
+struct Item * makeitem(const char* name);
 
 //getter
-char* getItemName(struct Item* item);
+const char* getItemName(struct Item* item);
 struct Item * getNext(struct Item* item);
 
 //setter
