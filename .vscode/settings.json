@@ -9,8 +9,7 @@
     "character.h": "c",
     "prettyprint.h": "c",
     "pool.h": "c",
-    "sstream": "c",
-    "functional": "c"
+    "game.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
