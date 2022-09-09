@@ -1,6 +1,6 @@
 # Clue
 ## How to compile
-1. You need to install [raylib](https://www.raylib.com), make and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way.
+1. You need to install [raylib](https://www.raylib.com), make and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way. For unix systems: [raylib on macOs](https://github.com/raysan5/raylib/wiki/Working-on-macOS), [raylib on linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 
 2. Clone this repository and execute `make` command in the terminal.
 
