@@ -2,15 +2,12 @@
   "files.associations": {
     "items.h": "c",
     "rooms.h": "c",
-    "time.h": "c",
-    "stdio.h": "c",
-    "stdlib.h": "c",
-    "string.h": "c",
     "character.h": "c",
     "prettyprint.h": "c",
     "pool.h": "c",
     "game.h": "c",
-    "utils.h": "c"
+    "utils.h": "c",
+    "assert.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,
