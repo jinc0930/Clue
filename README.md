@@ -1,9 +1,23 @@
 # Clue
+## How to compile
+1. You need to install [raylib](https://www.raylib.com), make and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way.
 
-To play this game you need to compile all the c files which includes: adventure.c, rooms.c , character.c, items.c, util.c, prettyprint.c, and pool.c
-To compile, gcc all the mentioned documents above and optionally flag with -o to name the combined file
-For example: gcc utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c -o a.out
-The above code will compile a combined file a.out, to run the file, simply type ./a.out in the terminal
+2. Clone this repository and execute `make` command in the terminal.
+
+3. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
+
+4. If the compilation is successfull now you can execute the output file "clue.exe" in the same directory. To run the file, simply type ./clue.exe in the terminal.
+
+## How to play
+todo
+
+# Clue legacy
+The legacy is the terminal text-based way of playing the game.
+
+## Compile the legacy version
+For the legacy version you don't need to have raylib installed. But you still need a compiler. To compile enter the legacy folder and execute make command in the terminal.
+
+## How to play the legacy
 
 In this game, the board consists of nine rooms, each has four pointers to it's north, south, east and west. If there is
 no room in one of the directions, that pointer will point to null. The nine rooms are set on a 3*3 grid, with their name
