@@ -1,10 +1,10 @@
-#include "rooms.h"
 #include "prettyprint.h"
-#include "utils.h"
-#include "character.h"
-#include "items.h"
-#include "pool.h"
-#include "game.h"
+#include "../rooms.h"
+#include "../utils.h"
+#include "../character.h"
+#include "../items.h"
+#include "../pool.h"
+#include "../game.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>

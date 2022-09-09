@@ -1,7 +1,6 @@
 #include "character.h"
 #include "items.h"
 #include "rooms.h"
-#include "prettyprint.h"
 #include<stdio.h>
 
 //makeChar(name:char*): struct character *
@@ -109,62 +108,62 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         strcpy(character->prefix[0], "I'm not sure, but I think the murder weapon is");
         if (strcmp(itemHint->name, "butter knife") == 0) {
-           strcpy(character->hints[0], RED"butter knife"RESET" because it had blood on it");
+           strcpy(character->hints[0], "butter knife because it had blood on it");
         } 
         else if (strcmp(itemHint->name, "bat") == 0) {
-           strcpy(character->hints[0], RED"bat,"RESET" because I couldn't find it yesterday");
+           strcpy(character->hints[0], "bat, because I couldn't find it yesterday");
         }
         else if (strcmp(itemHint->name, "wrench") == 0) {
-            strcpy(character->hints[0], RED"wrench"RESET" because it was missing for a couple of days");
+            strcpy(character->hints[0], "wrench because it was missing for a couple of days");
         }
         else if (strcmp(itemHint->name, "rope") == 0) {
-            strcpy(character->hints[0], RED"rope"RESET" because it has scratch marks on it");
+            strcpy(character->hints[0], "rope because it has scratch marks on it");
         }
         else if (strcmp(itemHint->name, "dagger") == 0) {
-            strcpy(character->hints[0], RED"dagger"RESET" because it is bloody");
+            strcpy(character->hints[0], "dagger because it is bloody");
         }
         else if (strcmp(itemHint->name, "rifle") == 0) {
-            strcpy(character->hints[0], RED"rifle"RESET" because three bullets went missing");
+            strcpy(character->hints[0], "rifle because three bullets went missing");
         }
         else if (strcmp(itemHint->name, "hammer") == 0) {
-            strcpy(character->hints[0], RED"hammer"RESET" because it's sticky");
+            strcpy(character->hints[0], "hammer because it's sticky");
         }
         else if (strcmp(itemHint->name, "lead pipe") == 0) {
-            strcpy(character->hints[0], RED"lead pipe"RESET" because it looks like someone ripped it off the building");
+            strcpy(character->hints[0], "lead pipe because it looks like someone ripped it off the building");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
-            strcpy(character->hints[0], RED"poison bottle"RESET" because the floor was corroded");
+            strcpy(character->hints[0], "poison bottle because the floor was corroded");
         }
     }
     else{
         // character->hints[0] = (itemHint->name);
         strcpy(character->prefix[0], "The murder weapon is not");
         if (strcmp(itemHint->name, "butter knife") == 0) {
-           strcpy(character->hints[0], BLU"butter knife"RESET" because it had butter on it");
+           strcpy(character->hints[0], "butter knife because it had butter on it");
         } 
         else if (strcmp(itemHint->name, "bat") == 0) {
-           strcpy(character->hints[0], BLU"bat,"RESET" because I took the only one to play baseball with some friends");
+           strcpy(character->hints[0], "bat, because I took the only one to play baseball with some friends");
         }
         else if (strcmp(itemHint->name, "wrench") == 0) {
-            strcpy(character->hints[0], BLU"wrench"RESET" because Michael took it to fix the car");
+            strcpy(character->hints[0], "wrench because Michael took it to fix the car");
         }
         else if (strcmp(itemHint->name, "rope") == 0) {
-            strcpy(character->hints[0], BLU"rope"RESET" because I borrowed the only one to my friend Kayla, who loves rock climbing");
+            strcpy(character->hints[0], "rope because I borrowed the only one to my friend Kayla, who loves rock climbing");
         }
         else if (strcmp(itemHint->name, "dagger") == 0) {
-            strcpy(character->hints[0], BLU"dagger"RESET" because it was stored and locked in the safe");
+            strcpy(character->hints[0], "dagger because it was sto and locked in the safe");
         }
         else if (strcmp(itemHint->name, "rifle") == 0) {
-            strcpy(character->hints[0], BLU"rifle"RESET" because it was stored and locked in the safe");
+            strcpy(character->hints[0], "rifle because it was sto and locked in the safe");
         }
         else if (strcmp(itemHint->name, "hammer") == 0) {
-            strcpy(character->hints[0], BLU"hammer"RESET" because I was using it to fix my cabinet");
+            strcpy(character->hints[0], "hammer because I was using it to fix my cabinet");
         }
         else if (strcmp(itemHint->name, "lead pipe") == 0) {
-            strcpy(character->hints[0], BLU"lead pipe"RESET" because we shipped it to a fixing company");
+            strcpy(character->hints[0], "lead pipe because we shipped it to a fixing company");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
-            strcpy(character->hints[0], BLU"poison bottle"RESET" because it was locked in the lab");
+            strcpy(character->hints[0], "poison bottle because it was locked in the lab");
         }
     }
 }
@@ -173,62 +172,62 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         strcpy(character->prefix[1], "I'm not sure, but I think the murder happened in the");
         if (strcmp(roomHint->name, "kitchen") == 0) {
-           strcpy(character->hints[1], RED"kitchen"RESET" because I heard weird noises last night");
+           strcpy(character->hints[1], "kitchen because I heard weird noises last night");
         } 
         else if (strcmp(roomHint->name, "hall") == 0) {
-           strcpy(character->hints[1], RED"hall"RESET" because the sensor lights were triggered");
+           strcpy(character->hints[1], "hall because the sensor lights were trigge");
         }
         else if (strcmp(roomHint->name, "study") == 0) {
-            strcpy(character->hints[1], RED"study"RESET" because the lights was on");
+            strcpy(character->hints[1], "study because the lights was on");
         }
         else if (strcmp(roomHint->name, "bathroom") == 0) {
-            strcpy(character->hints[1], RED"bathroom"RESET" because someone was using it for a couple of hours straight");
+            strcpy(character->hints[1], "bathroom because someone was using it for a couple of hours straight");
         }
         else if (strcmp(roomHint->name, "ballroom") == 0) {
-            strcpy(character->hints[1], RED"ballroom"RESET" because creepy music was blasting for the whole night");
+            strcpy(character->hints[1], "ballroom because creepy music was blasting for the whole night");
         }
         else if (strcmp(roomHint->name, "library") == 0) {
-            strcpy(character->hints[1], RED"library"RESET" because the shelves were flipped on the floor");
+            strcpy(character->hints[1], "library because the shelves were flipped on the floor");
         }
         else if (strcmp(roomHint->name, "lounge") == 0) {
-            strcpy(character->hints[1], RED"lounge"RESET" because the sofa had blood stains");
+            strcpy(character->hints[1], "lounge because the sofa had blood stains");
         }
         else if (strcmp(roomHint->name, "office") == 0) {
-            strcpy(character->hints[1], RED"office"RESET" because noone ever goes there");
+            strcpy(character->hints[1], "office because noone ever goes there");
         }
         else if (strcmp(roomHint->name, "bedroom") == 0) {
-            strcpy(character->hints[1], RED"bedroom"RESET" because the pillow is missing");
+            strcpy(character->hints[1], "bedroom because the pillow is missing");
         }
     }
     else{
         // character->hints[1] = (getRoomName(roomHint));
         strcpy(character->prefix[1], "The murder did not happen in the");
         if (strcmp(roomHint->name, "kitchen") == 0) {
-           strcpy(character->hints[1], BLU"kitchen"RESET" because I was making a midnight snack there");
+           strcpy(character->hints[1], "kitchen because I was making a midnight snack there");
         } 
         else if (strcmp(roomHint->name, "hall") == 0) {
-           strcpy(character->hints[1], BLU"hall"RESET" because the hall has sensor lights that would have been triggered");
+           strcpy(character->hints[1], "hall because the hall has sensor lights that would have been trigge");
         }
         else if (strcmp(roomHint->name, "study") == 0) {
-            strcpy(character->hints[1], BLU"study"RESET" because I was writting letters in the study");
+            strcpy(character->hints[1], "study because I was writting letters in the study");
         }
         else if (strcmp(roomHint->name, "bathroom") == 0) {
-            strcpy(character->hints[1], BLU"bathroom"RESET" because I had to use it for a couple of hours");
+            strcpy(character->hints[1], "bathroom because I had to use it for a couple of hours");
         }
         else if (strcmp(roomHint->name, "ballroom") == 0) {
-            strcpy(character->hints[1], BLU"ballroom"RESET" because there was a party hosted there");
+            strcpy(character->hints[1], "ballroom because there was a party hosted there");
         }
         else if (strcmp(roomHint->name, "library") == 0) {
-            strcpy(character->hints[1], BLU"library"RESET" because it is locked and closed after 4pm");
+            strcpy(character->hints[1], "library because it is locked and closed after 4pm");
         }
         else if (strcmp(roomHint->name, "lounge") == 0) {
-            strcpy(character->hints[1], BLU"lounge"RESET" because a couple of people were watching TV in the lounge");
+            strcpy(character->hints[1], "lounge because a couple of people were watching TV in the lounge");
         }
         else if (strcmp(roomHint->name, "office") == 0) {
-            strcpy(character->hints[1], BLU"office"RESET" because I took a nap in there");
+            strcpy(character->hints[1], "office because I took a nap in there");
         }
         else if (strcmp(roomHint->name, "bedroom") == 0) {
-            strcpy(character->hints[1], BLU"bedroom"RESET" because Ivan was sleeping there");
+            strcpy(character->hints[1], "bedroom because Ivan was sleeping there");
         }
     }
 }
@@ -238,61 +237,61 @@ void set_char_hint(struct Character* character, struct Character* accused){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
         strcpy(character->prefix[2], ("I'm not sure, but I think the murderer is"));
         if (strcmp(accused->name, "chang") == 0) {
-           strcpy(character->hints[2], RED"Chang"RESET" because she is always passive-aggressive");
+           strcpy(character->hints[2], "Chang because she is always passive-aggressive");
         } 
         else if (strcmp(accused ->name, "kevin") == 0) {
-           strcpy(character->hints[2], RED"Kevin"RESET" because he was acting suspicious");
+           strcpy(character->hints[2], "Kevin because he was acting suspicious");
         }
         else if (strcmp(accused ->name, "james") == 0) {
-            strcpy(character->hints[2], RED"James"RESET" because he used the bathroom for a couple of hours");
+            strcpy(character->hints[2], "James because he used the bathroom for a couple of hours");
         }
         else if (strcmp(accused ->name, "tenzin") == 0) {
-            strcpy(character->hints[2], RED"Tenzin"RESET" because he loves to play violent videogames.");
+            strcpy(character->hints[2], "Tenzin because he loves to play violent videogames.");
         }
         else if (strcmp(accused ->name, "minh") == 0) {
-            strcpy(character->hints[2], RED"Minh"RESET" because he is so fake, he acts nice but bad mouths you behind your back");
+            strcpy(character->hints[2], "Minh because he is so fake, he acts nice but bad mouths you behind your back");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
-            strcpy(character->hints[2], RED"Michael"RESET" because he and the victim's are enemies");
+            strcpy(character->hints[2], "Michael because he and the victim's are enemies");
         }
         else if (strcmp(accused ->name, "ivan") == 0) {
-            strcpy(character->hints[2], RED"Ivan"RESET" because he was off for the whole day and stayed in");
+            strcpy(character->hints[2], "Ivan because he was off for the whole day and stayed in");
         }
         else if (strcmp(accused ->name, "edrick") == 0) {
-            strcpy(character->hints[2], RED"Edrick"RESET" because he was acting weird and didn't study that night");
+            strcpy(character->hints[2], "Edrick because he was acting weird and didn't study that night");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
-            strcpy(character->hints[2], RED"Joey"RESET" because he did not go work out at the gym that day");
+            strcpy(character->hints[2], "Joey because he did not go work out at the gym that day");
         }
     }
     else{
         strcpy(character->prefix[2], "I don't know who the muderer is, but I know it is not");
         if (strcmp(accused->name, "chang") == 0) {
-           strcpy(character->hints[2], BLU"Chang"RESET" because she was with me when the murder happened");
+           strcpy(character->hints[2], "Chang because she was with me when the murder happened");
         } 
         else if (strcmp(accused ->name, "kevin") == 0) {
-           strcpy(character->hints[2], BLU"Kevin"RESET" because he is always coding");
+           strcpy(character->hints[2], "Kevin because he is always coding");
         }
         else if (strcmp(accused ->name, "james") == 0) {
-            strcpy(character->hints[2], BLU"James"RESET" because he is the nicest man I have ever seen");
+            strcpy(character->hints[2], "James because he is the nicest man I have ever seen");
         }
         else if (strcmp(accused ->name, "tenzin") == 0) {
-            strcpy(character->hints[2], BLU"Tenzin"RESET" because he was playing videogames the time of the murder.");
+            strcpy(character->hints[2], "Tenzin because he was playing videogames the time of the murder.");
         }
         else if (strcmp(accused ->name, "minh") == 0) {
-            strcpy(character->hints[2], BLU"Minh"RESET" because he is such a nice person");
+            strcpy(character->hints[2], "Minh because he is such a nice person");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
-            strcpy(character->hints[2], BLU"Michael"RESET" because he is the victim's bestfriend");
+            strcpy(character->hints[2], "Michael because he is the victim's bestfriend");
         }
         else if (strcmp(accused ->name, "ivan") == 0) {
-            strcpy(character->hints[2], BLU"Ivan"RESET" because he was working the whole day");
+            strcpy(character->hints[2], "Ivan because he was working the whole day");
         }
         else if (strcmp(accused ->name, "edrick") == 0) {
-            strcpy(character->hints[2], BLU"Edrick"RESET" because he was busy studying");
+            strcpy(character->hints[2], "Edrick because he was busy studying");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
-            strcpy(character->hints[2], BLU"Joey"RESET" because he was working out at the gym");
+            strcpy(character->hints[2], "Joey because he was working out at the gym");
         }
     }
 }

@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "game.h"
+#include "draw.h"
 #include <time.h>
 
 //------------------------------------------------------------------------------------
@@ -16,7 +17,7 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(30);               // Set our game to run at 30 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Game initialization
@@ -39,8 +40,8 @@ int main(void)
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-
-            DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+            DrawMap(game.map);
+            // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

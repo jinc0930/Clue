@@ -242,6 +242,8 @@ enum actionResult take(struct Game * game, char * itemName) {
             break;
         };
     }
+    if (invalid == true) return Invalid;
+    
     // no items in the room?
     if(game->avatar->location->itemList == NULL) return NotFound;
 
@@ -270,6 +272,8 @@ enum actionResult drop(struct Game * game, char * itemName) {
             break;
         };
     }
+    if (invalid == true) return Invalid;
+
     // no items in the inventory?
     if(game->avatar->inventory == NULL) return NotFound;
 
