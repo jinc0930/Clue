@@ -402,3 +402,8 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 	del *.o *.html *.js
 endif
 	@echo Cleaning done
+
+
+# Custom test suit
+test:
+	$(CC) -o tests/output utils.c pool.c character.c rooms.c items.c game.c tests/test.c $(CFLAGS) -D$(PLATFORM)

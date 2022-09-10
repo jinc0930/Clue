@@ -5,7 +5,7 @@
 #include "pool.h"
 
 struct Pool makePoolExcluding(int pool_desired_size, int exclude_indexes[], int exclude_indexes_size) {
-	struct Pool pool = {};
+	struct Pool pool = {.length = 0, .vec = { 0 }};
 	int r = 0;
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
@@ -17,7 +17,7 @@ struct Pool makePoolExcluding(int pool_desired_size, int exclude_indexes[], int 
 				break;
 			};
 		}
-		if (include) {
+		if (include == true) {
 			pool.vec[r++] = i;
 			pool.length += 1;
 		}
@@ -26,7 +26,7 @@ struct Pool makePoolExcluding(int pool_desired_size, int exclude_indexes[], int 
 }
 
 struct Pool makePool(int pool_desired_size) {
-	struct Pool pool = {};
+	struct Pool pool = {.length = 0, .vec = { 0 }};
 	// ensure it fits the array
 	assert(pool_desired_size <= MAX_POOL_SIZE);
 	for (int i = 0; i < pool_desired_size; i++){
@@ -46,16 +46,17 @@ int poolTake(struct Pool *pool) {
 	return ref;
 }
 
-int poolTakeExcluding(struct Pool *pool, int exlude) {
+int poolTakeExcluding(struct Pool *pool, int exclude) {
 	// this function requires pool to be length > 0;
 	if (pool->length <= 0) return -1; 
 	int temp[MAX_POOL_SIZE];
 	int size = 0;
 	for(int j = 0; j < pool->length; j++){
-		if(pool->vec[j] != exlude) {
+		if(pool->vec[j] != exclude) {
 			temp[size++] = j;
 		};
 	}
+	if (size <= 0) return -1; // no elements left
 
 	int take = rand() % size;
   	int ref = pool->vec[temp[take]];

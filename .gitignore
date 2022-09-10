@@ -5,3 +5,4 @@ clue.exe
 .vscode/targets.log
 legacy/clue
 legacy/clue.exe
+tests/output

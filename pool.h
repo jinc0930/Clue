@@ -30,7 +30,6 @@ int poolTake(struct Pool *pool);
 /**
  * Pick one index randomly exluding exclude_idx and remove the index if the index
  * If pool is empty it returns -1
- * WIP
  */
 int poolTakeExcluding(struct Pool *pool, int exclude_idx); 
 

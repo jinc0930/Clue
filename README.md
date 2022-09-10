@@ -2,7 +2,7 @@
 ## How to compile
 1. You need to install [raylib](https://www.raylib.com), make and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way. For unix systems: [raylib on macOs](https://github.com/raysan5/raylib/wiki/Working-on-macOS), [raylib on linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 
-2. Clone this repository and execute `make` command in the terminal.
+2. Clone this repository and execute `mingw32-make` or just `make` command in the terminal.
 
 3. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
 
@@ -10,6 +10,10 @@
 
 ## How to play
 todo
+
+## How to test
+1. Compile by executing `mingw32-make` or just `make`
+2. Execute: `tests/output`
 
 # Clue legacy
 The legacy is the terminal text-based way of playing the game.
