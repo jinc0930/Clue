@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <time.h>
 #include "../game.h"
 #include "../items.h"
 #include "../character.h"
@@ -48,7 +47,6 @@ static void test_pool_excluding() {
 }
 
 static void test_pool_excluding_caller() {
-  srand(time(NULL));
   struct Pool pool = makePool(9);
   int taken[9] = { [0 ... 8] = -1 };
   for (size_t i = 0; i < 8; i++) {
@@ -158,12 +156,10 @@ static void test_gameplay() {
   SUBTEST("movements");
   for(int i=North; i<=South; i++) {
     // swap player to the middle if necessary
-    if (player_position != 4) {
-      void*temp = game.map[4]->chara[0];
-      game.map[4]->chara[0] = game.map[player_position]->chara[0];
-      game.map[player_position]->chara[0] = temp;
-      game.avatar->location = game.map[4];
-    }
+    void*temp = game.map[4]->chara[0];
+    game.map[4]->chara[0] = game.map[player_position]->chara[0];
+    game.map[player_position]->chara[0] = temp;
+    game.avatar->location = game.map[4];
     assert(move(&game, i) > -1);
     assert(move(&game, i) == -1);
     if (i == North || i == South) {
