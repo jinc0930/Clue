@@ -404,6 +404,6 @@ endif
 	@echo Cleaning done
 
 
-# Custom test suit
+# Custom test suit (hard coded)
 test:
-	$(CC) -o tests/output utils.c pool.c character.c rooms.c items.c game.c tests/test.c $(CFLAGS) -D$(PLATFORM)
+	$(CC) -o tests/output utils.c pool.c character.c rooms.c items.c game.c tests/test.c -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
