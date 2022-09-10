@@ -1,0 +1,21 @@
+name: Run Test
+
+on:
+  push:
+    branches: [ "main", "graphical" ]
+  pull_request:
+    branches: [ "main", "graphical" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        
+    steps:
+    - uses: actions/checkout@v3
+    - name: make test
+      run: make test
+    - name: run tests
+      run: ./tests/output
