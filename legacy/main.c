@@ -241,6 +241,9 @@ int main() {
             case Invalid:
                 printErr("that item does not exist");
                 break;
+            default:
+                printErr("that item does not exist");
+                break;
             };
         }
         else if(strcmp(cmd,"quit")==0){
@@ -265,6 +268,9 @@ int main() {
                 continue;
                 break;
             case Invalid:
+                printErr("not a valid character");
+                break;
+            default:
                 printErr("not a valid character");
                 break;
             };

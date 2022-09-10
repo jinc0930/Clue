@@ -6,20 +6,21 @@
 
 3. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
 
-4. If the compilation is successfull now you can execute the output file "clue.exe" in the same directory. To run the file, simply type ./clue.exe in the terminal.
+4. If the compilation is successfull now you can execute the output file "clue.exe" in the same directory. To run the file, simply type `./clue.exe` in the terminal.
 
 ## How to play
 todo
 
 ## How to test
-1. Compile by executing `mingw32-make` or just `make`
-2. Execute: `tests/output`
+1. Compile by executing `mingw32-make test` or just `make test`
+2. Execute: `./tests/output`
 
 # Clue legacy
 The legacy is the terminal text-based way of playing the game.
 
 ## Compile the legacy version
-For the legacy version you don't need to have raylib installed. But you still need a compiler. To compile enter the legacy folder and execute make command in the terminal.
+1. For the legacy version you don't need to have raylib installed. But you still need a compiler. To compile clone this repository and execute `mingw32-make legacy` or just `make legacy` command in the terminal.
+2. To run the file, simply type `./clue-legacy.exe` in the terminal.
 
 ## How to play the legacy
 

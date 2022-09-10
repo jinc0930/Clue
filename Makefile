@@ -21,7 +21,7 @@
 #
 #**************************************************************************************************
 
-.PHONY: all clean
+.PHONY: all test legacy clean
 
 # Define required raylib variables
 PROJECT_NAME       ?= clue
@@ -404,6 +404,13 @@ endif
 	@echo Cleaning done
 
 
+# Custom files
+CFLAGS_PURE = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
+SOURCE_BASE = utils.c pool.c character.c rooms.c items.c game.c
+
 # Custom test suit (hard coded)
 test:
-	$(CC) -o tests/output utils.c pool.c character.c rooms.c items.c game.c tests/test.c -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
+	$(CC) -o tests/output $(SOURCE_BASE) tests/test.c $(CFLAGS_PURE)
+
+legacy:
+	$(CC) -o clue-legacy $(SOURCE_BASE) legacy/prettyprint.c legacy/main.c $(CFLAGS_PURE)

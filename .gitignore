@@ -1,8 +1,8 @@
 clue
 clue.exe
+clue-legacy
+clue-legacy.exe
 .vscode/configurationCache.log
 .vscode/dryrun.log
 .vscode/targets.log
-legacy/clue
-legacy/clue.exe
 tests/output
