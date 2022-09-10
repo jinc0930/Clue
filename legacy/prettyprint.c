@@ -152,7 +152,8 @@ void printRoomItems(struct Room * room) {
 }
 
 // 32 milliseconds
-struct timespec remaining, request = {0, 32000000};
+struct timespec remaining, request = {0, 30000000};
+
 void printTyping(const char *msg) {
     int i = 0;
     while ( msg[i] != '\0') {

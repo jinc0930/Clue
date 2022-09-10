@@ -68,7 +68,7 @@ int main() {
     printRoomItems(game.avatar->location);
 
     #ifndef TEST
-    while( game.attempts <= 10 ){
+    while( game.finished != true ){
         struct Room* curroom = game.avatar->location;
 
         char cmd[MAX_LINE];
@@ -247,7 +247,8 @@ int main() {
             };
         }
         else if(strcmp(cmd,"quit")==0){
-            game.attempts = 12;
+            game.finished = true;
+            game.attempts = 99;
         }
         //or game.map
         else if(strcmp(cmd,"map")==0){
@@ -284,7 +285,7 @@ int main() {
             
             if (game.okChar == true && game.okItem == true && game.okRoom == true) {
                 //breaks gaming loop
-                game.attempts = 11;
+                game.finished = true;
             }
         }
         else{
@@ -292,10 +293,10 @@ int main() {
         }
     }
     #endif
-    //check if user gets all three answers correct
-    if(game.attempts==12){
+    if(game.attempts == 99){ // magical number to when the player quits
         printf("Thank you for playing, see you next time!\n");
     }
+    //check if user gets all three answers correct
     else if(game.okChar == true && game.okItem == true && game.okRoom == true){
         puts("    /\\_____/\\");
         puts("   /  o   o  \\");

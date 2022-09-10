@@ -19,6 +19,7 @@ struct Game {
     bool okChar;
     bool okRoom;
     bool okItem;
+    bool finished;
 };
 
 enum direction { North, East, West, South };

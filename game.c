@@ -19,7 +19,8 @@ struct Game makeGame() {
         .avatar = NULL,
         .okChar = false,
         .okItem = false,
-        .okRoom = false
+        .okRoom = false,
+        .finished = false
     };
 
     // INIT: ROOMS, CHARACTERS, ITEMS
