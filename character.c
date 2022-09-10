@@ -151,10 +151,10 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
             strcpy(character->hints[0], "rope because I borrowed the only one to my friend Kayla, who loves rock climbing");
         }
         else if (strcmp(itemHint->name, "dagger") == 0) {
-            strcpy(character->hints[0], "dagger because it was sto and locked in the safe");
+            strcpy(character->hints[0], "dagger because it was stored and locked in the safe");
         }
         else if (strcmp(itemHint->name, "rifle") == 0) {
-            strcpy(character->hints[0], "rifle because it was sto and locked in the safe");
+            strcpy(character->hints[0], "rifle because it was stored and locked in the safe");
         }
         else if (strcmp(itemHint->name, "hammer") == 0) {
             strcpy(character->hints[0], "hammer because I was using it to fix my cabinet");
@@ -175,7 +175,7 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
            strcpy(character->hints[1], "kitchen because I heard weird noises last night");
         } 
         else if (strcmp(roomHint->name, "hall") == 0) {
-           strcpy(character->hints[1], "hall because the sensor lights were trigge");
+           strcpy(character->hints[1], "hall because the sensor lights were triggered");
         }
         else if (strcmp(roomHint->name, "study") == 0) {
             strcpy(character->hints[1], "study because the lights was on");
@@ -206,7 +206,7 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
            strcpy(character->hints[1], "kitchen because I was making a midnight snack there");
         } 
         else if (strcmp(roomHint->name, "hall") == 0) {
-           strcpy(character->hints[1], "hall because the hall has sensor lights that would have been trigge");
+           strcpy(character->hints[1], "hall because the hall has sensor lights that would have been triggered");
         }
         else if (strcmp(roomHint->name, "study") == 0) {
             strcpy(character->hints[1], "study because I was writting letters in the study");

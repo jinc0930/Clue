@@ -13,7 +13,7 @@ todo
 
 ## How to test
 1. Compile by executing `mingw32-make test` or just `make test`
-2. Execute: `./tests/output`
+2. Execute: `./test`
 
 # Clue legacy
 The legacy is the terminal text-based way of playing the game.
