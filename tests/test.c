@@ -6,6 +6,8 @@
 #include "../items.h"
 #include "../character.h"
 #include "../pool.h"
+#include "../utils.h"
+#include "../rooms.h"
 
 #define TEST(t) ({ puts("-> " #t " testing "); t(); })
 #define SUBTEST(t) ({ puts("  -> " t " testing"); })
@@ -59,6 +61,27 @@ static void test_pool_excluding_caller() {
   assert(poolTakeExcluding(&pool, 3) == -1); // must return -1 since there's no element dinstinct from 3
   assert(pool.length == 1); // the exclude still exists
   assert(poolTake(&pool) == 3); // must be the number 3 (that was excluded earlier)
+}
+
+// UTILS
+static void test_utils() {
+  SUBTEST("test_starts_with");
+  assert(startsWith("abcd", "abcd"));
+  assert(startsWith("a", "abcd"));
+  assert(startsWith("ab", "ab"));
+  assert(startsWith("a", "aaaa"));
+  assert(startsWith("aa", "aa\n"));
+  assert(startsWith("\n", "\n"));
+  assert(startsWith("", ""));
+  assert(!startsWith("abcd", "a"));
+  assert(!startsWith("aaaaa", "a"));
+  assert(!startsWith("xyz", "xy\n"));
+  assert(!startsWith("xy\n", "xy"));
+  
+  SUBTEST("test_slice");
+  char direction[10] = { 0 };
+  slice("go north", direction, strlen("go "), 10);
+  assert(strcmp(direction, "north") == 0);
 }
 
 // ITEMS
@@ -190,6 +213,7 @@ static void test_gameplay() {
 // TESTS
 int main(void) {
   srand(20);
+  TEST(test_utils);
   TEST(test_pool_basic);
   TEST(test_pool_excluding);
   TEST(test_pool_excluding_caller);

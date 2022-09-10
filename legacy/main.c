@@ -18,7 +18,7 @@ int main() {
     srand(time(NULL));
     struct Game game = makeGame();
 
-    char instructions[MAX_LINE];
+    char instructions[MAX_LINE] = {0};
     prompt(instructions, "First time playing? y/n");
 
     for(;;) {
@@ -41,7 +41,7 @@ int main() {
     }
     
     //asks for user name
-    char avatarname[MAX_LINE];
+    char avatarname[MAX_LINE] = {0};
     prompt(avatarname, "Welcome, please type your name, keep it short and simple:");
 
     for(;;) {
@@ -71,7 +71,7 @@ int main() {
     while( game.finished != true ){
         struct Room* curroom = game.avatar->location;
 
-        char cmd[MAX_LINE];
+        char cmd[MAX_LINE] = {0};
         promptWithLoc(cmd, "Type your command:", getRoomName(curroom));
         // printf("%s", cmd);
         //if command is help
@@ -96,7 +96,7 @@ int main() {
         }
         else if(startsWith("talk", cmd)){
             // todo
-            char description[MAX_LINE];
+            char description[MAX_LINE] = {0};
             slice(cmd, description, strlen("talk "), MAX_LINE);
             if (strcmp(description, "") == 0) {
                 prompt(description, "Who do you want to talk to?");
@@ -107,7 +107,7 @@ int main() {
             for(int a =0;a<9;a++){
                 if((strcmp(description,game.characters[a]->name)==0)&&(strcmp(description,game.avatar->name)!=0)&& (strcmp(getloc(game.avatar)->name,getloc(game.characters[a])->name)==0)){
                     // experimental typing
-                    char str[100];
+                    char str[100] = { 0 };
                     sprintf(str, "%s %s.\n", game.characters[a]->prefix[0], game.characters[a]->hints[0]);
                     printTyping(str);
                     sprintf(str, "%s %s.\n", game.characters[a]->prefix[1], game.characters[a]->hints[1]);
@@ -165,7 +165,7 @@ int main() {
         //if command was go
         else if(startsWith("go", cmd)){
             // printf("make sure to specify which direction would you like to go? north, south, west, or east?\n");
-            char direction[MAX_LINE];
+            char direction[MAX_LINE] = {0};
             slice(cmd, direction, strlen("go "), MAX_LINE);
             //cases for each direction
             if(startsWith(direction, "north")){
@@ -204,7 +204,7 @@ int main() {
         }
         //take item command
         else if(startsWith("take", cmd)){
-            char description[MAX_LINE];
+            char description[MAX_LINE] = {0};
             slice(cmd, description, strlen("take "), MAX_LINE);
             if (strcmp(description, "") == 0) {
                 prompt(description, "What item do you like to take?");
@@ -226,7 +226,7 @@ int main() {
         }
         //if command was drop
         else if(startsWith("drop", cmd)){
-            char description[MAX_LINE];
+            char description[MAX_LINE] = {0};
             slice(cmd, description, strlen("take "), MAX_LINE);
             if (strcmp(description, "") == 0) {
                 prompt(description, "What item do you like to drop?");
@@ -258,7 +258,7 @@ int main() {
         }
         //if command is clue
         else if(startsWith("clue", cmd)){
-            char des[MAX_LINE];
+            char des[MAX_LINE] = {0};
             slice(cmd, des, strlen("clue "), MAX_LINE);
             if (strcmp(des, "") == 0) {
                 prompt(des, "Who is the murderer");

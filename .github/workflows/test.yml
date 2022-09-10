@@ -18,4 +18,4 @@ jobs:
     - name: make test
       run: make test
     - name: run tests
-      run: ./tests/output
+      run: ./test

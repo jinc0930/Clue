@@ -410,7 +410,7 @@ SOURCE_BASE = utils.c pool.c character.c rooms.c items.c game.c
 
 # Custom test suit (hard coded)
 test:
-	$(CC) -o tests/output $(SOURCE_BASE) tests/test.c $(CFLAGS_PURE)
+	$(CC) -o test $(SOURCE_BASE) tests/test.c $(CFLAGS_PURE)
 
 legacy:
 	$(CC) -o clue-legacy $(SOURCE_BASE) legacy/prettyprint.c legacy/main.c $(CFLAGS_PURE)
