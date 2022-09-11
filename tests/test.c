@@ -263,31 +263,23 @@ static void test_gameplay_take_drop() {
   initGame(&game, "test");
   assert(game.avatar->location->itemList != NULL);
   
-  void test_take(const char * item_name) {
-    assert(take(&game, item_name) == Ok);
-    assert(take(&game, item_name) == NotFound);
-  }
-  void test_drop(const char * item_name) {
-    assert(drop(&game, item_name) == Ok);
-    assert(drop(&game, item_name) == NotFound);
-  }
-  const char * get_item_name() {
-    return game.avatar->location->itemList->name;
-  }
-  const char * item_name = get_item_name();
+  const char * item_name = game.avatar->location->itemList->name;
   SUBTEST("take");
-  test_take(item_name);
+  assert(take(&game, item_name) == Ok);
+  assert(take(&game, item_name) == NotFound);
   assert(game.avatar->location->itemList == NULL);
   assert(strcmp(game.avatar->inventory->name, item_name) == 0);
   assert(take(&game, item_name) == NotFound);
 
   SUBTEST("drop");
-  test_drop(item_name);
+  assert(drop(&game, item_name) == Ok);
+  assert(drop(&game, item_name) == NotFound);
   assert(game.avatar->inventory == NULL);
   assert(strcmp(game.avatar->location->itemList->name, item_name) == 0);
 
   SUBTEST("take2");
-  test_take(item_name);
+  assert(take(&game, item_name) == Ok);
+  assert(take(&game, item_name) == NotFound);
   assert(strcmp(game.avatar->inventory->name, item_name) == 0);
 
   SUBTEST("multi");
@@ -296,12 +288,14 @@ static void test_gameplay_take_drop() {
       break;
     }
   }
-  const char * item_name_2 = get_item_name();
+  const char * item_name_2 = game.avatar->location->itemList->name;
   SUBTEST("m_take");
-  test_take(item_name_2);
+  assert(take(&game, item_name_2) == Ok);
+  assert(take(&game, item_name_2) == NotFound);
 
   SUBTEST("m_drop");
-  test_drop(item_name_2);
+  assert(drop(&game, item_name_2) == Ok);
+  assert(drop(&game, item_name_2) == NotFound);
 
   SUBTEST("checks");
   assert(game.avatar->inventoryItems == 1);
