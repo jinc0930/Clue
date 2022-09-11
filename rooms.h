@@ -41,6 +41,7 @@ void freeRoom(struct Room* room);
 //checks
 bool isIdInside(struct Room* room, const char * id);
 bool isCharInside(struct Room* room, const char * name);
+bool isItemInside(struct Room* room, const char * name);
 
 //adding
 void additem(struct Room* room,struct Item* item);

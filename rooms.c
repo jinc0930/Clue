@@ -214,3 +214,14 @@ bool isCharInside(struct Room* room, const char * name) {
   }
   return x;
 }
+
+bool isItemInside(struct Room* room, const char * name) {
+  struct Item * roominv = room->itemList;
+  while(roominv!=NULL){
+      if(strcmp(roominv->name, name)==0){
+        return true;
+      }
+      roominv = roominv->next;
+  }
+  return false;
+}

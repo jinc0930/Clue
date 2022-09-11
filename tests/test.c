@@ -355,10 +355,9 @@ static void test_gameplay_clue_rooms() {
 static void test_gameplay_clue_chars() {
   struct Game game = makeGame();
   int player_id = initGame(&game, "test");
-  int len = sizeof(game.characters) / sizeof(game.characters[0]);
-  game.attempts = len; // ensure there is enough attemps
+  game.attempts = N_ROOMS; // ensure there is enough attemps
   int corrects = 0;
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < N_ROOMS; i++) {
     if (player_id == i) continue;
     assert(game.characters[i] != NULL);
     assert(game.characters[i] != game.avatar);
@@ -366,12 +365,30 @@ static void test_gameplay_clue_chars() {
     assert(clue(&game, game.characters[i]->name) == Ok);
     if (game.okChar == true) {
       corrects++;
-      assert(strcmp(game.characters[i]->name, game.targetChar) == 0);
+      assert(isCharInside(game.map[i], game.targetChar));
     }
   }
   assert(corrects == 1);
 }
 
+static void test_gameplay_clue_items() {
+  struct Game game = makeGame();
+  int player_id = initGame(&game, "test");
+  game.attempts = N_ROOMS; // ensure there is enough attemps
+  int corrects = 0;
+  for (int i = 0; i < N_ROOMS; i++) {
+    if (player_id == i) continue;
+    assert(game.characters[i] != NULL);
+    assert(game.characters[i] != game.avatar);
+    teleport(&game, i); // to prevent rooms from being full
+    assert(clue(&game, game.characters[i]->name) == Ok);
+    if (game.okItem == true) {
+      corrects++;
+      assert(isItemInside(game.map[i], game.targetItem));
+    }
+  }
+  assert(corrects == 1);
+}
 
 // TESTS
 int main(void) {
@@ -391,5 +408,6 @@ int main(void) {
   TEST(test_gameplay_clue_basic);
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
+  TEST(test_gameplay_clue_items);
   return 0;
 }
