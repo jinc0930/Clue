@@ -9,7 +9,7 @@ WIP
 1. You need to install [raylib](https://www.raylib.com), `make` and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way. For unix systems: [raylib on macOs](https://github.com/raysan5/raylib/wiki/Working-on-macOS), [raylib on linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
 2. Clone this repository and execute `mingw32-make graphics` or just `make graphics` command in the terminal.
 3. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
-4. To run the file, simply type `./clue.exe` in the terminal.
+4. To run the file, simply type `./graphics/clue.exe` in the terminal.
 
 ## Tests
 Compile and test by executing `mingw32-make test && ./test` or on unix systems `make test && ./test`

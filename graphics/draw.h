@@ -4,7 +4,7 @@
 #include "../rooms.h"
 
 #ifndef DRAW_H
-#define DRA_H
+#define DRAW_H
 
 void DrawMap(struct Room* map[9]);
 
