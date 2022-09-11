@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "game.h"
+#include "../game.h"
 
 void DrawMap(struct Room* map[9]) {
     int xStep = 800 / 3;

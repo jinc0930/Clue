@@ -21,7 +21,7 @@
 #
 #**************************************************************************************************
 
-.PHONY: all test legacy clean
+.PHONY: all test graphics clean
 
 # Define required raylib variables
 PROJECT_NAME       ?= clue
@@ -354,7 +354,7 @@ OBJ_DIR = obj
 # Define all object files from source files
 SRC = $(call rwildcard, *.c, *.h)
 #OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-OBJS ?= utils.c draw.c pool.c character.c rooms.c items.c game.c main.c
+OBJS ?= utils.c graphics/draw.c pool.c character.c rooms.c items.c game.c graphics/main.c
 
 # For Android platform we call a custom Makefile.Android
 ifeq ($(PLATFORM),PLATFORM_ANDROID)
@@ -365,9 +365,12 @@ else
     MAKEFILE_PARAMS = $(PROJECT_NAME)
 endif
 
+adventure:
+	$(CC) -o clue $(SOURCE_BASE) prettyprint.c main.c $(CFLAGS_PURE)
+
 # Default target entry
 # NOTE: We call this Makefile target or Makefile.Android target
-all:
+graphics:
 	$(MAKE) $(MAKEFILE_PARAMS)
 
 # Project target defined by PROJECT_NAME
@@ -411,6 +414,3 @@ SOURCE_BASE = utils.c pool.c character.c rooms.c items.c game.c
 # Custom test suit (hard coded)
 test:
 	$(CC) -o test $(SOURCE_BASE) tests/test.c $(CFLAGS_PURE)
-
-legacy:
-	$(CC) -o clue-legacy $(SOURCE_BASE) legacy/prettyprint.c legacy/main.c $(CFLAGS_PURE)

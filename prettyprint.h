@@ -1,6 +1,6 @@
 #include <string.h>
-#include "../character.h"
-#include "../rooms.h"
+#include "character.h"
+#include "rooms.h"
 #ifndef PRETTYPRINT_H
 #define PRETTYPRINT_H
 // colors

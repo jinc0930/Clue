@@ -1,7 +1,7 @@
 #include "prettyprint.h"
-#include "../rooms.h"
-#include "../character.h"
-#include "../items.h"
+#include "rooms.h"
+#include "character.h"
+#include "items.h"
 #include <stdio.h>
 #include <time.h>
 #define VAL 120
