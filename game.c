@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "pool.h"
 #include <assert.h>
-#define N 9
 
 const char* CHARACTERS[] = {"minh","james","ivan","tenzin","edrick","chang","kevin","michael","joey"};
 const char* ITEMS[] = {"butter knife","bat","wrench","rope","dagger","rifle","hammer","lead pipe","poison bottle"};
@@ -24,17 +23,21 @@ struct Game makeGame() {
     };
 
     // INIT: ROOMS, CHARACTERS, ITEMS
-    struct Pool a = makePool(N), b = makePool(N), c = makePool(N);
-    for (size_t i = 0; i < N; i++) {
+    struct Pool a = makePool(N_ROOMS), b = makePool(N_ITEMS), c = makePool(N_CHARACTERS);
+    for (size_t i = 0; i < N_ROOMS; i++) {
         game.map[poolTake(&a)] = makeroom(ROOMS[i]);
+    }
+    for (size_t i = 0; i < N_ITEMS; i++) {
         game.items[poolTake(&b)] = makeitem(ITEMS[i]);
+    }
+    for (size_t i = 0; i < N_CHARACTERS; i++) {
         game.characters[poolTake(&c)] = makeChar(CHARACTERS[i]);
     }
     // making sure pools are consumed
     assert(a.length == 0 && b.length == 0 && c.length == 0);
 
     // SET: ROOM CONNECTIONS
-    for (int p = 0; p < N; p++ ){
+    for (int p = 0; p < N_ROOMS; p++ ){
         if( p > 2 ){
             setNorth(game.map[p], game.map[p-3]);
         }
@@ -49,13 +52,15 @@ struct Game makeGame() {
         }
     }
 
-    // SET ON MAP: ITEMS AND CHARS
+    // SET ON MAP: ITEMS
     // pool for distribution of items and chars
-    struct Pool poolChar = makePool(N), poolItem = makePool(N);
-    for (size_t i = 0; i < N; i++) {
+    struct Pool poolChar = makePool(N_CHARACTERS), poolItem = makePool(N_ITEMS);
+    for (size_t i = 0; i < N_ITEMS; i++) {
         // a random item to a room
         additem(game.map[i], game.items[poolTake(&poolItem)]);
-
+    }
+    // SET ON MAP: CHARS
+    for (size_t i = 0; i < N_CHARACTERS; i++) {
         // a random character to a room
         struct Character * charChosen = game.characters[poolTake(&poolChar)];
         addChar(game.map[i], charChosen);
@@ -63,7 +68,6 @@ struct Game makeGame() {
         // add reference
         setloc(charChosen, game.map[i]);
     }
-
     return game;
 }
 
@@ -72,7 +76,7 @@ int initGame(struct Game * game, const char * name) {
     bool already_exists = false;
     int avatarIdx = 0;
 
-    for (size_t i = 0; i < N; i++) {
+    for (size_t i = 0; i < N_CHARACTERS; i++) {
         if (strcasecmp(name, getcharname(game->characters[i])) == 0) {
             already_exists = true;
             avatarIdx = i;
@@ -81,7 +85,7 @@ int initGame(struct Game * game, const char * name) {
     };
 
     if (already_exists == false) {
-        avatarIdx = rand()%N;
+        avatarIdx = rand()%N_CHARACTERS;
     }
 
     // AVATAR
@@ -91,9 +95,9 @@ int initGame(struct Game * game, const char * name) {
     game->avatar->location->visited = true;
 
     // HINTS
-    struct Pool poolHintsChar = makePool(N),
-    poolHintsRoom = makePool(N),
-    poolHintsItem = makePool(N);
+    struct Pool poolHintsChar = makePool(N_CHARACTERS),
+    poolHintsRoom = makePool(N_ROOMS),
+    poolHintsItem = makePool(N_ITEMS);
 
     // TAKE INDEX FOR ANSWERS
     int murderIdx = poolTakeExcluding(&poolHintsChar, avatarIdx); 
@@ -108,7 +112,7 @@ int initGame(struct Game * game, const char * name) {
 
     // IDS DISTRIBUTION
     int excludes[] = {murderIdx, avatarIdx};
-    struct Pool poolChars = makePoolExcluding(N, excludes, sizeof(excludes)/sizeof(excludes[0]));
+    struct Pool poolChars = makePoolExcluding(N_CHARACTERS, excludes, sizeof(excludes)/sizeof(excludes[0]));
     
     // 4 HINT GIVERS
     for (size_t i = 0; i < 4; i++) {
@@ -169,13 +173,13 @@ int initGame(struct Game * game, const char * name) {
             } else {
                 // select a random one excluding avatar and self
                 int excludes[] = {avatarIdx, idx};
-                struct Pool notMe = makePoolExcluding(N, excludes, sizeof(excludes)/sizeof(excludes[0]));
+                struct Pool notMe = makePoolExcluding(N_CHARACTERS, excludes, sizeof(excludes)/sizeof(excludes[0]));
                 accused = game->characters[poolTake(&notMe)];
             }
         } else {
             // select a random one excluding avatar and self
             int excludes[] = {avatarIdx, idx};
-            struct Pool notMe = makePoolExcluding(N, excludes, sizeof(excludes)/sizeof(excludes[0]));
+            struct Pool notMe = makePoolExcluding(N_CHARACTERS, excludes, sizeof(excludes)/sizeof(excludes[0]));
             accused = game->characters[poolTake(&notMe)];
         }
 
@@ -191,7 +195,7 @@ int initGame(struct Game * game, const char * name) {
     set_room_hint(game->characters[murderIdx], roomHint);
 
     int excludesMurd[] = {avatarIdx, murderIdx};
-    struct Pool notMeAndAvatar = makePoolExcluding(N, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
+    struct Pool notMeAndAvatar = makePoolExcluding(N_CHARACTERS, excludesMurd, sizeof(excludesMurd)/sizeof(excludesMurd[0]));
     struct Character * accused = game->characters[poolTake(&notMeAndAvatar)];
     set_char_hint(game->characters[murderIdx], accused);
 
@@ -237,7 +241,7 @@ int move(struct Game * game, enum direction dir) {
 enum actionResult take(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
-    for (int t=0;t<N;t++){
+    for (int t=0;t<N_ITEMS;t++){
         if (startsWith(itemName, getItemName(game->items[t])) == true) {
             invalid = false;
             break;
@@ -269,7 +273,7 @@ enum actionResult take(struct Game * game, const char * itemName) {
 enum actionResult drop(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
-    for (int t=0;t<N;t++){
+    for (int t=0;t<N_ITEMS;t++){
         if (startsWith(itemName, getItemName(game->items[t])) == true) {
             invalid = false;
             break;
@@ -299,7 +303,7 @@ enum actionResult clue(struct Game * game, const char * murderer) {
     struct Room * currentRoom = game->avatar->location;
     struct Character * clueChar = NULL;
     // check if is valid
-    for(int r = 0; r<N;r++){
+    for(int r = 0; r<N_CHARACTERS;r++){
         if(strcmp(game->characters[r]->name, murderer) == 0 && strcmp(game->characters[r]->id, game->avatar->id) != 0){
             clueChar = game->characters[r];
             break;
@@ -363,7 +367,7 @@ enum actionResult clue(struct Game * game, const char * murderer) {
 void teleport(struct Game * game, int roomIdx) {
     int map_idx = 0;
     int slot_idx = 0;
-    for (size_t i = 0; i < N; i++) {
+    for (size_t i = 0; i < N_CHARACTERS; i++) {
         for (size_t j = 0; j < MAX_CHARACTER; j++) {
             struct Character *slot = game->map[i]->chara[j];
             if (slot != NULL && strcmp(game->avatar->name, slot->name) == 0) {
@@ -385,15 +389,15 @@ void teleport(struct Game * game, int roomIdx) {
 
 void freeGame(struct Game * game) {
     //free rooms
-    for(int k =0;k<N;k++){
+    for(int k =0;k<N_ROOMS;k++){
         free(game->map[k]);
     }
     //free items
-    for(int l=0;l<N;l++){
+    for(int l=0;l<N_ITEMS;l++){
         free(game->items[l]);
     }
     //free characters
-    for(int j=0;j<N;j++){
+    for(int j=0;j<N_CHARACTERS;j++){
         for (size_t i = 0; i < 3; i++) {
             free(game->characters[j]->hints[i]);
             free(game->characters[j]->prefix[i]);

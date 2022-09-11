@@ -64,8 +64,7 @@ static void test_pool_excluding_caller() {
 }
 
 // UTILS
-static void test_utils() {
-  SUBTEST("test_starts_with");
+static void test_starts_with() {
   assert(startsWith("abcd", "abcd"));
   assert(startsWith("a", "abcd"));
   assert(startsWith("ab", "ab"));
@@ -77,8 +76,9 @@ static void test_utils() {
   assert(!startsWith("aaaaa", "a"));
   assert(!startsWith("xyz", "xy\n"));
   assert(!startsWith("xy\n", "xy"));
-  
-  SUBTEST("test_slice");
+}
+
+static void test_slice() {
   char direction[10] = { 0 };
   slice("go north", direction, strlen("go "), 10);
   assert(strcmp(direction, "north") == 0);
@@ -156,6 +156,9 @@ static void test_rooms() {
     assert(addChar(room, character) != -1);
     assert(isCharInside(room, chars[i]));
   }
+  assert(room->chara[1] != NULL);
+  room->chara[1]->id = "me";
+  assert(isIdInside(room, "me"));
 
   SUBTEST("add_item");
   char* items[] = {"butter knife","bat","wrench"};
@@ -223,20 +226,22 @@ static void test_gameplay() {
   assert(game.items != NULL);
   assert(game.avatar == game.characters[avatar_idx]);
   
-  // int player_position = 0;
+  // check if map is well distributed
   for (size_t i = 0; i < 9; i++) {
     assert(game.map[i] != NULL);
     assert(game.map[i]->chara != NULL);
     if (game.map[i]->visited) {
       assert(strcmp(game.map[i]->chara[0]->name, "test") == 0);
-      // player_position = i;
     }
     assert(game.map[i]->itemList != NULL);
     assert(game.map[i]->chara[0] != NULL);
   }
+}
 
+static void test_gameplay_movements() {
+  struct Game game = makeGame();
+  initGame(&game, "test");
   // from middle
-  SUBTEST("movements");
   for(int i=North; i<=South; i++) {
     teleport(&game, 4); // to the middle
     assert(strcmp(game.avatar->location->name, game.map[4]->name) == 0);
@@ -307,62 +312,72 @@ static void test_gameplay_take_drop() {
   assert(drop(&game, "invalid item") == Invalid);
 }
 
-
-static void test_gameplay_clue_chars() {
+static void test_gameplay_clue_basic() {
   struct Game game = makeGame();
   initGame(&game, "test");
+  // invalid case
   assert(game.attempts == 0);
   assert(clue(&game, "invalid") == Invalid);
   assert(game.attempts == 0);
+  assert(game.okChar == false);
 
-  SUBTEST("clue_target_char");
+  // valid and correct case
   assert(clue(&game, game.targetChar) == Ok);
   assert(game.attempts == 1);
   assert(game.okChar == true);
-
-  SUBTEST("clue_all_chars");
-  int len = sizeof(game.characters) / sizeof(game.characters[0]);
-  int corrects = 0;
-  for (size_t i = 0; i < len; i++) {
-    // since seed is deterministic, here we are testing clue against all characters
-    struct Game game = makeGame();
-    initGame(&game, "test");
-    if (strcmp(game.characters[0]->name, "test") != 0) {
-      assert(clue(&game, game.characters[i]->name) == Ok);
-      assert(game.attempts == 1); 
-      if (game.okChar == true) {
-        corrects++;
-        assert(strcmp(game.characters[i]->name, game.targetChar) == 0);
-      }
-    }
-  }
-  // only one is the correct
-  assert(corrects == 1);
 }
 
 static void test_gameplay_clue_rooms() {
+  SUBTEST("clue_room_utils");
   struct Game game = makeGame();
   initGame(&game, "test");
-  int len = sizeof(game.map) / sizeof(game.map[0]);
+  int room_to_test = 0;
+  const char *names[N_CHARACTERS];
+  int names_len = 0;
+  for (int i = 0; i < N_ROOMS; i++) {
+    if (isCharInside(game.map[i], game.targetChar)) continue;
+    if (isCharInside(game.map[i], "test")) continue;
+    if(game.map[i]->chara[0] == NULL) continue;
+    names[names_len++] = game.map[i]->chara[0]->name;
+    if (roomCharLength(game.map[i]) != 1) continue;
+    room_to_test = i;
+  }
+  // is full case
+  SUBTEST("clue_room_full");
+  assert(names_len >= 3);
+  teleport(&game, room_to_test);
+  assert(clue(&game, names[0]) == Ok);
+  assert(clue(&game, names[1]) == Full);
+  assert(clue(&game, names[2]) == Full);
+  assert(game.attempts == 1);
+}
+
+static void test_gameplay_clue_chars() {
+  struct Game game = makeGame();
+  int player_id = initGame(&game, "test");
+  int len = sizeof(game.characters) / sizeof(game.characters[0]);
+  game.attempts = len; // ensure there is enough attemps
   int corrects = 0;
-  game.attempts = len; // add more attemps for this test
-  assert(strcmp(game.avatar->location->chara[0]->name, "test") == 0);
-  for (size_t i = 0; i < len; i++) {
-    // teleport player
-    teleport(&game, i);
-    clue(&game, "chang");
-    if (game.okRoom == true) {
+  for (int i = 0; i < len; i++) {
+    if (player_id == i) continue;
+    assert(game.characters[i] != NULL);
+    assert(game.characters[i] != game.avatar);
+    teleport(&game, i); // to prevent rooms from being full
+    assert(clue(&game, game.characters[i]->name) == Ok);
+    if (game.okChar == true) {
       corrects++;
-      assert(strcmp(game.map[i]->name, game.targetRoom) == 0);
+      assert(strcmp(game.characters[i]->name, game.targetChar) == 0);
     }
   }
   assert(corrects == 1);
 }
+
 
 // TESTS
 int main(void) {
   srand(20); // rand seed must be deterministic
-  TEST(test_utils);
+  TEST(test_starts_with);
+  TEST(test_slice);
   TEST(test_pool_basic);
   TEST(test_pool_excluding);
   TEST(test_pool_excluding_caller);
@@ -371,7 +386,9 @@ int main(void) {
   TEST(test_rooms);
   TEST(test_game);
   TEST(test_gameplay);
+  TEST(test_gameplay_movements);
   TEST(test_gameplay_take_drop);
+  TEST(test_gameplay_clue_basic);
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
   return 0;

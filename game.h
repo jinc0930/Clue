@@ -5,13 +5,16 @@
 #include "rooms.h"
 #ifndef GAME_H
 #define GAME_H
+#define N_CHARACTERS 9
+#define N_ROOMS 9
+#define N_ITEMS 9
 
 // struct for keeping track of state of the game
 struct Game {
     int attempts;
-    struct Character *characters[9];
-    struct Item *items[9];
-    struct Room *map[9];
+    struct Character *characters[N_CHARACTERS];
+    struct Item *items[N_ITEMS];
+    struct Room *map[N_ROOMS];
     struct Character *avatar;
     const char* targetChar;
     const char* targetRoom;
@@ -27,7 +30,7 @@ enum direction { North, East, West, South };
 // create the game
 struct Game makeGame();
 
-// set a player
+// intialize the game with a name for the player
 int initGame(struct Game * game, const char * name);
 
 // player move
@@ -41,6 +44,7 @@ enum actionResult drop(struct Game * game, const char * itemName);
 // call clue
 enum actionResult clue(struct Game * game, const char * murderer);
 
+// player teleport used for testing.
 void teleport(struct Game * game, int roomIdx);
 
 // free everything
