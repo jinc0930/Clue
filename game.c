@@ -68,7 +68,7 @@ struct Game makeGame() {
 }
 
 // intialize everything
-int initGame(struct Game * game, char * name) {
+int initGame(struct Game * game, const char * name) {
     bool already_exists = false;
     int avatarIdx = 0;
 
@@ -234,11 +234,11 @@ int move(struct Game * game, enum direction dir) {
 }
 
 // helper take an item in the room
-enum actionResult take(struct Game * game, char * itemName) {
+enum actionResult take(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
     for (int t=0;t<N;t++){
-        if (startsWith(itemName, getItemName(game->items[t])) == false) {
+        if (startsWith(itemName, getItemName(game->items[t])) == true) {
             invalid = false;
             break;
         };
@@ -252,23 +252,25 @@ enum actionResult take(struct Game * game, char * itemName) {
     struct Item * m = game->avatar->location->itemList;
     while(m != NULL){
         if (startsWith(itemName, m->name)){
-            if (add(game->avatar,m) != 0) {
+            if (add(game->avatar,m) > 0) {
                 removeItem(game->avatar->location, m);
                 return Ok;
-            } else return Full;
+            };
+            assert(m != NULL);
+            break;
+        } else {
+            m = m->next;
         }
-        m = getNext(m);
     }
-    
-    return Ok;
+    return NotFound;
 }
 
 // helper drop an item in the room
-enum actionResult drop(struct Game * game, char * itemName) {
+enum actionResult drop(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
     for (int t=0;t<N;t++){
-        if (startsWith(itemName, getItemName(game->items[t])) == false) {
+        if (startsWith(itemName, getItemName(game->items[t])) == true) {
             invalid = false;
             break;
         };
@@ -289,11 +291,11 @@ enum actionResult drop(struct Game * game, char * itemName) {
         m = getNext(m);
     }
 
-    return Ok;
+    return NotFound;
 }
 
 // helper drop an item in the room
-enum actionResult clue(struct Game * game, char * murderer) {
+enum actionResult clue(struct Game * game, const char * murderer) {
     struct Room * currentRoom = game->avatar->location;
     struct Character * clueChar = NULL;
     // check if is valid
@@ -358,6 +360,28 @@ enum actionResult clue(struct Game * game, char * murderer) {
     return Ok;
 }
 
+void teleport(struct Game * game, int roomIdx) {
+    int map_idx = 0;
+    int slot_idx = 0;
+    for (size_t i = 0; i < N; i++) {
+        for (size_t j = 0; j < MAX_CHARACTER; j++) {
+            struct Character *slot = game->map[i]->chara[j];
+            if (slot != NULL && strcmp(game->avatar->name, slot->name) == 0) {
+                map_idx = i;
+                slot_idx = j;
+                break;
+            }
+        }
+    }
+    for (size_t i = 0; i < MAX_CHARACTER; i++) {
+        if (game->map[roomIdx]->chara[i] == NULL) {
+            game->map[roomIdx]->chara[i] = game->map[map_idx]->chara[slot_idx];
+            game->avatar->location = game->map[roomIdx];
+            break;
+        }
+    }
+    game->map[map_idx]->chara[slot_idx] = NULL;
+}
 
 void freeGame(struct Game * game) {
     //free rooms

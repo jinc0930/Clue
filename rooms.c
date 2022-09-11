@@ -111,14 +111,18 @@ void removeItem(struct Room* room, struct Item* item){
   if(room -> itemList == NULL){
    //do nothing
   }
-  else if((room->itemList==item) && (room->itemList->next == NULL)){
-    room->itemList = NULL;
+  else if(strcmp(room->itemList->name, item->name) == 0){
+    if (room->itemList->next == NULL) {
+      room->itemList = NULL;
+    } else {
+      room->itemList = room->itemList->next;
+    }
   }
   //not first item, and there are multiple items
   else{
     //start from second item
     struct Item * temp = room->itemList;
-    struct Item * prev;
+    struct Item * prev = NULL;
     while(temp -> next != NULL && strcmp(temp -> name, item->name) != 0){ 
       //iterate until find the place that holds the item
       prev = temp;

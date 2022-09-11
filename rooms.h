@@ -46,7 +46,6 @@ bool isCharInside(struct Room* room, const char * name);
 void additem(struct Room* room,struct Item* item);
 int addChar(struct Room * room, struct Character* character);
 int moveChar(struct Room * from, struct Room * to, struct Character* character);
-void swapRooms(struct Room ** a, struct Room ** b);
 
 //removing
 void removeChar(struct Room* room, struct Character* character);

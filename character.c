@@ -55,16 +55,12 @@ int add(struct Character* character, struct Item*item) {
     // somenthing
     if (character->inventory == NULL) {
         character->inventory = item;
-    } else {
-        struct Item *temp = character->inventory;
-        for(;;) {
-            if (temp->next == NULL) {
-                temp->next = item;
-                break;
-            }
-            temp = temp->next;
-        }
+        character->inventoryItems++;
+        return 1;
     }
+    struct Item *temp = character->inventory;
+    item->next = temp;
+    character->inventory = item;
     character->inventoryItems++;
     return 1;
 }
@@ -89,7 +85,7 @@ void rmv(struct Character* character, struct Item*item){
     else{
     //start from second item
         struct Item * temp = character->inventory;
-        struct Item * prev;
+        struct Item * prev = NULL;
         while((temp->next != NULL) && (strcmp(temp->name, item->name) != 0)) { 
             //iterate until find the place that holds the item
             prev = temp;

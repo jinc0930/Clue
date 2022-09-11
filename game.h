@@ -28,18 +28,20 @@ enum direction { North, East, West, South };
 struct Game makeGame();
 
 // set a player
-int initGame(struct Game * game, char * name);
+int initGame(struct Game * game, const char * name);
 
 // player move
 int move(struct Game * game, enum direction dir);
 
 enum actionResult { Invalid, NotFound, Full, Ok };
 // player take
-enum actionResult take(struct Game * game, char * itemName);
+enum actionResult take(struct Game * game, const char * itemName);
 // player drop
-enum actionResult drop(struct Game * game, char * itemName);
+enum actionResult drop(struct Game * game, const char * itemName);
 // call clue
-enum actionResult clue(struct Game * game, char * murderer);
+enum actionResult clue(struct Game * game, const char * murderer);
+
+void teleport(struct Game * game, int roomIdx);
 
 // free everything
 void freeGame(struct Game * game);
