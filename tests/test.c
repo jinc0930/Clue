@@ -390,6 +390,23 @@ static void test_gameplay_clue_items() {
   assert(corrects == 1);
 }
 
+static void test_future_graph() {
+  // FIXME
+}
+
+static void test_future_coin() {
+  // FIXME
+}
+
+static void test_future_bread() {
+  // FIXME
+}
+
+static void test_future_key() {
+  // FIXME
+}
+
+
 // TESTS
 int main(void) {
   srand(20); // rand seed must be deterministic
@@ -409,5 +426,14 @@ int main(void) {
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
   TEST(test_gameplay_clue_items);
+
+// test things not yet fully implemented here
+// to test: `make test future=1 && ./test`
+#ifdef FUTURE
+  TEST(test_future_graph);
+  TEST(test_future_coin);
+  TEST(test_future_bread);
+  TEST(test_future_key);
+#endif
   return 0;
 }
