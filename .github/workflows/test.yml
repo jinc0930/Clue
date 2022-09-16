@@ -2,9 +2,9 @@ name: Run Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "graphical" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "graphical" ]
 
 jobs:
   build:
@@ -17,5 +17,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: make test
       run: make test
-    - name: run clue
-      run: ./clue
+    - name: run tests
+      run: ./test

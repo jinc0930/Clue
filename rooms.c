@@ -6,7 +6,7 @@
 
 //makeroom(roomname:char*):Room*
 //initializes room, takes a roomname as input and outputs a room
-struct Room* makeroom(char* roomname){
+struct Room* makeroom(const char* roomname){
   struct Room * room = (struct Room*) malloc (sizeof(struct Room));
   room -> name = roomname;
   room -> North = NULL;
@@ -111,14 +111,18 @@ void removeItem(struct Room* room, struct Item* item){
   if(room -> itemList == NULL){
    //do nothing
   }
-  else if((room->itemList==item) && (room->itemList->next == NULL)){
-    room->itemList = NULL;
+  else if(strcmp(room->itemList->name, item->name) == 0){
+    if (room->itemList->next == NULL) {
+      room->itemList = NULL;
+    } else {
+      room->itemList = room->itemList->next;
+    }
   }
   //not first item, and there are multiple items
   else{
     //start from second item
     struct Item * temp = room->itemList;
-    struct Item * prev;
+    struct Item * prev = NULL;
     while(temp -> next != NULL && strcmp(temp -> name, item->name) != 0){ 
       //iterate until find the place that holds the item
       prev = temp;
@@ -209,4 +213,15 @@ bool isCharInside(struct Room* room, const char * name) {
     if (c != NULL && c->name != NULL && strcmp(c->name, name) == 0) x = true;
   }
   return x;
+}
+
+bool isItemInside(struct Room* room, const char * name) {
+  struct Item * roominv = room->itemList;
+  while(roominv!=NULL){
+      if(strcmp(roominv->name, name)==0){
+        return true;
+      }
+      roominv = roominv->next;
+  }
+  return false;
 }

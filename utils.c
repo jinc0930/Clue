@@ -10,7 +10,7 @@ bool startsWith(const char *prefix, const char *str) {
 
 void slice(const char *str, char *result, size_t start, size_t end) {
     strncpy(result, str + start, end - start);
-};
+}
 
 void swap(int *a, int *b){
     int temp = *a;

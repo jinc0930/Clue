@@ -1,8 +1,8 @@
+#include "prettyprint.h"
 #include "rooms.h"
 #include "character.h"
 #include "items.h"
 #include <stdio.h>
-#include "prettyprint.h"
 #include <time.h>
 #define VAL 120
 
@@ -72,9 +72,6 @@ void rowBreak() {
 }
 // print all the rooms
 void printMap(struct Room* map[9]) {
-    #if defined DEBUG
-    debugMap(map);
-    #else
     rowBreak();
     for (size_t i = 0; i < 9; i = i+3) {
         for (size_t j = 0; j < 3; j++) {
@@ -114,7 +111,6 @@ void printMap(struct Room* map[9]) {
         }
         rowBreak();
     }
-    #endif
 }
 
 void printInventory(struct Character * avatar) {
@@ -156,7 +152,8 @@ void printRoomItems(struct Room * room) {
 }
 
 // 32 milliseconds
-struct timespec remaining, request = {0, 32000000};
+struct timespec remaining, request = {0, 30000000};
+
 void printTyping(const char *msg) {
     int i = 0;
     while ( msg[i] != '\0') {
@@ -174,47 +171,3 @@ void printClue() {
     puts("  \\/_____/   \\/_____/   \\/_____/   \\/_____/ ");
     puts("");
 }
-
-#if defined DEBUG
-// for testing purposes
-void debugMap(struct Room* map[9]) {
-    puts(BLD "\nDEBUG MAP:" RESET);
-    rowBreak();
-    for (size_t i = 0; i < 9; i = i+3) {
-        for (size_t j = 0; j < 3; j++) {
-            if (map[i+j]->visited == true) {
-                if (isIdInside(map[i+j], "avatar") == true) {
-                    char checkmark[18] = {0};
-                    sprintf(checkmark,"%s *", map[i+j]->name);
-                    printCell(checkmark, BLD CYN);
-                } else {
-                    char checkmark[18] = {0};
-                    sprintf(checkmark,"%s *", map[i+j]->name);
-                    printCell(checkmark, "");
-                }
-            } else {
-                printCell(map[i+j]->name, BLD);
-            }
-        }
-        endCells();
-        for (size_t j = 0; j < 3; j++) {
-            for (size_t k = 0; k < 3; k++) {
-                struct Character * c = map[i+k]->chara[j];
-                if (c != NULL && strcmp(c->id, "avatar") == 0) {
-                    printCell(c->name, CYN);
-                } else if (c != NULL && strcmp(c->id, "murderer") == 0){
-                    printCell(c->name, RED);
-                } else if (c != NULL && strcmp(c->id, "hint giver") == 0){
-                    printCell(c->name, GRN);
-                } else if (c != NULL && strcmp(c->id, "accuser") == 0){
-                    printCell(c->name, YEL);
-                } else {
-                    printCell(c != NULL ? c->name : NULL, "");
-                }
-            }
-            endCells();
-        }
-        rowBreak();
-    }
-}
-#endif

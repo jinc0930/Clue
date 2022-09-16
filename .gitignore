@@ -1,5 +1,8 @@
 clue
 clue.exe
+test
+test.exe
 .vscode/configurationCache.log
 .vscode/dryrun.log
 .vscode/targets.log
+tests/output

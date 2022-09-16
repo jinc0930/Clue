@@ -1,15 +1,19 @@
-SOURCES = utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c
+.PHONY: all graphics test
 
-final:
-	gcc utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c -o clue
+CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
+OBJS = utils.c pool.c character.c rooms.c items.c game.c
+ 
+ifeq ($(future),1)
+    CFLAGS += -DFUTURE
+endif
 
-final-windows:
-	gcc $(SOURCES) -o clue.exe
+# Default target entry
+all:
+	gcc -o clue $(OBJS) prettyprint.c main.c $(CFLAGS)
 
-debug:
-	gcc -g -DDEBUG=1 $(SOURCES) -o clue
+graphics:
+	$(MAKE) -C graphics/
 
+# Custom test suit (hard coded)
 test:
-	gcc -g -DDEBUG=1 -DTEST=1 $(SOURCES) -o clue
-
-# COPYPASTE: gcc utils.c prettyprint.c pool.c character.c rooms.c items.c adventure.c
+	gcc -o test $(OBJS) tests/test.c $(CFLAGS)
