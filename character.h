@@ -13,6 +13,7 @@ struct Character{
     int inventoryItems;
     char* hints[3];
     char* prefix[3];
+    int coins_count;
 };
 
 //make character
@@ -32,6 +33,10 @@ void setloc(struct Character* character, struct Room* room);
 int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
+
+//updates new coin amount, purchase will be the adjustment of coins (pass in the correct signs),
+//an integer is returned, 0 = purchase succesful and complete, 1= purchase unsucessful
+int updatecoins(struct Character* character, int purchase);
 
 //setting hints the npcs will give out
 void set_item_hint(struct Character* character, struct Item* itemHint);

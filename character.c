@@ -12,6 +12,7 @@ struct Character* makeChar(const char* name){
     character->inventory = NULL;
     character->inventoryItems = 0;
     character->id = NULL;
+    character->coins_count = 0;
     // allocate on heap. remember to free!
     for (size_t i = 0; i < 3; i++) {
         character->hints[i] = malloc((128)*sizeof(char));
@@ -46,6 +47,17 @@ struct Room* getloc (struct Character * character){
 //takes character and room as input, sets the location of the character to the room given
 void setloc(struct Character* character, struct Room* room){
     character -> location = room;
+}
+
+//updates amount of coins a character has
+int updatecoins(struct Character* character, int purchase){
+    if((character->coins_count += purchase)<0){
+        return 1;
+    }
+    else{
+        character->coins_count += purchase;
+        return 0;
+    }
 }
 
 //add(character:Character*,item:Item*):int
