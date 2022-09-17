@@ -1,19 +1,4 @@
 # Clue
-## How to compile
-1. Clone this repository and execute `mingw32-make` or just `make` command in the terminal.
-2. If the compilation is successfull now you can execute the output file "clue.exe" in the same directory. To run the file, simply type `./clue.exe` in the terminal.
-
-## Graphics version
-WIP
-
-1. You need to install [raylib](https://www.raylib.com), `make` and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way. For unix systems: [raylib on macOs](https://github.com/raysan5/raylib/wiki/Working-on-macOS), [raylib on linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
-2. Clone this repository and execute `mingw32-make graphics` or just `make graphics` command in the terminal.
-3. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
-4. To run the file, simply type `./graphics/clue.exe` in the terminal.
-
-## Tests
-Compile and test by executing `mingw32-make test && ./test` or on unix systems `make test && ./test`
-
 ## About
 In this game, the board consists of nine rooms, each has four pointers to it's north, south, east and west. If there is
 no room in one of the directions, that pointer will point to null. The nine rooms are set on a 3*3 grid, with their name
@@ -24,8 +9,14 @@ character has name, inventory(a linked list of items), and location(indicating t
 
 The 8 npcs, however, are tagged with an ID, they can either be a "hint giver" or an "accuser", and of course, one of the npcs will be the "murderer". The "hint givers" will give the user three guarenteed accurate hints (one about each category: room, item, person) that eliminates the suspicsion. The "accuser" will give the user three accusations (one of each category) that are not guarenteed to be true, the chance of it being true varies from one accuser to another. The "murderer" will blend in and act either as a "hint giver" or an "accuser".
 
+## How to compile
+1. Clone this repository and type `mingw32-make` if you havem mingw or just `make` command in the terminal.
+2. If the compilation is successfull now you can execute the output file "clue.exe" in the same directory. To run the file, simply type `./clue.exe` in the terminal.
 
-## How to play (Legacy)
+## Tests
+Compile and test by executing `mingw32-make test && ./test` or on unix systems `make test && ./test`
+
+## How to play
 Commands include "help","list","go","take","drop","inventory","look","talk", and "clue".
 The game uses scanf() to gather user input, and allow commands with secondary inputs. Players can enter a direction
 after the "go" command was inputed, or name of an item after "drop" and "take", and a character name (suspected murderer)
@@ -36,3 +27,9 @@ The game begins by asking user to input their name, and sets given name as the p
 Then, it asks for user to input commands for gameplay.
 The game will end when the user wins or loses, the user can win by guessing the answer correctly, which consist of a 
 random room, random item, and a random character. The player can keep guessing until clue is called at the eleventh time, where the game will end.
+
+## Experimental graphics version (WIP)
+
+1. You need to install [raylib](https://www.raylib.com), `make` and a c99 compiler like gcc. You can skip all of this in case you already have it by using MSYS2 or any other way. For unix systems: [raylib on macOs](https://github.com/raysan5/raylib/wiki/Working-on-macOS), [raylib on linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux).
+2. Some adjustments in the `Makefile` may be needed depending where you installed raylib. I recommend you changing the `RAYLIB_PATH` and `COMPILER_PATH` variables in the `Makefile` accordingly.
+3. To run the file, simply type `./graphics/clue.exe` in the terminal.
