@@ -11,7 +11,7 @@
     "stdio.h": "c",
     "time.h": "c",
     "stdlib.h": "c",
-    "string.h": "c"
+    "draw.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,

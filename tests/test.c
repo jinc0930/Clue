@@ -446,8 +446,8 @@ static void test_transaction() {
   assert(bob->coins_count == 0); // must be 0 now
   assert(alice->coins_count == 15); // must be 15 now
 
-  int must_fail = transaction(bob, alice, 1);
-  assert(x == 0); // must be 0 when it fails
+  int fail = transaction(bob, alice, 1);
+  assert(fail == 0); // must be 0 when it fails
 }
 
 static void test_bread() {
