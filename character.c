@@ -60,6 +60,14 @@ int updatecoins(struct Character* character, int purchase){
     }
 }
 
+//
+int transaction(struct Character* sender, struct Character* receiver, int amount) {
+    // ============
+    // FIXME TODO
+    // ============
+    return 0;
+}
+
 //add(character:Character*,item:Item*):int
 //takes character and item as input, add the item to the inventory of the character; returns 1 if item is added and 0 if inventory is full
 int add(struct Character* character, struct Item*item) {

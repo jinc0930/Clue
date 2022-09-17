@@ -390,19 +390,71 @@ static void test_gameplay_clue_items() {
   assert(corrects == 1);
 }
 
-static void test_future_graph() {
+static void test_graph() {
   // FIXME
 }
 
-static void test_future_coin() {
+static void test_coin() {
+  struct Character * character = makeChar("chang");
+
+  // CASE: update when it DOES NOT have enough coins
+  character->coins_count = 0; // RESET
+  int a = updatecoins(character, -1); 
+  assert(a == 0); // must be 0 when it fails
+  assert(character->coins_count == 0); // must be unchanged
+
+  // CASE: update to add (must always succeed)
+  character->coins_count = 0; // RESET
+  int b = updatecoins(character, 1);
+  assert(b == 1); // must be 1 when it succeeds
+  assert(character->coins_count == 1); // must update
+
+  // CASE: update when it have enough coins
+  character->coins_count = 1; // RESET
+  int c = updatecoins(character, -1);
+  assert(c == 1); // must be 1 when it succeeds
+  assert(character->coins_count == 0); // must remove
+}
+
+static void test_transaction() {
+  struct Character * bob = makeChar("bob");
+  struct Character * alice = makeChar("alice");
+
+  // CASE: bob DOES NOT have enough coins
+  bob->coins_count = 1; // RESET
+  alice->coins_count = 0; // RESET
+  int a = transaction(bob, alice, 2);
+  assert(a == 0); // must be 0 when it fails
+  assert(bob->coins_count == 1); // must be unchanged
+  assert(alice->coins_count == 0); // must be unchanged
+
+  // CASE: bob have enough coins
+  bob->coins_count = 1; // RESET
+  alice->coins_count = 0; // RESET
+  int b = transaction(bob, alice, 1);
+  assert(b == 1); // must be 1 when it succeeds
+  assert(bob->coins_count == 0); // must be 0 now
+  assert(alice->coins_count == 1); // must be 1 now
+
+  // CASE: bob send multiple times
+  bob->coins_count = 10; // RESET
+  alice->coins_count = 5; // RESET
+  transaction(bob, alice, 5);
+  transaction(bob, alice, 4);
+  int x = transaction(bob, alice, 1);
+  assert(x == 1); // must be 1 when it succeeds
+  assert(bob->coins_count == 0); // must be 0 now
+  assert(alice->coins_count == 15); // must be 15 now
+
+  int must_fail = transaction(bob, alice, 1);
+  assert(x == 0); // must be 0 when it fails
+}
+
+static void test_bread() {
   // FIXME
 }
 
-static void test_future_bread() {
-  // FIXME
-}
-
-static void test_future_key() {
+static void test_key() {
   // FIXME
 }
 
@@ -426,14 +478,11 @@ int main(void) {
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
   TEST(test_gameplay_clue_items);
+  TEST(test_coin);
+  TEST(test_transaction);
 
-// test things not yet fully implemented here
-// to test: `make test future=1 && ./test`
-#ifdef FUTURE
-  TEST(test_future_graph);
-  TEST(test_future_coin);
-  TEST(test_future_bread);
-  TEST(test_future_key);
-#endif
+  TEST(test_graph); // EMPTY
+  TEST(test_bread); // EMPTY
+  TEST(test_key); // EMPTY
   return 0;
 }

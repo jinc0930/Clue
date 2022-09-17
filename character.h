@@ -38,6 +38,11 @@ void rmv(struct Character* character, struct Item*item);
 //an integer is returned, 0 = purchase succesful and complete, 1= purchase unsucessful
 int updatecoins(struct Character* character, int purchase);
 
+// transaction between 2 characters
+// returns 0 when it fails reamining unchanges
+// returns 1 when it succeeds
+int transaction(struct Character* sender, struct Character* receiver, int amount);
+
 //setting hints the npcs will give out
 void set_item_hint(struct Character* character, struct Item* itemHint);
 void set_room_hint(struct Character* character, struct Room* roomHint);
