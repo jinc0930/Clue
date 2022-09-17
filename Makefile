@@ -3,8 +3,8 @@
 CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
 OBJS = utils.c pool.c character.c rooms.c items.c game.c
  
-ifeq ($(future),1)
-    CFLAGS += -DFUTURE
+ifeq ($(disable_future),1)
+    CFLAGS += -DDISABLE_FUTURE
 endif
 
 # Default target entry

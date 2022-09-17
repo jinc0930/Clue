@@ -478,11 +478,14 @@ int main(void) {
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
   TEST(test_gameplay_clue_items);
-  TEST(test_coin);
-  TEST(test_transaction);
 
+// tests work in progress
+#ifndef DISABLE_FUTURE
+  TEST(test_coin); // FAILING
+  TEST(test_transaction); // FAILING
   TEST(test_graph); // EMPTY
   TEST(test_bread); // EMPTY
   TEST(test_key); // EMPTY
+#endif
   return 0;
 }

@@ -1,4 +1,4 @@
-name: Build and run tests
+name: Future tests
 
 on:
   push:
@@ -11,13 +11,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
         
     steps:
     - uses: actions/checkout@v3
-    - name: build
-      run: make
     - name: make test
-      run: make test disable_future=1
+      run: make test
     - name: run tests
       run: ./test
