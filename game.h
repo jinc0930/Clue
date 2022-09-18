@@ -25,6 +25,10 @@ struct Game {
     bool finished;
 };
 
+extern const char* CHARACTERS[];
+extern const char* ITEMS[];
+extern const char* ROOMS[];
+
 enum direction { North, East, West, South };
 
 // create the game

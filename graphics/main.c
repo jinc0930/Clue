@@ -2,6 +2,8 @@
 #include "../game.h"
 #include "draw.h"
 #include <time.h>
+#include <stdbool.h>
+
 // #define PLATFORM_WEB
 
 #if defined(PLATFORM_WEB)
@@ -9,14 +11,25 @@
 #endif
 
 //----------------------------------------------------------------------------------
+// Structs
+//----------------------------------------------------------------------------------
+
+struct FullState {
+    struct Game *game;
+    Texture2D characters_textures[N_CHARACTERS];
+    bool cheatsheet_items[N_ITEMS];
+    Vector2 mouse_pos;
+    GameScreen current_screen;
+    struct ChatState chat;
+};
+
+
+//----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 const int screenWidth = 800;
 const int screenHeight = 450;
-struct FullState {
-    struct Game *game;
-    Texture2D characters_textures[9];
-};
+const int panel_size = 260;
 
 //----------------------------------------------------------------------------------
 // Module functions declaration
@@ -39,14 +52,20 @@ int main(void)
     struct FullState state = {
         .game = &game,
         .characters_textures = {
-            LoadTexture("./graphics/resources/char_02.png")
-        }
+            LoadTexture("./graphics/resources/char_02.png"),
+            LoadTexture("./graphics/resources/char_23.png"),
+        },
+        .cheatsheet_items = { false },
+        .mouse_pos = (Vector2){ 0.0f, 0.0f },
+        .current_screen = GAMEPLAY,
+        .chat = { false, 0, 0 }
     };
+    
 
 #if defined(PLATFORM_WEB)
-    emscripten_set_main_loop_arg(UpdateDrawFrame, &state, 60, 1);
+    emscripten_set_main_loop_arg(UpdateDrawFrame, &state, 30, 1);
 #else
-    SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
+    SetTargetFPS(30);   // Set our game to run at 30 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -70,20 +89,42 @@ int main(void)
 void UpdateDrawFrame(void* arg_)
 {
     struct FullState* state = arg_;
+    struct Game * game = state->game;
     // Update
-    //----------------------------------------------------------------------------------
-    // TODO: Update your variables here
-    //----------------------------------------------------------------------------------
+    state->mouse_pos = GetMousePosition();
+    if (IsKeyPressed(KEY_C)) state->current_screen = state->current_screen == CHEATSHEET ? GAMEPLAY : CHEATSHEET;
+    if (IsKeyPressed(KEY_T)) state->chat.is_open = !state->chat.is_open;
+
+    if (IsKeyPressed(KEY_RIGHT)) move(game, East);
+    if (IsKeyPressed(KEY_LEFT)) move(game, West);
+    if (IsKeyPressed(KEY_UP)) move(game, North);
+    if (IsKeyPressed(KEY_DOWN)) move(game, South);
 
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-
         ClearBackground(RAYWHITE);
-        DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - 260, GetScreenHeight() - 16);
-        DrawItems(state->game->avatar->location, GetScreenWidth() - 260 + 8 * 3, 8);
+        switch(state->current_screen) {
+            case GAMEPLAY: {
+                
+                int m_left = GetScreenWidth() - panel_size + 8 * 3;
+                int m_bottom = GetScreenHeight() - 100;
 
-        // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+                DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panel_size, GetScreenHeight() - 16);
+                DrawItems(state->game->avatar->location, m_left, 8);
+
+                DrawText("Controls:", m_left, m_bottom, 10, BLACK);
+                DrawText("- C to open cheatsheet", m_left, m_bottom + 20, 10, DARKGRAY);
+                DrawText("- T to talk", m_left, m_bottom + 40, 10, DARKGRAY);
+                DrawText("- Space to call clue", m_left, m_bottom + 60, 10, DARKGRAY);
+                DrawText("- Arrow keys to move", m_left, m_bottom + 80, 10, DARKGRAY);
+
+                if (state->chat.is_open) DrawChat(m_left, 0, panel_size);
+            } break;
+            case CHEATSHEET: {
+                DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);
+            } break;
+        }
 
     EndDrawing();
     //----------------------------------------------------------------------------------
