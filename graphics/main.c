@@ -28,8 +28,9 @@ struct FullState {
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 const int screenWidth = 800;
-const int screenHeight = 450;
-const int panel_size = 260;
+const int screenHeight = 600;
+const int panelWidth = 260;
+const int chatHeight = 120;
 
 //----------------------------------------------------------------------------------
 // Module functions declaration
@@ -58,7 +59,7 @@ int main(void)
         .cheatsheet_items = { false },
         .mouse_pos = (Vector2){ 0.0f, 0.0f },
         .current_screen = GAMEPLAY,
-        .chat = { false, 0, 0 }
+        .chat = { NULL, 0, 0 }
     };
     
 
@@ -90,15 +91,17 @@ void UpdateDrawFrame(void* arg_)
 {
     struct FullState* state = arg_;
     struct Game * game = state->game;
+    struct Room * current_room = game->avatar->location;
+    struct ChatState * chat = &state->chat;
+
+
     // Update
     state->mouse_pos = GetMousePosition();
     if (IsKeyPressed(KEY_C)) state->current_screen = state->current_screen == CHEATSHEET ? GAMEPLAY : CHEATSHEET;
-    if (IsKeyPressed(KEY_T)) state->chat.is_open = !state->chat.is_open;
-
-    if (IsKeyPressed(KEY_RIGHT)) move(game, East);
-    if (IsKeyPressed(KEY_LEFT)) move(game, West);
-    if (IsKeyPressed(KEY_UP)) move(game, North);
-    if (IsKeyPressed(KEY_DOWN)) move(game, South);
+    if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)) (move(game, East), chat->talking_to = NULL);
+    if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)) (move(game, West), state->chat.talking_to = NULL);
+    if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) (move(game, North), state->chat.talking_to = NULL);
+    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) (move(game, South), state->chat.talking_to = NULL);
 
     // Draw
     //----------------------------------------------------------------------------------
@@ -107,10 +110,10 @@ void UpdateDrawFrame(void* arg_)
         switch(state->current_screen) {
             case GAMEPLAY: {
                 
-                int m_left = GetScreenWidth() - panel_size + 8 * 3;
-                int m_bottom = GetScreenHeight() - 100;
+                int m_left = GetScreenWidth() - panelWidth + 8 * 3;
+                int m_bottom = GetScreenHeight() - 100 - chatHeight;
 
-                DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panel_size, GetScreenHeight() - 16);
+                DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panelWidth, GetScreenHeight() - 20 - chatHeight);
                 DrawItems(state->game->avatar->location, m_left, 8);
 
                 DrawText("Controls:", m_left, m_bottom, 10, BLACK);
@@ -119,7 +122,7 @@ void UpdateDrawFrame(void* arg_)
                 DrawText("- Space to call clue", m_left, m_bottom + 60, 10, DARKGRAY);
                 DrawText("- Arrow keys to move", m_left, m_bottom + 80, 10, DARKGRAY);
 
-                if (state->chat.is_open) DrawChat(m_left, 0, panel_size);
+                if (true) DrawChat(current_room, &state->chat, m_left, 0, panelWidth, chatHeight);
             } break;
             case CHEATSHEET: {
                 DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);

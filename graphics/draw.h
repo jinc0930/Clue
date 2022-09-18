@@ -10,9 +10,9 @@
 typedef enum GameScreen { START = 0, GAMEPLAY, CHEATSHEET, ENDING } GameScreen;
 
 struct ChatState {
-    bool is_open;
-    int talking_to;
-    int part;
+    struct Character * talking_to;
+    int count;
+    int page;
 };
 
 // Draw map
@@ -24,6 +24,6 @@ void DrawItems(struct Room * map, int _x, int _y);
 // Draw Cheatsheet
 void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) ;
 
-void DrawChat(int _x, int _y, int width);
+void DrawChat(struct Room * current_room, struct ChatState * chat, int _x, int _y, int width, int height);
 
 #endif

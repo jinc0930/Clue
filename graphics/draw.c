@@ -2,6 +2,7 @@
 #include "../game.h"
 #include "../items.h"
 #include "../rooms.h"
+#include "../character.h"
 #include "./draw.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -98,10 +99,36 @@ void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {
     }
 }
 
-void DrawChat(int _x, int _y, int width) {
+const int keys[] = { KEY_ONE, KEY_TWO, KEY_THREE };
+
+void DrawChat(struct Room * current_room, struct ChatState * chat, int _x, int _y, int width, int height) {
     int m_top = 8;
     int m_left = 8;
-    int y = GetScreenHeight() - 100;
-    DrawRectangle(0, GetScreenHeight() - 100, GetScreenWidth(), 100, BLACK);
-    WordWrap("- lead pipe because it looks like someone ripped it off the building", 80, m_left, y + m_top, 20, WHITE);
+    int y = GetScreenHeight() - height;
+    DrawRectangle(0, GetScreenHeight() - height, GetScreenWidth(), height, BLACK);
+
+    if (chat->talking_to != NULL) {
+        char text[200] = { 0 };
+        sprintf(text, "- %s %s.\n", chat->talking_to->prefix[chat->page], chat->talking_to->hints[chat->page]);
+        WordWrap(text, 70, m_left, y + m_top, 20, WHITE);
+        DrawText("[ENTER]", GetScreenWidth() - 100, GetScreenHeight() - 28, 20, DARKGRAY);
+
+        if (IsKeyPressed(KEY_ENTER)) {
+            if (chat->page + 1 < MAX_CHARACTER) chat->page += 1;
+            else (chat->page = 0, chat->talking_to = NULL);
+        }
+    } else {
+        DrawText("Who do you want to talk to?", m_left, y + m_top, 20, WHITE);
+        char text[100] = {0};
+        for (int i = 0; i < MAX_CHARACTER; i++) {
+            struct Character * c = current_room->chara[i];
+            if (c != NULL && strcmp(c->id, "avatar") != 0) {
+                if (IsKeyPressed(keys[i])) chat->talking_to = c;
+                char temp[32] = {0};
+                sprintf(temp, "%d. %s\n", i+1, c->name);
+                strncat(text, temp, 32);
+            }
+        }
+        DrawText(text, m_left, y + m_top + 24, 20, WHITE);
+    }
 }
