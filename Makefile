@@ -9,7 +9,7 @@ endif
 
 # Default target entry
 all:
-	gcc -o clue $(OBJS) prettyprint.c main.c $(CFLAGS)
+	gcc -o clue $(OBJS) prettyprint.c adventure.c $(CFLAGS)
 
 graphics:
 	$(MAKE) -C graphics/

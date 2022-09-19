@@ -28,7 +28,7 @@ struct FullState {
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 const int screenWidth = 800;
-const int screenHeight = 600;
+const int screenHeight = 450;
 const int panelWidth = 260;
 const int chatHeight = 120;
 
@@ -49,7 +49,6 @@ int main(void)
 
     struct Game game = makeGame();
     initGame(&game, "ME");
-    
     struct FullState state = {
         .game = &game,
         .characters_textures = {
@@ -59,7 +58,7 @@ int main(void)
         .cheatsheet_items = { false },
         .mouse_pos = (Vector2){ 0.0f, 0.0f },
         .current_screen = GAMEPLAY,
-        .chat = { NULL, 0, 0 }
+        .chat = { NULL, 0, 0 },
     };
     
 
@@ -115,12 +114,11 @@ void UpdateDrawFrame(void* arg_)
 
                 DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panelWidth, GetScreenHeight() - 20 - chatHeight);
                 DrawItems(state->game->avatar->location, m_left, 8);
-
                 DrawText("Controls:", m_left, m_bottom, 10, BLACK);
-                DrawText("- C to open cheatsheet", m_left, m_bottom + 20, 10, DARKGRAY);
-                DrawText("- T to talk", m_left, m_bottom + 40, 10, DARKGRAY);
-                DrawText("- Space to call clue", m_left, m_bottom + 60, 10, DARKGRAY);
-                DrawText("- Arrow keys to move", m_left, m_bottom + 80, 10, DARKGRAY);
+                DrawText("[C] to open cheatsheet", m_left, m_bottom + 20, 10, DARKGRAY);
+                DrawText("[T] to talk", m_left, m_bottom + 40, 10, DARKGRAY);
+                DrawText("[Arrow] to move", m_left, m_bottom + 80, 10, DARKGRAY);
+                DrawText("[Space] to call clue", m_left, m_bottom + 60, 10, DARKGRAY);
 
                 if (true) DrawChat(current_room, &state->chat, m_left, 0, panelWidth, chatHeight);
             } break;
