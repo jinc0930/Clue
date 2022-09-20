@@ -153,11 +153,14 @@ int addChar(struct Room * room, struct Character* character){
 }
 
 //move character from one slot to another room
-//return -1 if there's no available slots in the room otherwise return the index slot
+//return -1 if there's no available slots in the room
 //return -2 if is locked
 //return the index if ok
 int moveChar(struct Room * from, struct Room * to, struct Character* character){
-  if (to->isLocked) return -2;
+  if (to->isLocked) {
+    if (!constainsItem(character, "key")) return -2;
+    else unlockRoom(to);
+  }
   int slot = addChar(to, character);
   if (slot > -1) {
     for (size_t i = 0; i < MAX_CHARACTER; i++){

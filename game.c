@@ -373,7 +373,7 @@ int lockRandomRoom(struct Game * game) {
     game->map[idx]->isLocked = true;
     return idx;
 }
-
+// used for tests
 void teleport(struct Game * game, int roomIdx) {
     int map_idx = 0;
     int slot_idx = 0;

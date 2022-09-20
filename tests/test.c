@@ -279,6 +279,21 @@ static void test_room_locked() {
   assert(move(&game, East) == -2);
 }
 
+static void test_room_unlock() {
+  struct Game game = makeGame();
+  // lock all rooms
+  for (size_t i = 0; i < N_ROOMS; i++) {
+    if (i == 4) continue;
+    game.map[i]->isLocked = true;
+  }
+  initGame(&game, "test");
+  add(game.avatar, makeSpecialItem("key"));
+  teleport(&game, 4); // to the middle
+  assert(strcmp(game.avatar->location->name, game.map[4]->name) == 0);
+  assert(move(&game, South) >= 0);
+  assert(game.avatar->location->isLocked == false);
+}
+
 static void test_gameplay_take_drop() {
   struct Game game = makeGame();
   initGame(&game, "test");
@@ -552,6 +567,7 @@ int main(void) {
   TEST(test_gameplay_clue_items);
   TEST(test_special_items);
   TEST(test_room_locked);
+  TEST(test_room_unlock);
   TEST(test_transfer_item_1);
   TEST(test_transfer_item_2);
 
