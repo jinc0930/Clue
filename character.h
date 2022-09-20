@@ -35,7 +35,7 @@ void setloc(struct Character* character, struct Room* room);
 int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
-//destroying
+//destroying and freeing
 // 0 = fail, 1 = ok
 int destroy(struct Character* character, const char * item);
 //transferItem to another character

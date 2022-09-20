@@ -129,6 +129,7 @@ int destroy(struct Character* character, const char * item) {
                 else prev->next = NULL;
             else character->inventory = temp->next;
             character->inventoryItems--;
+            free(temp); // it can be changed in the future
             return 1;
         }
         prev = temp;
