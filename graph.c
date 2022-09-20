@@ -40,8 +40,35 @@ struct Node makeNode(enum nodeType t, const char * trigger, const char * say) {
         .type = t,
         .trigger = trigger,
         .say = say,
+        .send = NULL,
+        .receive = NULL,
     };
-    // todo: FIXME
+    return node;
+}
+
+struct Node makeNodeBuy(const char * trigger, const char * say, int cost, const char * item) {
+    struct Node node = {
+        .type = Trade,
+        .trigger = trigger,
+        .say = say,
+        .amount_send = cost,
+        .amount_receive = 1,
+        .send = "coin",
+        .receive = item,
+    };
+    return node;
+}
+
+struct Node makeNodeTrade(const char * trigger, const char * say, const char * send, const char * item) {
+    struct Node node = {
+        .type = Trade,
+        .trigger = trigger,
+        .say = say,
+        .amount_send = 1,
+        .amount_receive = 1,
+        .send = send,
+        .receive = item,
+    };
     return node;
 }
 

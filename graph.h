@@ -24,16 +24,16 @@ enum nodeType {
 
 // Node
 struct Node {
-  enum nodeType type;  // a enum to identify the type: `buy`, `receive...
+  enum nodeType type;       // a enum to identify the type: `buy`, `receive...
   const char * trigger;     // a command to trigger this node. if null fallback to the nodeType.
   const char * say;         // text/speech of this node
-  int amount_send;    // when this node is a `Trade` type, this will be the cost
-  int amount_receive; // when the character gives something to the player
+  int amount_send;          // when this node is a `Trade` type, this will be the cost
+  int amount_receive;       // when the character gives something to the player
   const char * send;        // when this node is a `Trade` type this will be the name of the item
   const char * receive;     // what item the player receives
-  const char * prob;        // probability of this node failing
-  bool is_inactive;   // node is not accessible
-  int trigger_flags;  // example: INACTIVE | END (this node will end and not be more accessible)
+  int  prob;                // probability of this node failing
+  bool is_inactive;         // node is not accessible
+  int trigger_flags;        // example: INACTIVE | END (this node will end and not be more accessible)
 };
 
 // adjacency list
@@ -77,6 +77,10 @@ int addNode(struct Graph * graph, struct Node node);
 const char ** getTriggers(struct Graph * graph);
 // make a node with a simple initialization
 struct Node makeNode(enum nodeType t, const char * trigger, const char * say);
+// player buys somenthing
+struct Node makeNodeBuy(const char * trigger, const char * say, int cost, const char * item);
+// player trades somenthing
+struct Node makeNodeTrade(const char * trigger, const char * say, const char * send, const char * item);
 // get next npc speech
 const char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input);
 #endif

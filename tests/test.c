@@ -553,6 +553,13 @@ static void test_graph_1() {
   assert(strcmp(findNext(&graph, NULL)->say, "hello again"));
 }
 
+static void test_nodes_1() {
+  // struct Node node1 = makeNode(Say, NULL, "hello");
+  // struct Node node2 = makeNodeBuy("trigger", "say", 10, "item");
+  // struct Node node3 = makeNodeTrade("trigger", "say", "send", "item");
+  // WIP
+}
+
 static void test_bread() {
   // FIXME
 }
@@ -591,6 +598,7 @@ int main(void) {
   TEST(test_transaction_2); // FAILING
   TEST(test_transaction_3); // FAILING
   TEST(test_graph_1); // FAILING
+  TEST(test_nodes_1); // FAILING
   TEST(test_bread); // EMPTY
 #endif
   return 0;
