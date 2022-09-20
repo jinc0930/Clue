@@ -18,6 +18,7 @@ struct Room* makeroom(const char* roomname){
   room -> chara[2] = NULL;
   room -> itemList = NULL;
   room -> visited = false;
+  room -> isLocked = false;
   return room;
 }
 
@@ -153,7 +154,10 @@ int addChar(struct Room * room, struct Character* character){
 
 //move character from one slot to another room
 //return -1 if there's no available slots in the room otherwise return the index slot
+//return -2 if is locked
+//return the index if ok
 int moveChar(struct Room * from, struct Room * to, struct Character* character){
+  if (to->isLocked) return -2;
   int slot = addChar(to, character);
   if (slot > -1) {
     for (size_t i = 0; i < MAX_CHARACTER; i++){
@@ -224,4 +228,10 @@ bool isItemInside(struct Room* room, const char * name) {
       roominv = roominv->next;
   }
   return false;
+}
+
+int unlockRoom(struct Room* room) {
+  // TODO: maybe add more stuff
+  room->isLocked = false;
+  return 1;
 }

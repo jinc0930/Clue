@@ -205,6 +205,9 @@ int initGame(struct Game * game, const char * name) {
 
 
 // helper moving the player
+//-1 if is full/invalid
+//-2 if is locked
+// >= 0 if is ok
 int move(struct Game * game, enum direction dir) {
     struct Room * current = game->avatar->location;
     struct Room * target = NULL;
@@ -363,6 +366,12 @@ enum actionResult clue(struct Game * game, const char * murderer) {
     }
 
     return Ok;
+}
+
+int lockRandomRoom(struct Game * game) {
+    int idx = rand() % N_ROOMS;
+    game->map[idx]->isLocked = true;
+    return idx;
 }
 
 void teleport(struct Game * game, int roomIdx) {

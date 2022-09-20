@@ -12,6 +12,19 @@
 #include <stdbool.h>
 #define MAX_LINE 100
 
+// move util
+static void moveFeedBack(int result, struct Game * game) {
+    if(result == -1){
+        printErr("there is no path in that direction");
+    } else if (result == -2){
+        printErr("room in that direction is locked");
+    } else {
+        game->avatar->location->visited = true;
+        printMap(game->map);
+        printRoomItems(game->avatar->location);
+    }
+}
+
 int main() {
     printClue();
     // a random seed
@@ -168,35 +181,11 @@ int main() {
             char direction[MAX_LINE] = {0};
             slice(cmd, direction, strlen("go "), MAX_LINE);
             //cases for each direction
-            if(startsWith(direction, "north")){
-                if(move(&game, North) == -1){
-                    printErr("there is no path in that direction");
-                    continue;
-                } else game.avatar->location->visited = true;
-            }
-            else if(startsWith(direction, "south")){
-                if(move(&game, South) == -1){
-                    printErr("there is no path in that direction");
-                    continue;
-                } else game.avatar->location->visited = true;
-            }
-            else if(startsWith(direction,"west")){
-                if(move(&game, West) == -1){
-                    printErr("there is no path in that direction");
-                    continue;
-                } else game.avatar->location->visited = true;
-            }
-            else if(startsWith(direction,"east")){
-                if(move(&game, East) == -1){
-                    printErr("there is no path in that direction");
-                    continue;
-                } else game.avatar->location->visited = true;
-            } else {
-                printErr("invalid direction\n");
-                continue;
-            }
-            printMap(game.map);
-            printRoomItems(game.avatar->location);
+            if(startsWith(direction, "north")) moveFeedBack(move(&game, North), &game);
+            else if(startsWith(direction, "south")) moveFeedBack(move(&game, South), &game);
+            else if(startsWith(direction,"west")) moveFeedBack(move(&game, West), &game);
+            else if(startsWith(direction,"east")) moveFeedBack(move(&game, East), &game);
+            else printErr("invalid direction\n");
         }
         //if command was inventory
         else if(strcmp(cmd,"inventory")==0){

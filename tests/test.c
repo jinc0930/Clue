@@ -263,6 +263,22 @@ static void test_gameplay_movements() {
   }
 }
 
+static void test_room_locked() {
+  struct Game game = makeGame();
+  // lock all rooms
+  for (size_t i = 0; i < N_ROOMS; i++) {
+    if (i == 4) continue;
+    game.map[i]->isLocked = true;
+  }
+  initGame(&game, "test");
+  teleport(&game, 4); // to the middle
+  assert(strcmp(game.avatar->location->name, game.map[4]->name) == 0);
+  assert(move(&game, South) == -2);
+  assert(move(&game, North) == -2);
+  assert(move(&game, West) == -2);
+  assert(move(&game, East) == -2);
+}
+
 static void test_gameplay_take_drop() {
   struct Game game = makeGame();
   initGame(&game, "test");
@@ -535,6 +551,7 @@ int main(void) {
   TEST(test_gameplay_clue_rooms);
   TEST(test_gameplay_clue_items);
   TEST(test_special_items);
+  TEST(test_room_locked);
   TEST(test_transfer_item_1);
   TEST(test_transfer_item_2);
 

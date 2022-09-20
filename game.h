@@ -40,6 +40,9 @@ struct Game makeGame();
 int initGame(struct Game * game, const char * name);
 
 // player move
+//-1 if is full/invalid
+//-2 if is locked
+// >= 0 if is ok
 int move(struct Game * game, enum direction dir);
 
 enum actionResult { Invalid, NotFound, Full, Ok };
@@ -55,4 +58,7 @@ void teleport(struct Game * game, int roomIdx);
 
 // free everything
 void freeGame(struct Game * game);
+
+// lock room and return index of the room in the map
+int lockRandomRoom(struct Game * game);
 #endif

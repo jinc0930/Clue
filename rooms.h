@@ -16,6 +16,7 @@ struct Room {
     struct Item * itemList;
     struct Character* chara[MAX_CHARACTER];
     bool visited;
+    bool isLocked;
 };
 
 //makeroom
@@ -46,12 +47,17 @@ bool isItemInside(struct Room* room, const char * name);
 //adding
 void additem(struct Room* room,struct Item* item);
 int addChar(struct Room * room, struct Character* character);
+
+//-1 if is full
+//-2 if is locked
+// >= 0 if is ok
 int moveChar(struct Room * from, struct Room * to, struct Character* character);
 
 //removing
 void removeChar(struct Room* room, struct Character* character);
 void removeItem(struct Room* room, struct Item *item);
 
-
+int unlockRoom(struct Room* room);
 int roomCharLength(struct Room* room);
+
 #endif
