@@ -8,6 +8,7 @@
 #include "../pool.h"
 #include "../utils.h"
 #include "../rooms.h"
+#include "../graph.h"
 
 #define TEST(t) ({ puts("-> " #t); t(); })
 #define SUBTEST(t) ({ puts("  -> " t); })
@@ -532,18 +533,29 @@ static void test_transfer_item_2() {
   assert(transferItem(alice, bob, "") == 0);
 }
 
-static void test_graph() {
-  // FIXME
+static void test_graph_1() {
+  struct Graph graph = makeGraph();
+  assert(graph.length == 0);
+  struct Node node1 = makeNode(Say, NULL, "hello");
+  struct Node node2 = makeNode(Say, NULL, "hello again");
+  int idx1 = addNode(&graph, node1);
+  assert(graph.list[idx1] != NULL);
+  int idx2 = addNode(&graph, node2);
+  assert(graph.list[idx2] != NULL);
+  addEdge(&graph, idx1, idx2);
+
+  // check iterator
+  assert(strcmp(findEntry(&graph)->say, "hello"));
+  assert(strcmp(findNext(&graph, NULL)->say, "hello again"));
+
+  //reset
+  assert(strcmp(findEntry(&graph)->say, "hello"));
+  assert(strcmp(findNext(&graph, NULL)->say, "hello again"));
 }
 
 static void test_bread() {
   // FIXME
 }
-
-static void test_key() {
-  // FIXME
-}
-
 
 // TESTS
 int main(void) {
@@ -578,9 +590,8 @@ int main(void) {
   TEST(test_transaction_1); // FAILING
   TEST(test_transaction_2); // FAILING
   TEST(test_transaction_3); // FAILING
-  TEST(test_graph); // EMPTY
+  TEST(test_graph_1); // FAILING
   TEST(test_bread); // EMPTY
-  TEST(test_key); // EMPTY
 #endif
   return 0;
 }

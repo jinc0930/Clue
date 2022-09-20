@@ -78,5 +78,5 @@ const char ** getTriggers(struct Graph * graph);
 // make a node with a simple initialization
 struct Node makeNode(enum nodeType t, const char * trigger, const char * say);
 // get next npc speech
-char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input);
+const char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input);
 #endif

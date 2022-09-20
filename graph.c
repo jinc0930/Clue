@@ -6,7 +6,7 @@
  */
 
 struct Graph makeGraph() {
-    struct Graph graph = { .length = 0 }; 
+    struct Graph graph = { .length = 0 };
     // todo: FIXME
     return graph;
 }
@@ -22,12 +22,12 @@ void addEdge(struct Graph * graph, int node1, int node2) {
 
 struct Node * findNext(struct Graph * graph, const char * trigger) {
     // todo: FIXME
-    return /* Node * */;
+    return NULL;
 }
 
 struct Node * findEntry(struct Graph * graph) {
     // todo: FIXME
-    return /* Node * */;
+    return NULL;
 }
 
 
@@ -36,17 +36,21 @@ struct Node * findEntry(struct Graph * graph) {
  */
 
 struct Node makeNode(enum nodeType t, const char * trigger, const char * say) {
+    struct Node node = {
+        .type = t,
+        .trigger = trigger,
+        .say = say,
+    };
     // todo: FIXME
-    return /* Node * */;
+    return node;
 }
 
-
-char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input) {
+const char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input) {
     // todo: FIXME
-    return;
+    return NULL;
 }
 
 const char ** getTriggers(struct Graph * graph) {
     // todo: FIXME
-    return;
+    return NULL;
 }

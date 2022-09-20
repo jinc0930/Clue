@@ -1,7 +1,7 @@
 .PHONY: all graphics test
 
 CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
-OBJS = utils.c pool.c character.c rooms.c items.c game.c
+OBJS = utils.c pool.c graph.c character.c rooms.c items.c game.c
  
 ifeq ($(disable_future),1)
     CFLAGS += -DDISABLE_FUTURE
