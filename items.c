@@ -6,6 +6,17 @@ struct Item * makeitem(const char*name){
     struct Item * item = (struct Item*) malloc (sizeof(struct Item));
     item -> name = name;
     item -> next = NULL;
+    item -> isSpecial = false;
+    return item;
+}
+
+//makeSpecialItem(name:char*):Item*
+//takes an item and a "string" as input, set given string as given item's name
+struct Item * makeSpecialItem(const char*name){
+    struct Item * item = (struct Item*) malloc (sizeof(struct Item));
+    item -> name = name;
+    item -> next = NULL;
+    item -> isSpecial = true;
     return item;
 }
 

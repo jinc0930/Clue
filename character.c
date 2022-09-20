@@ -71,7 +71,7 @@ int transaction(struct Character* sender, struct Character* receiver, int amount
 //add(character:Character*,item:Item*):int
 //takes character and item as input, add the item to the inventory of the character; returns 1 if item is added and 0 if inventory is full
 int add(struct Character* character, struct Item*item) {
-    if (character->inventoryItems >= 3) return 0;
+    if (character->inventoryItems >= MAX_INVENTORY) return 0;
     // somenthing
     if (character->inventory == NULL) {
         character->inventory = item;
@@ -119,6 +119,53 @@ void rmv(struct Character* character, struct Item*item){
     }
 }
 
+// destroy item from inventory
+int destroy(struct Character* character, const char * item) {
+    struct Item * temp = character->inventory, * prev = NULL;
+    while (temp != NULL) {
+        if (strcmp(temp->name, item) == 0) {
+            if (prev != NULL)
+                if (temp->next != NULL) prev->next = temp->next;
+                else prev->next = NULL;
+            else character->inventory = temp->next;
+            character->inventoryItems--;
+            return 1;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return 0;
+}
+
+// destroy item from the game and iventory if has space
+// 0 = fail, 1 = ok
+int transferItem(struct Character* from, struct Character* to, const char * item) {
+    if (to->inventoryItems >= MAX_INVENTORY) return 0;
+    struct Item * temp = from->inventory, * prev = NULL;
+    while (temp != NULL) {
+        if (strcmp(temp->name, item) == 0) {
+            if (prev != NULL)
+                if (temp->next != NULL) prev->next = temp->next;
+                else prev->next = NULL;
+            else from->inventory = temp->next;
+            from->inventoryItems--;
+            if (to->inventory == NULL) to->inventory = temp;
+            else (temp->next = to->inventory->next, to->inventory = temp);
+            to->inventoryItems++;
+            return 1;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return 0;
+}
+bool constainsItem(struct Character* character, const char * item) {
+    if (character->inventoryItems == 0) return 0;
+    struct Item * temp = character->inventory;
+    while (temp != NULL) if (strcmp(temp->name, item) == 0) return true;
+    else temp = temp->next;
+    return false;
+}
 //takes character and item, gives the character that hint
 void set_item_hint(struct Character* character, struct Item* itemHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){

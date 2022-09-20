@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #ifndef CHARACTER_H
 #define CHARACTER_H
+#define MAX_INVENTORY 3
 
 //character structure
 struct Character{
@@ -33,7 +35,13 @@ void setloc(struct Character* character, struct Room* room);
 int add(struct Character* character, struct Item*item);
 //removing
 void rmv(struct Character* character, struct Item*item);
-
+//destroying
+// 0 = fail, 1 = ok
+int destroy(struct Character* character, const char * item);
+//transferItem to another character
+// 0 = fail, 1 = ok
+int transferItem(struct Character* from, struct Character* to, const char * item);
+bool constainsItem(struct Character* character, const char * item);
 //updates new coin amount, purchase will be the adjustment of coins (pass in the correct signs),
 //an integer is returned, 0 = purchase succesful and complete, 1= purchase unsucessful
 int updatecoins(struct Character* character, int purchase);

@@ -8,12 +8,14 @@
 #define N_CHARACTERS 9
 #define N_ROOMS 9
 #define N_ITEMS 9
+#define N_SPECIAL_ITEMS 2
 
 // struct for keeping track of state of the game
 struct Game {
     int attempts;
     struct Character *characters[N_CHARACTERS];
     struct Item *items[N_ITEMS];
+    struct Item *special[N_SPECIAL_ITEMS];
     struct Room *map[N_ROOMS];
     struct Character *avatar;
     const char* targetChar;

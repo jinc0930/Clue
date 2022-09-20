@@ -390,10 +390,6 @@ static void test_gameplay_clue_items() {
   assert(corrects == 1);
 }
 
-static void test_graph() {
-  // FIXME
-}
-
 static void test_coin() {
   struct Character * character = makeChar("chang");
 
@@ -416,7 +412,7 @@ static void test_coin() {
   assert(character->coins_count == 0); // must remove
 }
 
-static void test_transaction() {
+static void test_transaction_1() {
   struct Character * bob = makeChar("bob");
   struct Character * alice = makeChar("alice");
 
@@ -427,6 +423,11 @@ static void test_transaction() {
   assert(a == 0); // must be 0 when it fails
   assert(bob->coins_count == 1); // must be unchanged
   assert(alice->coins_count == 0); // must be unchanged
+}
+
+static void test_transaction_2() {
+  struct Character * bob = makeChar("bob");
+  struct Character * alice = makeChar("alice");
 
   // CASE: bob have enough coins
   bob->coins_count = 1; // RESET
@@ -435,6 +436,11 @@ static void test_transaction() {
   assert(b == 1); // must be 1 when it succeeds
   assert(bob->coins_count == 0); // must be 0 now
   assert(alice->coins_count == 1); // must be 1 now
+}
+
+static void test_transaction_3() {
+  struct Character * bob = makeChar("bob");
+  struct Character * alice = makeChar("alice");
 
   // CASE: bob send multiple times
   bob->coins_count = 10; // RESET
@@ -450,6 +456,55 @@ static void test_transaction() {
   assert(fail == 0); // must be 0 when it fails
 }
 
+static void test_special_items() {
+  struct Item * item = makeSpecialItem("plushie"), *item2 = makeSpecialItem("key");
+  assert(strcmp(item->name, "plushie") == 0);
+  assert(item->isSpecial);
+  
+  // CASE: add, check, destroy
+  struct Character * alice = makeChar("alice");
+  assert(add(alice, item) == 1);
+  assert(add(alice, item2) == 1);
+  assert(constainsItem(alice, "plushie"));
+  assert(constainsItem(alice, "key"));
+  assert(destroy(alice, "key") == 1);
+  assert(!constainsItem(alice, "key"));
+  assert(destroy(alice, "plushie") == 1);
+  assert(!constainsItem(alice, "plushie"));
+}
+
+static void test_transfer_item_1() {
+  struct Character * alice = makeChar("alice");
+  struct Character * bob = makeChar("bob");
+  assert(add(alice, makeSpecialItem("key1")) == 1);
+  assert(add(alice, makeSpecialItem("key2")) == 1);
+  assert(alice->inventoryItems == 2);
+  assert(bob->inventoryItems == 0);
+  assert(transferItem(alice, bob, "key1") == 1);
+  assert(alice->inventoryItems == 1);
+  assert(bob->inventoryItems == 1);
+  assert(!constainsItem(bob, "key2"));
+  assert(!constainsItem(alice, "key1"));
+  assert(constainsItem(bob, "key1"));
+  assert(constainsItem(alice, "key2"));
+  assert(transferItem(alice, bob, "key2") == 1);
+  assert(!constainsItem(alice, "key2"));
+}
+
+static void test_transfer_item_2() {
+  struct Character * alice = makeChar("alice");
+  struct Character * bob = makeChar("bob");
+  assert(add(alice, makeSpecialItem("key1")) == 1);
+  assert(transferItem(alice, bob, "key2") == 0);
+  assert(transferItem(alice, bob, "key1") == 1);
+  assert(transferItem(alice, bob, "key1") == 0);
+  assert(transferItem(alice, bob, "") == 0);
+}
+
+static void test_graph() {
+  // FIXME
+}
+
 static void test_bread() {
   // FIXME
 }
@@ -461,6 +516,7 @@ static void test_key() {
 
 // TESTS
 int main(void) {
+  puts("\n## START TESTS ##");
   srand(20); // rand seed must be deterministic
   TEST(test_starts_with);
   TEST(test_slice);
@@ -478,11 +534,17 @@ int main(void) {
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
   TEST(test_gameplay_clue_items);
+  TEST(test_special_items);
+  TEST(test_transfer_item_1);
+  TEST(test_transfer_item_2);
 
 // tests work in progress
 #ifndef DISABLE_FUTURE
+  puts("\n## START FUTURE TESTS ##");
   TEST(test_coin); // FAILING
-  TEST(test_transaction); // FAILING
+  TEST(test_transaction_1); // FAILING
+  TEST(test_transaction_2); // FAILING
+  TEST(test_transaction_3); // FAILING
   TEST(test_graph); // EMPTY
   TEST(test_bread); // EMPTY
   TEST(test_key); // EMPTY
