@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "graph.h"
+#include "utils.h"
 #ifndef CHARACTER_H
 #define CHARACTER_H
 #define MAX_INVENTORY 3
+
 
 //character structure
 struct Character{
@@ -16,6 +19,7 @@ struct Character{
     char* hints[3];
     char* prefix[3];
     int coins_count;
+    struct Graph* brain;
 };
 
 //make character

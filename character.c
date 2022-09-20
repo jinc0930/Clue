@@ -13,6 +13,7 @@ struct Character* makeChar(const char* name){
     character->inventoryItems = 0;
     character->id = NULL;
     character->coins_count = 0;
+    character->brain = NULL; // graph
     // allocate on heap. remember to free!
     for (size_t i = 0; i < 3; i++) {
         character->hints[i] = malloc((128)*sizeof(char));

@@ -553,15 +553,41 @@ static void test_graph_1() {
   assert(strcmp(findNext(&graph, NULL)->say, "hello again"));
 }
 
-static void test_nodes_1() {
-  // struct Node node1 = makeNode(Say, NULL, "hello");
-  // struct Node node2 = makeNodeBuy("trigger", "say", 10, "item");
-  // struct Node node3 = makeNodeTrade("trigger", "say", "send", "item");
-  // WIP
-}
+static void test_graph_buy() {
+  // graph setup
+  struct Graph graph = makeGraph();
+  struct Node buy_start = makeNode(Say, NULL, "hello want some bread?");
+  struct Node buy_act = makeNodeBuy("yes", "here is your bread", 1, "bread");
+  struct Node buy_fail = makeNode(Say, "seems you have no money.", NULL);
 
-static void test_bread() {
-  // FIXME
+  // add nodes and connections
+  int idx_start = addNode(&graph, buy_start);
+  int idx_act = addNode(&graph, buy_act);
+  int idx_fail = addNode(&graph, buy_fail);
+
+  // start -> act -> fail
+  addEdge(&graph, idx_start, idx_act);
+  addEdge(&graph, idx_act, idx_fail);
+
+  // characters setup
+  struct Character * james = makeChar("james");
+  james->brain = &graph;
+  
+  struct Character * player = makeChar("player");
+  player->coins_count = 1;
+
+  // execution
+  const char * say_1 = nextSay(&graph, player, james, "hi");
+  assert(strcmp(say_1, "hello want some bread?"));
+  const char * say_2 = nextSay(&graph, player, james, "yes");
+  assert(strcmp(say_2, "here is your bread"));
+  assert(nextSay(&graph, player, james, "") == NULL);
+
+  // checks 
+  assert(constainsItem(player, "bread"));
+  assert(player->coins_count == 0);
+  assert(!constainsItem(player, "bread"));
+  assert(james->coins_count == 1);
 }
 
 // TESTS
@@ -598,8 +624,7 @@ int main(void) {
   TEST(test_transaction_2); // FAILING
   TEST(test_transaction_3); // FAILING
   TEST(test_graph_1); // FAILING
-  TEST(test_nodes_1); // FAILING
-  TEST(test_bread); // EMPTY
+  TEST(test_graph_buy); // FAILING
 #endif
   return 0;
 }
