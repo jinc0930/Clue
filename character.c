@@ -157,10 +157,14 @@ int transferItem(struct Character* from, struct Character* to, const char * item
 				prev->next = temp->next;
 			}
             from->inventoryItems--;
-
-            struct Item * temp2 = to->inventory;
-            to->inventory = temp;
-            to->inventory->next = temp2;
+            if (to->inventory == NULL) {
+				to->inventory = temp;
+				to->inventory->next = NULL;
+			} else {
+                struct Item * temp2 = to->inventory;
+                to->inventory = temp;
+                to->inventory->next = temp2;
+            };
             to->inventoryItems++;
             return 1;
         }
