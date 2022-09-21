@@ -246,31 +246,22 @@ enum actionResult take(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
     for (int t=0;t<N_ITEMS;t++){
-        if (startsWith(itemName, getItemName(game->items[t])) == true) {
+        if (strcmp(itemName, getItemName(game->items[t])) == 0) {
             invalid = false;
             break;
         };
     }
     if (invalid == true) return Invalid;
-    
-    // no items in the room?
-    if(game->avatar->location->itemList == NULL) return NotFound;
 
-    // check items in the room
-    struct Item * m = game->avatar->location->itemList;
-    while(m != NULL){
-        if (startsWith(itemName, m->name)){
-            if (add(game->avatar,m) > 0) {
-                removeItem(game->avatar->location, m);
-                return Ok;
-            };
-            assert(m != NULL);
-            break;
-        } else {
-            m = m->next;
-        }
+    int result = moveToInventory(game->avatar, itemName);
+
+    if (result == 0) {
+        return NotFound;
+    } else if (result == -1) {
+        return Full;
+    } else {
+        return Ok;
     }
-    return NotFound;
 }
 
 // helper drop an item in the room
@@ -278,28 +269,20 @@ enum actionResult drop(struct Game * game, const char * itemName) {
     // is valid?
     bool invalid = true;
     for (int t=0;t<N_ITEMS;t++){
-        if (startsWith(itemName, getItemName(game->items[t])) == true) {
+        if (strcmp(itemName, getItemName(game->items[t])) == 0) {
             invalid = false;
             break;
         };
     }
     if (invalid == true) return Invalid;
 
-    // no items in the inventory?
-    if(game->avatar->inventory == NULL) return NotFound;
+    int result = moveItemToRoom(game->avatar, itemName);
 
-    // check items in the inventory
-    struct Item * m = game->avatar->inventory;
-    while(m != NULL){
-        if (startsWith(itemName, m->name)){
-            rmv(game->avatar, m);
-            additem(game->avatar->location,m);
-            return Ok;
-        }
-        m = getNext(m);
+    if (result == 0) {
+        return NotFound;
+    } else {
+        return Ok;
     }
-
-    return NotFound;
 }
 
 // helper drop an item in the room

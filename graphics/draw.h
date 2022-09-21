@@ -7,7 +7,9 @@
 
 #ifndef DRAW_H
 #define DRAW_H
+
 typedef enum GameScreen { START = 0, GAMEPLAY, CHEATSHEET, ENDING } GameScreen;
+typedef enum BottomScreen { IDLE, TALK, TAKE, DROP, CLUE } BottomScreen;
 
 struct ChatState {
     struct Character * talking_to;
@@ -16,14 +18,19 @@ struct ChatState {
 };
 
 // Draw map
-void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int width, int height) ;
+void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int width, int height);
 
-// Draw items
-void DrawItems(struct Room * map, int _x, int _y);
+// Draw instructions
+void DrawSide(int x, int y);
+
+/*
+ * SCREENS
+ */
 
 // Draw Cheatsheet
 void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) ;
 
-void DrawChat(struct Room * current_room, struct ChatState * chat, int _x, int _y, int width, int height);
+// Draw Bottom Screen
+void DrawBottomScreen(struct Game * game, BottomScreen * bottom_screen, struct ChatState * chat, int height);
 
 #endif

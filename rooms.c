@@ -193,6 +193,76 @@ void removeChar(struct Room* room, struct Character* character) {
   }
 }
 
+// move item in the room to the inventory
+// 0 if item doen't exist
+// 1 if ok
+// -1 if inventory is full
+int moveToInventory(struct Character* chara, const char * item) {
+    if (chara->inventoryItems >= MAX_INVENTORY) return -1;
+    struct Item * temp = chara->location->itemList, * prev = NULL;
+    while (temp != NULL) {
+        if (strcmp(temp->name, item) == 0) {
+            if (temp->next != NULL && prev != NULL) {
+                chara->location->itemList = prev;
+                chara->location->itemList->next = temp->next;
+            } else if (prev != NULL) {
+                chara->location->itemList = prev;
+                chara->location->itemList->next = NULL;
+            } else if (temp->next != NULL) {
+                chara->location->itemList = temp->next;
+                chara->location->itemList->next = NULL;
+            } else {
+                chara->location->itemList = NULL;
+            }
+            if (chara->inventory == NULL) chara->inventory = temp;
+            else {
+                struct Item * temp2 = chara->inventory;
+                chara->inventory = temp;
+                chara->inventory->next = temp2;
+            };
+            chara->inventoryItems++;
+            return 1;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return 0;
+}
+
+// move item from inventory to the room
+// 0 if item doen't exist
+// 1 if ok
+int moveItemToRoom(struct Character* chara, const char * item) {
+    struct Item * temp = chara->inventory, * prev = NULL;
+    while (temp != NULL) {
+        if (strcmp(temp->name, item) == 0) {
+            if (temp->next != NULL && prev != NULL) {
+                chara->inventory = prev;
+                chara->inventory->next = temp->next;
+            } else if (prev != NULL) {
+                chara->inventory = prev;
+                chara->inventory->next = NULL;
+            } else if (temp->next != NULL) {
+                chara->inventory = temp->next;
+                chara->inventory->next = NULL;
+            } else {
+                chara->inventory = NULL;
+            }
+            chara->inventoryItems--;
+            if (chara->location->itemList == NULL) chara->location->itemList = temp;
+            else {
+                struct Item * temp2 = chara->location->itemList;
+                chara->location->itemList = temp;
+                chara->location->itemList->next = temp2;
+            };
+            return 1;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return 0;
+}
+
 // how many chars in the room
 // no optimization since room size is 3
 int roomCharLength(struct Room* room) {

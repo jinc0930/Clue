@@ -20,9 +20,9 @@ struct FullState {
     bool cheatsheet_items[N_ITEMS];
     Vector2 mouse_pos;
     GameScreen current_screen;
+    BottomScreen bottom_screen;
     struct ChatState chat;
 };
-
 
 //----------------------------------------------------------------------------------
 // Global Variables Definition
@@ -46,7 +46,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     srand(time(NULL));
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-
+    
     struct Game game = makeGame();
     initGame(&game, "ME");
     struct FullState state = {
@@ -59,8 +59,8 @@ int main(void)
         .mouse_pos = (Vector2){ 0.0f, 0.0f },
         .current_screen = GAMEPLAY,
         .chat = { NULL, 0, 0 },
+        .bottom_screen = IDLE
     };
-    
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop_arg(UpdateDrawFrame, &state, 30, 1);
@@ -86,41 +86,40 @@ int main(void)
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
+static void resetOnMove(struct FullState * state) {
+    state->bottom_screen = IDLE;
+    state->chat.talking_to = NULL;
+}
+
+
 void UpdateDrawFrame(void* arg_)
 {
     struct FullState* state = arg_;
     struct Game * game = state->game;
     struct Room * current_room = game->avatar->location;
     struct ChatState * chat = &state->chat;
-
+    bool canMove = true;
 
     // Update
+    if (state->chat.talking_to != NULL) canMove = false;
     state->mouse_pos = GetMousePosition();
     if (IsKeyPressed(KEY_C)) state->current_screen = state->current_screen == CHEATSHEET ? GAMEPLAY : CHEATSHEET;
-    if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)) (move(game, East), chat->talking_to = NULL);
-    if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)) (move(game, West), state->chat.talking_to = NULL);
-    if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) (move(game, North), state->chat.talking_to = NULL);
-    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) (move(game, South), state->chat.talking_to = NULL);
 
+    if (canMove) {
+        if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)) (move(game, East), resetOnMove(state));
+        if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)) (move(game, West), resetOnMove(state));
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) (move(game, North), resetOnMove(state));
+        if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) (move(game, South), resetOnMove(state));
+    }
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
         ClearBackground(RAYWHITE);
         switch(state->current_screen) {
             case GAMEPLAY: {
-                
-                int m_left = GetScreenWidth() - panelWidth + 8 * 3;
-                int m_bottom = GetScreenHeight() - 100 - chatHeight;
-
                 DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panelWidth, GetScreenHeight() - 20 - chatHeight);
-                DrawItems(state->game->avatar->location, m_left, 8);
-                DrawText("Controls:", m_left, m_bottom, 10, BLACK);
-                DrawText("[C] to open cheatsheet", m_left, m_bottom + 20, 10, DARKGRAY);
-                DrawText("[T] to talk", m_left, m_bottom + 40, 10, DARKGRAY);
-                DrawText("[Arrow] to move", m_left, m_bottom + 80, 10, DARKGRAY);
-                DrawText("[Space] to call clue", m_left, m_bottom + 60, 10, DARKGRAY);
-
-                if (true) DrawChat(current_room, &state->chat, m_left, 0, panelWidth, chatHeight);
+                DrawBottomScreen(game, &state->bottom_screen, &state->chat, chatHeight);
+                DrawSide(GetScreenWidth() - panelWidth + 8 * 3, GetScreenHeight() - 100 - chatHeight);
             } break;
             case CHEATSHEET: {
                 DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);

@@ -48,6 +48,17 @@ bool isItemInside(struct Room* room, const char * name);
 void additem(struct Room* room,struct Item* item);
 int addChar(struct Room * room, struct Character* character);
 
+// move item in the room to the inventory
+// 0 if item doen't exist
+// 1 if ok
+// -1 if inventory is full
+int moveToInventory(struct Character* chara, const char * item);
+
+// move item from inventory to the room
+// 0 if item doen't exist
+// 1 if ok
+int moveItemToRoom(struct Character* chara, const char * item);
+
 //-1 if is full
 //-2 if is locked
 // >= 0 if is ok

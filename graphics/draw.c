@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 
+const int keys[] = { KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE };
+const int space = 8;
+
 inline int wordlen(const char * str){
    int idx = 0;
    while(str[idx]!=' ' && str[idx]!=0 && str[idx]!='\n'){
@@ -51,42 +54,35 @@ void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int
             int texture = 0;
             Rectangle rec = { .width = xStep, .height = yStep, .x = x, .y = y };
             DrawRectangleRec(rec, SKYBLUE);
-            DrawText(TextFormat(map[idx]->name), x, y, 20, BLACK);
+            DrawText(TextFormat(map[idx]->name), x + space, y + space, 20, BLACK);
             for (size_t i = 0; i < MAX_CHARACTER; i++) {
                 if (map[idx]->chara[i] == NULL) continue;
-                int offset = char_size * i + 8 * i;
+                int offset = char_size * i + space * i;
                 if (strcmp(map[idx]->chara[i]->id, "avatar") == 0) {
                     texture = 1;
                 }
                 char_textures[texture].width = char_size;
                 char_textures[texture].height = char_size;
-                DrawTexture(char_textures[texture], x + offset, y + yStep - char_size, WHITE);
+                DrawTexture(char_textures[texture], x + offset + space, y + yStep - char_size - space, WHITE);
             }
         }
     }
 }
 
-void DrawItems(struct Room* room, int _x, int _y) {
-    struct Item *item = room->itemList;
-    int step = 1;
+void DrawSide(int x, int y) {
+    DrawText("Shortcut:", x, y, 10, BLACK);
+    DrawText("[C] to open cheatsheet", x, y + 20, 10, DARKGRAY);
+    DrawText("[Arrow] to move", x, y + 40, 10, DARKGRAY);
 
-    DrawText(TextFormat("Items"), _x, _y, 29, BLACK);
-    
-    while (item != NULL) {
-        int x = _x ;
-        int y = _y + 40.0f * step++;
 
-        DrawText(TextFormat(item->name), x, y, 20, BLUE);
-        item = item->next;
-    }
 }
 
 void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
-    int step = 1;
-    DrawText("Press C to close", GetScreenWidth() - 200, GetScreenHeight() - 20, 20, DARKGRAY);
+    int step = 0;
+    DrawText("Press C to close", GetScreenWidth() - 200, GetScreenHeight() - 20 - space, 20, DARKGRAY);
     for (int i = 0; i < N_ITEMS; i++) {
-        int y = 40.0f * step++;
+        int y = 30.0f * step++ + space;
         DrawText(CHARACTERS[i], 40, y, 20, BLACK);
         Rectangle btnBounds = { 20, y, 100, 20 };
         if (CheckCollisionPointRec(mousePoint, btnBounds)){
@@ -99,36 +95,79 @@ void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {
     }
 }
 
-const int keys[] = { KEY_ONE, KEY_TWO, KEY_THREE };
-
-void DrawChat(struct Room * current_room, struct ChatState * chat, int _x, int _y, int width, int height) {
-    int m_top = 8;
-    int m_left = 8;
-    int y = GetScreenHeight() - height;
-    DrawRectangle(0, GetScreenHeight() - height, GetScreenWidth(), height, BLACK);
-
+static void DrawChat(struct Game * game, struct ChatState * chat, int height) {
+    struct Room * current_room = game->avatar->location;
+    int y = GetScreenHeight() - height + space;
     if (chat->talking_to != NULL) {
-        char text[200] = { 0 };
-        sprintf(text, "- %s %s.\n", chat->talking_to->prefix[chat->page], chat->talking_to->hints[chat->page]);
-        WordWrap(text, 70, m_left, y + m_top, 20, WHITE);
-        DrawText("[ENTER]", GetScreenWidth() - 100, GetScreenHeight() - 28, 20, DARKGRAY);
+        WordWrap(TextFormat("- %s %s.", chat->talking_to->prefix[chat->page], chat->talking_to->hints[chat->page]), 70, space, y, 20, WHITE);
+        DrawText("[ENTER]", GetScreenWidth() - 100, GetScreenHeight() - 20 - space, 20, DARKGRAY);
 
         if (IsKeyPressed(KEY_ENTER)) {
             if (chat->page + 1 < MAX_CHARACTER) chat->page += 1;
             else (chat->page = 0, chat->talking_to = NULL);
         }
     } else {
-        DrawText("Who do you want to talk to?", m_left, y + m_top, 20, WHITE);
-        char text[100] = {0};
+        DrawText("Who do you want to talk to?", space, y, 20, SKYBLUE);
+        int prev = 0;
         for (int i = 0; i < MAX_CHARACTER; i++) {
             struct Character * c = current_room->chara[i];
             if (c != NULL && strcmp(c->id, "avatar") != 0) {
+                if (i == 0) {
+                    if (IsKeyPressed(KEY_ENTER)) chat->talking_to = c;
+                }
                 if (IsKeyPressed(keys[i])) chat->talking_to = c;
-                char temp[32] = {0};
-                sprintf(temp, "%d. %s\n", i+1, c->name);
-                strncat(text, temp, 32);
+                const char * text = TextFormat("%d. %s", i + 1, c->name);
+                DrawText(text, space + (space*4) * i + prev, y + 20 + space*2, 20, WHITE);
+                prev += MeasureText(text, 20);
             }
         }
-        DrawText(text, m_left, y + m_top + 24, 20, WHITE);
+    }
+}
+
+static void DrawTake(struct Game * game, int height) {
+    struct Room * current_room = game->avatar->location;
+    int y = GetScreenHeight() - height + space;
+    struct Item *item = current_room->itemList;
+    int step = 0, prev = 0;
+    DrawText("Take item:", space, y, 20, SKYBLUE);
+    while (item != NULL) {
+        if (IsKeyPressed(keys[step])) take(game, item->name);
+        const char * text = TextFormat("%d. %s", step + 1, item->name);
+        DrawText(text, space + (space*4) * step++ + prev, y + 20 + space*2, 20, WHITE);
+        prev += MeasureText(text, 20);
+        item = item->next;
+    }
+}
+
+static void DrawIdle(BottomScreen * bottom_screen, int height) {
+    int y = GetScreenHeight() - height + space;
+    DrawText("Choose an action:", space, y, 20, SKYBLUE);
+    char * arr[] = {"Talk", "Take", "Drop", "Clue"};
+    int len = sizeof(arr)/sizeof(arr[0]);
+    int prev = 0, step = 0;
+    for (int i = 0; i < len; i++) {
+        const char * text = TextFormat("%d. %s", step + 1, arr[i]);
+        DrawText(text, space + (space*4) * step++ + prev, y + 20 + space*2, 20, WHITE);
+        prev += MeasureText(text, 20);
+    }
+
+    if (IsKeyPressed(keys[0])) *bottom_screen = TALK;
+    else if (IsKeyPressed(keys[1])) *bottom_screen = TAKE;
+    else if (IsKeyPressed(keys[2])) *bottom_screen = DROP;
+    else if (IsKeyPressed(keys[3])) *bottom_screen = CLUE;
+}
+
+void DrawBottomScreen(struct Game * game, BottomScreen * bottom_screen, struct ChatState * chat, int height) {
+    DrawRectangle(0, GetScreenHeight() - height, GetScreenWidth(), height, BLACK);
+    switch(*bottom_screen) {
+        case IDLE: {
+            DrawIdle(bottom_screen, height);
+        } break;
+        case TALK: {
+            DrawChat(game, chat, height);
+        } break;
+        case TAKE: {
+            DrawTake(game, height);
+        } break;
     }
 }

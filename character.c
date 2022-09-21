@@ -125,12 +125,20 @@ int destroy(struct Character* character, const char * item) {
     struct Item * temp = character->inventory, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (prev != NULL)
-                if (temp->next != NULL) prev->next = temp->next;
-                else prev->next = NULL;
-            else character->inventory = temp->next;
+            if (temp->next != NULL && prev != NULL) {
+                character->inventory = prev;
+                character->inventory->next = temp->next;
+            } else if (prev != NULL) {
+                character->inventory = prev;
+                character->inventory->next = NULL;
+            } else if (temp->next != NULL) {
+                character->inventory = temp->next;
+                character->inventory->next = NULL;
+            } else {
+                character->inventory = NULL;
+            }
             character->inventoryItems--;
-            free(temp); // it can be changed in the future
+            // free(temp); // it can be changed in the future
             return 1;
         }
         prev = temp;
@@ -146,13 +154,23 @@ int transferItem(struct Character* from, struct Character* to, const char * item
     struct Item * temp = from->inventory, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (prev != NULL)
-                if (temp->next != NULL) prev->next = temp->next;
-                else prev->next = NULL;
-            else from->inventory = temp->next;
+            if (prev != NULL && temp->next != NULL) {
+                from->inventory = prev;
+                from->inventory->next = temp->next;
+            } else if (prev != NULL) {
+                from->inventory = prev;
+                from->inventory->next = NULL;
+            } else if (temp->next != NULL) {
+                from->inventory = temp->next;
+                from->inventory->next = NULL;
+            } else {
+                from->inventory = NULL;
+            }
             from->inventoryItems--;
-            if (to->inventory == NULL) to->inventory = temp;
-            else (temp->next = to->inventory->next, to->inventory = temp);
+
+            struct Item * temp2 = to->inventory;
+            to->inventory = temp;
+            to->inventory->next = temp2;
             to->inventoryItems++;
             return 1;
         }
