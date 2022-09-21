@@ -202,20 +202,17 @@ int moveToInventory(struct Character* chara, const char * item) {
     struct Item * temp = chara->location->itemList, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (temp->next != NULL && prev != NULL) {
-                chara->location->itemList = prev;
-                chara->location->itemList->next = temp->next;
-            } else if (prev != NULL) {
-                chara->location->itemList = prev;
-                chara->location->itemList->next = NULL;
-            } else if (temp->next != NULL) {
+            if (prev == NULL) {
                 chara->location->itemList = temp->next;
-                chara->location->itemList->next = NULL;
+            } else if (temp->next == NULL) {
+                prev->next = NULL;
             } else {
-                chara->location->itemList = NULL;
-            }
-            if (chara->inventory == NULL) chara->inventory = temp;
-            else {
+				prev->next = temp->next;
+			}
+            if (chara->inventory == NULL) {
+				chara->inventory = temp;
+				chara->inventory->next = NULL;
+			} else {
                 struct Item * temp2 = chara->inventory;
                 chara->inventory = temp;
                 chara->inventory->next = temp2;
@@ -236,21 +233,18 @@ int moveItemToRoom(struct Character* chara, const char * item) {
     struct Item * temp = chara->inventory, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (temp->next != NULL && prev != NULL) {
-                chara->inventory = prev;
-                chara->inventory->next = temp->next;
-            } else if (prev != NULL) {
-                chara->inventory = prev;
-                chara->inventory->next = NULL;
-            } else if (temp->next != NULL) {
+            if (prev == NULL) {
                 chara->inventory = temp->next;
-                chara->inventory->next = NULL;
+            } else if (temp->next == NULL) {
+                prev->next = NULL;
             } else {
-                chara->inventory = NULL;
-            }
+				prev->next = temp->next;
+			}
             chara->inventoryItems--;
-            if (chara->location->itemList == NULL) chara->location->itemList = temp;
-            else {
+            if (chara->location->itemList == NULL) {
+				chara->location->itemList = temp;
+				chara->location->itemList = NULL;
+			} else {
                 struct Item * temp2 = chara->location->itemList;
                 chara->location->itemList = temp;
                 chara->location->itemList->next = temp2;

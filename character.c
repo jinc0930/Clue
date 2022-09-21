@@ -125,18 +125,13 @@ int destroy(struct Character* character, const char * item) {
     struct Item * temp = character->inventory, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (temp->next != NULL && prev != NULL) {
-                character->inventory = prev;
-                character->inventory->next = temp->next;
-            } else if (prev != NULL) {
-                character->inventory = prev;
-                character->inventory->next = NULL;
-            } else if (temp->next != NULL) {
+            if (prev == NULL) {
                 character->inventory = temp->next;
-                character->inventory->next = NULL;
+            } else if (temp->next == NULL) {
+                prev->next = NULL;
             } else {
-                character->inventory = NULL;
-            }
+				prev->next = temp->next;
+			}
             character->inventoryItems--;
             // free(temp); // it can be changed in the future
             return 1;
@@ -154,18 +149,13 @@ int transferItem(struct Character* from, struct Character* to, const char * item
     struct Item * temp = from->inventory, * prev = NULL;
     while (temp != NULL) {
         if (strcmp(temp->name, item) == 0) {
-            if (prev != NULL && temp->next != NULL) {
-                from->inventory = prev;
-                from->inventory->next = temp->next;
-            } else if (prev != NULL) {
-                from->inventory = prev;
-                from->inventory->next = NULL;
-            } else if (temp->next != NULL) {
+            if (prev == NULL) {
                 from->inventory = temp->next;
-                from->inventory->next = NULL;
+            } else if (temp->next == NULL) {
+                prev->next = NULL;
             } else {
-                from->inventory = NULL;
-            }
+				prev->next = temp->next;
+			}
             from->inventoryItems--;
 
             struct Item * temp2 = to->inventory;

@@ -131,12 +131,36 @@ static void DrawTake(struct Game * game, int height) {
     int step = 0, prev = 0;
     DrawText("Take item:", space, y, 20, SKYBLUE);
     while (item != NULL) {
-        if (IsKeyPressed(keys[step])) take(game, item->name);
+        if (IsKeyPressed(keys[step])) {
+            enum actionResult result = take(game, item->name);
+            if (result == Ok) break;
+        };
         const char * text = TextFormat("%d. %s", step + 1, item->name);
         DrawText(text, space + (space*4) * step++ + prev, y + 20 + space*2, 20, WHITE);
         prev += MeasureText(text, 20);
         item = item->next;
     }
+    if (step == 0) DrawText("Empty..", space + prev, y + 20 + space*2, 20, GRAY);
+    else if (game->avatar->inventoryItems == MAX_INVENTORY) DrawText("Inventory is full", space,  y + 40 + space*3, 20, RED);
+}
+
+static void DrawDrop(struct Game * game, int height) {
+    int y = GetScreenHeight() - height + space;
+    struct Item *item = game->avatar->inventory;
+    int step = 0, prev = 0;
+    DrawText("Drop item:", space, y, 20, SKYBLUE);
+    if (game->avatar->inventoryItems == MAX_INVENTORY) DrawText("Inventory is full", space,  y + 40 + space*3, 20, RED);
+    while (item != NULL) {
+        if (IsKeyPressed(keys[step])) {
+            enum actionResult result = drop(game, item->name);
+            if (result == Ok) break;
+        }
+        const char * text = TextFormat("%d. %s", step + 1, item->name);
+        DrawText(text, space + (space*4) * step++ + prev, y + 20 + space*2, 20, WHITE);
+        prev += MeasureText(text, 20);
+        item = item->next;
+    }
+    if (step == 0) DrawText("Empty..", space + prev, y + 20 + space*2, 20, GRAY);
 }
 
 static void DrawIdle(BottomScreen * bottom_screen, int height) {
@@ -168,6 +192,11 @@ void DrawBottomScreen(struct Game * game, BottomScreen * bottom_screen, struct C
         } break;
         case TAKE: {
             DrawTake(game, height);
+            if (IsKeyPressed(KEY_ENTER)) *bottom_screen = IDLE;
+        } break;
+        case DROP: {
+            DrawDrop(game, height);
+            if (IsKeyPressed(KEY_ENTER)) *bottom_screen = IDLE;
         } break;
     }
 }

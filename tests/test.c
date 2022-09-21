@@ -295,96 +295,104 @@ static void test_room_unlock() {
   assert(game.avatar->location->isLocked == false);
 }
 
-static void test_gameplay_take() {
+static void test_gameplay_take_drop_1() {
   struct Game game = makeGame();
   initGame(&game, "test");
-  const char * item_name_1 = game.avatar->location->itemList->name;
-  assert(item_name_1 != NULL);
-  assert(take(&game, item_name_1) == Ok);
-  assert(game.avatar->location->itemList == NULL);
-  assert(constainsItem(game.avatar, item_name_1));
+  game.avatar->location->itemList = NULL; // clear;
+  game.avatar->inventory = NULL;
+  game.avatar->inventoryItems = 0;
+  additem(game.avatar->location, makeitem(ITEMS[0]));
+  additem(game.avatar->location, makeitem(ITEMS[1]));
+  additem(game.avatar->location, makeitem(ITEMS[2]));
+  assert(take(&game, "invalid") == Invalid);
+  assert(game.avatar->inventoryItems == 0);
 
-  int moved = 0;
-  for(int i=North; i<=South; i++) {
-    if (move(&game, i) >= 0) {
-      if (moved == South) {
-        moved = North;
-      } else if (moved == North) {
-        moved = South;
-      } else if (moved == East) {
-        moved = West;
-      } else if (moved == West) {
-        moved = East;
-      }
-      break;
-    }
-  }
-  const char * item_name_2 = game.avatar->location->itemList->name;
-  assert(take(&game, item_name_2) == Ok);
-  assert(game.avatar->location->itemList == NULL);
-  assert(constainsItem(game.avatar, item_name_2));
+  // take 0
+  assert(take(&game, ITEMS[0]) == Ok);
+  assert(take(&game, ITEMS[0]) == NotFound); // invalid case
+  assert(constainsItem(game.avatar, ITEMS[0]));
+  assert(game.avatar->inventoryItems == 1);
+  // take 1
+  assert(take(&game, ITEMS[1]) == Ok);
+  assert(take(&game, ITEMS[1]) == NotFound); // invalid case
+  assert(constainsItem(game.avatar, ITEMS[1]));
+  assert(game.avatar->inventoryItems == 2);
+  // take 2
+  assert(take(&game, ITEMS[2]) == Ok);
+  assert(take(&game, ITEMS[2]) != Ok); // invalid case (maybe Full)
+  assert(constainsItem(game.avatar, ITEMS[2]));
+  assert(game.avatar->inventoryItems == 3);
 
-  for(int i=North; i<=South; i++) {
-    if (i == moved) continue;
-    if (move(&game, i) >= 0) {
-      moved = i;
-      break;
-    }
-  }
-  
-  const char * item_name_3 = game.avatar->location->itemList->name;
-  assert(take(&game, item_name_3) == Ok);
-  assert(game.avatar->location->itemList == NULL);
-  assert(constainsItem(game.avatar, item_name_3));
+  // drop 0
+  assert(drop(&game, ITEMS[0]) == Ok);
+  assert(drop(&game, ITEMS[0]) == NotFound); // invalid case
+  assert(!constainsItem(game.avatar, ITEMS[0]));
+  assert(game.avatar->inventoryItems == 2);
+
+  // drop 1
+  assert(drop(&game, ITEMS[1]) == Ok);
+  assert(drop(&game, ITEMS[1]) == NotFound); // invalid case
+  assert(!constainsItem(game.avatar, ITEMS[1]));
+  assert(game.avatar->inventoryItems == 1);
+
+  // drop 2
+  assert(drop(&game, ITEMS[2]) == Ok);
+  assert(drop(&game, ITEMS[2]) == NotFound); // invalid case
+  assert(!constainsItem(game.avatar, ITEMS[2]));
+  assert(game.avatar->inventoryItems == 0);
 }
 
-static void test_gameplay_take_drop() {
+static void test_gameplay_take_drop_2() {
   struct Game game = makeGame();
   initGame(&game, "test");
-  assert(game.avatar->location->itemList != NULL);
-  
-  const char * item_name = game.avatar->location->itemList->name;
-  SUBTEST("take");
-  assert(take(&game, item_name) == Ok);
-  assert(take(&game, item_name) == NotFound);
-  assert(game.avatar->location->itemList == NULL);
-  assert(strcmp(game.avatar->inventory->name, item_name) == 0);
-  assert(take(&game, item_name) == NotFound);
+  game.avatar->location->itemList = NULL; // clear;
+  game.avatar->inventory = NULL;
+  game.avatar->inventoryItems = 0;
+  additem(game.avatar->location, makeitem(ITEMS[0]));
+  additem(game.avatar->location, makeitem(ITEMS[1]));
+  additem(game.avatar->location, makeitem(ITEMS[2]));
+  additem(game.avatar->location, makeitem(ITEMS[3]));
+  additem(game.avatar->location, makeitem(ITEMS[4]));
 
-  SUBTEST("drop");
-  assert(drop(&game, item_name) == Ok);
-  assert(drop(&game, item_name) == NotFound);
-  assert(game.avatar->inventory == NULL);
-  assert(strcmp(game.avatar->location->itemList->name, item_name) == 0);
+  // take from middle;
+  assert(take(&game, ITEMS[2]) == Ok);
 
-  SUBTEST("take2");
-  assert(take(&game, item_name) == Ok);
-  assert(take(&game, item_name) == NotFound);
-  assert(strcmp(game.avatar->inventory->name, item_name) == 0);
+  // take from tail;
+  assert(take(&game, ITEMS[0]) == Ok);
 
-  SUBTEST("multi");
-  for(int i=North; i<=South; i++) {
-    if (move(&game, i) != -1) {
+  // take from head;
+  assert(take(&game, ITEMS[4]) == Ok);
+
+  // drop
+  assert(drop(&game, ITEMS[2]) == Ok);
+  assert(drop(&game, ITEMS[0]) == Ok);
+  assert(drop(&game, ITEMS[4]) == Ok);
+}
+
+static void test_gameplay_take_drop_3() {
+  struct Game game = makeGame();
+  initGame(&game, "test");
+  for (size_t i = 0; i < 3; i++) {
+    game.avatar->location->itemList = NULL; // clear;
+    game.avatar->inventory = NULL;
+    game.avatar->inventoryItems = 0;
+    for (size_t j = 0; j < 3; j++) {
+      additem(game.avatar->location, makeitem(ITEMS[j]));
+      assert(take(&game, ITEMS[j]) == Ok);
+    }
+    switch (i) {
+    case 0:
+      assert(drop(&game, ITEMS[0]) == Ok);
+      break;
+    case 1:
+      assert(drop(&game, ITEMS[1]) == Ok);
+      break;
+    case 2:
+      assert(drop(&game, ITEMS[2]) == Ok);
       break;
     }
+    game.avatar->inventoryItems = 2;
   }
-  const char * item_name_2 = game.avatar->location->itemList->name;
-  SUBTEST("m_take");
-  assert(take(&game, item_name_2) == Ok);
-  assert(take(&game, item_name_2) == NotFound);
-
-  SUBTEST("m_drop");
-  assert(drop(&game, item_name_2) == Ok);
-  assert(drop(&game, item_name_2) == NotFound);
-
-  SUBTEST("checks");
-  assert(game.avatar->inventoryItems == 1);
-  // assert(strcmp(game.avatar->inventory->name, item_name) == 0);
-  // assert(game.avatar->inventory->next == NULL);
-
-  SUBTEST("invalid cases");
-  assert(take(&game, "invalid item") == Invalid);
-  assert(drop(&game, "invalid item") == Invalid);
 }
 
 static void test_gameplay_clue_basic() {
@@ -648,8 +656,9 @@ int main(void) {
   TEST(test_game);
   TEST(test_gameplay);
   TEST(test_gameplay_movements);
-  TEST(test_gameplay_take);
-  TEST(test_gameplay_take_drop);
+  TEST(test_gameplay_take_drop_1);
+  TEST(test_gameplay_take_drop_2);
+  TEST(test_gameplay_take_drop_3);
   TEST(test_gameplay_clue_basic);
   TEST(test_gameplay_clue_chars);
   TEST(test_gameplay_clue_rooms);
