@@ -238,13 +238,13 @@ int moveItemToRoom(struct Character* chara, const char * item) {
             } else if (temp->next == NULL) {
                 prev->next = NULL;
             } else {
-				prev->next = temp->next;
-			}
+                prev->next = temp->next;
+            }
             chara->inventoryItems--;
             if (chara->location->itemList == NULL) {
-				chara->location->itemList = temp;
-				chara->location->itemList->next = NULL;
-			} else {
+                chara->location->itemList = temp;
+                chara->location->itemList->next = NULL;
+            } else {
                 struct Item * temp2 = chara->location->itemList;
                 chara->location->itemList = temp;
                 chara->location->itemList->next = temp2;

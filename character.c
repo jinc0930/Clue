@@ -130,8 +130,8 @@ int destroy(struct Character* character, const char * item) {
             } else if (temp->next == NULL) {
                 prev->next = NULL;
             } else {
-				prev->next = temp->next;
-			}
+                prev->next = temp->next;
+            }
             character->inventoryItems--;
             // free(temp); // it can be changed in the future
             return 1;
@@ -154,13 +154,13 @@ int transferItem(struct Character* from, struct Character* to, const char * item
             } else if (temp->next == NULL) {
                 prev->next = NULL;
             } else {
-				prev->next = temp->next;
-			}
+                prev->next = temp->next;
+            }
             from->inventoryItems--;
             if (to->inventory == NULL) {
-				to->inventory = temp;
-				to->inventory->next = NULL;
-			} else {
+                to->inventory = temp;
+                to->inventory->next = NULL;
+            } else {
                 struct Item * temp2 = to->inventory;
                 to->inventory = temp;
                 to->inventory->next = temp2;
