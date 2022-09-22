@@ -2,7 +2,6 @@
 #include "items.h"
 #include "character.h"
 #include "utils.h"
-#include "pool.h"
 #include <assert.h>
 
 const char* CHARACTERS[] = {"minh","james","ivan","tenzin","edrick","chang","kevin","michael","joey"};

@@ -2,13 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include "../game.h"
-#include "../items.h"
-#include "../character.h"
-#include "../pool.h"
-#include "../utils.h"
-#include "../rooms.h"
-#include "../graph.h"
+#include "game.h"
+#include "items.h"
+#include "character.h"
+#include "utils.h"
+#include "rooms.h"
 
 #define TEST(t) ({ puts("-> " #t); t(); })
 #define SUBTEST(t) ({ puts("  -> " t); })

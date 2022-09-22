@@ -4,15 +4,9 @@
     "rooms.h": "c",
     "character.h": "c",
     "prettyprint.h": "c",
-    "pool.h": "c",
     "game.h": "c",
     "utils.h": "c",
-    "assert.h": "c",
-    "stdio.h": "c",
-    "time.h": "c",
-    "stdlib.h": "c",
-    "draw.h": "c",
-    "graph.h": "c"
+    "draw.h": "c"
   },
   "git.enabled": true,
   "editor.formatOnSave": false,

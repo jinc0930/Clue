@@ -1,7 +1,7 @@
 #include "character.h"
 #include "items.h"
 #include "rooms.h"
-#include<stdio.h>
+#include <stdio.h>
 
 //makeChar(name:char*): struct character *
 //takes name as input, gives out a character as output
@@ -371,4 +371,92 @@ void set_char_hint(struct Character* character, struct Character* accused){
             strcpy(character->hints[2], "Joey because he was working out at the gym");
         }
     }
+}
+
+
+/**
+ * GRAPH
+ * Graph represents a dialogue flow for npcs.
+ * Which a node contains trigger and is connected to othe dialogues
+ */
+
+struct Graph makeGraph() {
+    struct Graph graph = { .length = 0 };
+    // FIXME create a directed graph
+    // using adjacency list
+    return graph;
+}
+
+int addNode(struct Graph * graph, struct Node node) {
+    // FIXME add a node to the list without any edges yet
+    return 0;
+}
+
+void addEdge(struct Graph * graph, int node1, int node2) {
+    // FIXME connect two nodes in the graph
+}
+
+struct Node * findNext(struct Graph * graph, const char * trigger) {
+    // FIXME find next node depending on the trigger
+    // if there is no connected nodes with the trigger
+    // find the first connected that is null
+    return NULL;
+}
+
+struct Node * findEntry(struct Graph * graph) {
+    // todo: FIXME find the first node inserted, but only if there is no pinned nodes
+    return NULL;
+}
+
+/*
+ * NODES
+ * Nodes are a single piece of dialogue that can contain instructions to be performed
+ * on dialogue.
+ */
+struct Node makeNode(enum nodeType t, const char * trigger, const char * say) {
+    struct Node node = {
+        .type = t,
+        .trigger = trigger,
+        .say = say,
+        .send = NULL,
+        .receive = NULL,
+    };
+    return node;
+}
+
+struct Node makeNodeBuy(const char * trigger, const char * say, int cost, const char * item) {
+    struct Node node = {
+        .type = Trade,
+        .trigger = trigger,
+        .say = say,
+        .amount_send = cost,
+        .amount_receive = 1,
+        .send = "coin",
+        .receive = item,
+    };
+    return node;
+}
+
+struct Node makeNodeTrade(const char * trigger, const char * say, const char * send, const char * item) {
+    struct Node node = {
+        .type = Trade,
+        .trigger = trigger,
+        .say = say,
+        .amount_send = 1,
+        .amount_receive = 1,
+        .send = send,
+        .receive = item,
+    };
+    return node;
+}
+
+const char * nextSay(struct Graph * graph, struct Character * player, struct Character * npc, const char * input) {
+    // todo: FIXME find the next speech depending on the context
+    // nextNode will be used here.
+    return NULL;
+}
+
+const char ** getTriggers(struct Graph * graph) {
+    // todo: FIXME get current triggers for the current connected nodes
+    return NULL;
 }

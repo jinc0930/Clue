@@ -1,7 +1,7 @@
 .PHONY: all graphics test
 
 CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces
-OBJS = utils.c pool.c graph.c character.c rooms.c items.c game.c
+OBJS = utils.c character.c rooms.c items.c game.c
  
 ifeq ($(disable_future),1)
     CFLAGS += -DDISABLE_FUTURE
@@ -14,6 +14,6 @@ all:
 graphics:
 	$(MAKE) -C graphics/
 
-# Custom test suit (hard coded)
+# Custom test suit
 test:
-	gcc -o test $(OBJS) tests/test.c $(CFLAGS)
+	gcc -o test $(OBJS) test.c $(CFLAGS)
