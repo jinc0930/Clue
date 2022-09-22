@@ -21,7 +21,7 @@ struct ChatState {
 void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int width, int height);
 
 // Draw instructions
-void DrawSide(int x, int y);
+void DrawSide(struct Game * game, int x, int y) ;
 
 /*
  * SCREENS

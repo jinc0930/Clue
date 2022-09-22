@@ -69,12 +69,18 @@ void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int
     }
 }
 
-void DrawSide(int x, int y) {
+void DrawSide(struct Game * game, int x, int y) {
     DrawText("Shortcut:", x, y, 10, BLACK);
     DrawText("[C] to open cheatsheet", x, y + 20, 10, DARKGRAY);
     DrawText("[Arrow] to move", x, y + 40, 10, DARKGRAY);
+    DrawText("Inventory", x, space, 20, BLACK);
 
-
+    struct Item * inventory = game->avatar->inventory;
+    int i = 0;
+    while (inventory != NULL) {
+        DrawText(inventory->name, x, i++ * 20 + space *2 + 20, 20, BLUE);
+        inventory = inventory->next;
+    }
 }
 
 void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {

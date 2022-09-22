@@ -119,7 +119,7 @@ void UpdateDrawFrame(void* arg_)
             case GAMEPLAY: {
                 DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panelWidth, GetScreenHeight() - 20 - chatHeight);
                 DrawBottomScreen(game, &state->bottom_screen, &state->chat, chatHeight);
-                DrawSide(GetScreenWidth() - panelWidth + 8 * 3, GetScreenHeight() - 100 - chatHeight);
+                DrawSide(state->game, GetScreenWidth() - panelWidth + 8 * 3, GetScreenHeight() - 100 - chatHeight);
             } break;
             case CHEATSHEET: {
                 DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);
