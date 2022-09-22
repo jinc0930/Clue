@@ -119,7 +119,7 @@ int main() {
             for(int a =0;a<9;a++){
                 if((strcmp(description,game.characters[a]->name)==0)&&(strcmp(description,game.avatar->name)!=0)&& (strcmp(getloc(game.avatar)->name,getloc(game.characters[a])->name)==0)){
                     // experimental typing
-                    char str[100] = { 0 };
+                    char str[260] = { 0 }; // FIXME concatenate before or use malloc with the correct size
                     sprintf(str, "%s %s.\n", game.characters[a]->prefix[0], game.characters[a]->hints[0]);
                     printTyping(str);
                     sprintf(str, "%s %s.\n", game.characters[a]->prefix[1], game.characters[a]->hints[1]);
