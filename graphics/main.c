@@ -11,20 +11,6 @@
 #endif
 
 //----------------------------------------------------------------------------------
-// Structs
-//----------------------------------------------------------------------------------
-
-struct FullState {
-    struct Game *game;
-    Texture2D characters_textures[N_CHARACTERS];
-    bool cheatsheet_items[N_ITEMS];
-    Vector2 mouse_pos;
-    GameScreen current_screen;
-    BottomScreen bottom_screen;
-    struct ChatState chat;
-};
-
-//----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 const int screenWidth = 800;
@@ -49,7 +35,7 @@ int main(void)
     
     struct Game game = makeGame();
     initGame(&game, "ME");
-    struct FullState state = {
+    FullState state = {
         .game = &game,
         .characters_textures = {
             LoadTexture("./graphics/resources/char_02.png"),
@@ -57,9 +43,13 @@ int main(void)
         },
         .cheatsheet_items = { false },
         .mouse_pos = (Vector2){ 0.0f, 0.0f },
-        .current_screen = GAMEPLAY,
-        .chat = { NULL, 0, 0 },
-        .bottom_screen = IDLE
+        .current_screen = (GameScreen)SCREEN_GAMEPLAY,
+        .chat = (ChatState){ NULL, 0, 0 },
+        .bottom_screen = (BottomScreen)BSCREEN_IDLE,
+        .input_state = (InputState){0, { 0 }},
+        .frames_counter = 0,
+        .lock = 0,
+        .error = { 0 }
     };
 
 #if defined(PLATFORM_WEB)
@@ -78,6 +68,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     CloseWindow();        // Close window and OpenGL context
+    freeGame(&game);
     //--------------------------------------------------------------------------------------
 
     return 0;
@@ -87,41 +78,44 @@ int main(void)
 // Module Functions Definition
 //----------------------------------------------------------------------------------
 static void resetOnMove(struct FullState * state) {
-    state->bottom_screen = IDLE;
+    state->bottom_screen = BSCREEN_IDLE;
     state->chat.talking_to = NULL;
 }
 
 
 void UpdateDrawFrame(void* arg_)
 {
+    // Update
+    //----------------------------------------------------------------------------------
     struct FullState* state = arg_;
     struct Game * game = state->game;
     struct Room * current_room = game->avatar->location;
     struct ChatState * chat = &state->chat;
-    bool canMove = true;
 
-    // Update
-    if (state->chat.talking_to != NULL) canMove = false;
+    state->frames_counter += 1; // note: if the game is running for more than 2 years at 30 fps, this causes a crash
+    if (state->chat.talking_to != NULL) state->lock |= LOCK_MOVE;
+    if (state->bottom_screen == BSCREEN_CLUE) state->lock |= LOCK_MOVE | LOCK_KEYS;
     state->mouse_pos = GetMousePosition();
-    if (IsKeyPressed(KEY_C)) state->current_screen = state->current_screen == CHEATSHEET ? GAMEPLAY : CHEATSHEET;
-
-    if (canMove) {
+    if ((state->lock & LOCK_KEYS) == 0 && IsKeyPressed(KEY_C)) state->current_screen = state->current_screen == SCREEN_CHEATSHEET ? SCREEN_GAMEPLAY : SCREEN_CHEATSHEET;
+    if ((state->lock & LOCK_MOVE) == 0) {
         if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)) (move(game, East), resetOnMove(state));
         if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)) (move(game, West), resetOnMove(state));
         if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) (move(game, North), resetOnMove(state));
         if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) (move(game, South), resetOnMove(state));
     }
+    //----------------------------------------------------------------------------------
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
         ClearBackground(RAYWHITE);
         switch(state->current_screen) {
-            case GAMEPLAY: {
+            case SCREEN_GAMEPLAY: {
                 DrawMap(state->game->map, state->characters_textures, 8, 8, GetScreenWidth() - panelWidth, GetScreenHeight() - 20 - chatHeight);
-                DrawBottomScreen(game, &state->bottom_screen, &state->chat, chatHeight);
+                DrawBottomScreen(state, chatHeight);
                 DrawSide(state->game, GetScreenWidth() - panelWidth + 8 * 3, GetScreenHeight() - 100 - chatHeight);
             } break;
-            case CHEATSHEET: {
+            case SCREEN_CHEATSHEET: {
                 DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);
             } break;
         }

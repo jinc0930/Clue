@@ -5,9 +5,9 @@
 #include "../character.h"
 #include "./draw.h"
 #include <stdbool.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-
 const int keys[] = { KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE };
 const int space = 8;
 
@@ -60,7 +60,7 @@ void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int
                 int offset = char_size * i + space * i;
                 if (strcmp(map[idx]->chara[i]->id, "avatar") == 0) {
                     texture = 1;
-                }
+                } else texture = 0;
                 char_textures[texture].width = char_size;
                 char_textures[texture].height = char_size;
                 DrawTexture(char_textures[texture], x + offset + space, y + yStep - char_size - space, WHITE);
@@ -101,16 +101,22 @@ void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {
     }
 }
 
-static void DrawChat(struct Game * game, struct ChatState * chat, int height) {
+static void DrawPressEnter() {
+    DrawText("[ENTER]", GetScreenWidth() - 100, GetScreenHeight() - 20 - space, 20, DARKGRAY);
+}
+
+static void DrawChat(FullState * state, int height) {
+    struct Game * game = state->game;
     struct Room * current_room = game->avatar->location;
+    ChatState * chat = &state->chat;
+    
     int y = GetScreenHeight() - height + space;
     if (chat->talking_to != NULL) {
         WordWrap(TextFormat("- %s %s.", chat->talking_to->prefix[chat->page], chat->talking_to->hints[chat->page]), 70, space, y, 20, WHITE);
-        DrawText("[ENTER]", GetScreenWidth() - 100, GetScreenHeight() - 20 - space, 20, DARKGRAY);
-
-        if (IsKeyPressed(KEY_ENTER)) {
+            DrawPressEnter();
+        if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
             if (chat->page + 1 < MAX_CHARACTER) chat->page += 1;
-            else (chat->page = 0, chat->talking_to = NULL);
+            else (chat->page = 0, chat->talking_to = NULL, state->lock = 0);
         }
     } else {
         DrawText("Who do you want to talk to?", space, y, 20, SKYBLUE);
@@ -130,16 +136,30 @@ static void DrawChat(struct Game * game, struct ChatState * chat, int height) {
     }
 }
 
-static void DrawTake(struct Game * game, int height) {
-    struct Room * current_room = game->avatar->location;
+static void DrawTake(FullState * state, int height) {
+    struct Room * current_room = state->game->avatar->location;
     int y = GetScreenHeight() - height + space;
     struct Item *item = current_room->itemList;
     int step = 0, prev = 0;
     DrawText("Take item:", space, y, 20, SKYBLUE);
     while (item != NULL) {
         if (IsKeyPressed(keys[step])) {
-            enum actionResult result = take(game, item->name);
-            if (result == Ok) break;
+            switch (take(state->game, item->name)) {
+            case Ok:
+                break;
+            case Full:
+                state->bottom_screen = BSCREEN_ERROR;
+                strncpy(state->error, "sorry, your inventory is full", MAX_ERROR_CHARS); 
+                break;
+            case NotFound:
+                state->bottom_screen = BSCREEN_ERROR;
+                strncpy(state->error, "sorry, there is nothing in this room", MAX_ERROR_CHARS); 
+                break;
+            case Invalid:
+                state->bottom_screen = BSCREEN_ERROR;
+                strncpy(state->error, "that item does not exist", MAX_ERROR_CHARS); 
+                break;
+            };
         };
         const char * text = TextFormat("%d. %s", step + 1, item->name);
         DrawText(text, space + (space*4) * step++ + prev, y + 20 + space*2, 20, WHITE);
@@ -147,7 +167,6 @@ static void DrawTake(struct Game * game, int height) {
         item = item->next;
     }
     if (step == 0) DrawText("Empty..", space + prev, y + 20 + space*2, 20, GRAY);
-    else if (game->avatar->inventoryItems == MAX_INVENTORY) DrawText("Inventory is full", space,  y + 40 + space*3, 20, RED);
 }
 
 static void DrawDrop(struct Game * game, int height) {
@@ -155,7 +174,6 @@ static void DrawDrop(struct Game * game, int height) {
     struct Item *item = game->avatar->inventory;
     int step = 0, prev = 0;
     DrawText("Drop item:", space, y, 20, SKYBLUE);
-    if (game->avatar->inventoryItems == MAX_INVENTORY) DrawText("Inventory is full", space,  y + 40 + space*3, 20, RED);
     while (item != NULL) {
         if (IsKeyPressed(keys[step])) {
             enum actionResult result = drop(game, item->name);
@@ -169,7 +187,7 @@ static void DrawDrop(struct Game * game, int height) {
     if (step == 0) DrawText("Empty..", space + prev, y + 20 + space*2, 20, GRAY);
 }
 
-static void DrawIdle(BottomScreen * bottom_screen, int height) {
+static void DrawIdle(struct InputState * input_state, BottomScreen * bottom_screen, int height) {
     int y = GetScreenHeight() - height + space;
     DrawText("Choose an action:", space, y, 20, SKYBLUE);
     char * arr[] = {"Talk", "Take", "Drop", "Clue"};
@@ -181,28 +199,121 @@ static void DrawIdle(BottomScreen * bottom_screen, int height) {
         prev += MeasureText(text, 20);
     }
 
-    if (IsKeyPressed(keys[0])) *bottom_screen = TALK;
-    else if (IsKeyPressed(keys[1])) *bottom_screen = TAKE;
-    else if (IsKeyPressed(keys[2])) *bottom_screen = DROP;
-    else if (IsKeyPressed(keys[3])) *bottom_screen = CLUE;
+    if (IsKeyPressed(keys[0])) *bottom_screen = BSCREEN_TALK;
+    else if (IsKeyPressed(keys[1])) *bottom_screen = BSCREEN_TAKE;
+    else if (IsKeyPressed(keys[2])) *bottom_screen = BSCREEN_DROP;
+    else if (IsKeyPressed(keys[3])) {
+        *bottom_screen = BSCREEN_CLUE;
+        input_state->count = 0;
+        input_state->text[0] = '\0';
+    };
 }
 
-void DrawBottomScreen(struct Game * game, BottomScreen * bottom_screen, struct ChatState * chat, int height) {
+
+static void DrawTextInput(struct InputState * input_state, Rectangle box, int frames_count, char * dest) {
+    DrawRectangleRec(box, BLACK);
+    DrawRectangleLines(box.x, box.y, box.width, box.height, LIGHTGRAY);
+    DrawText(dest, box.x + 5, box.y + 8, 20, WHITE);
+    int key = GetCharPressed();
+    if (isalpha(key) && (input_state->count < MAX_INPUT_CHARS)) {
+        input_state->text[input_state->count] = (char)key;
+        input_state->text[input_state->count+1] = '\0';
+        input_state->count++;
+    }
+    if (IsKeyPressed(KEY_BACKSPACE)) {
+        input_state->count--;
+        if (input_state->count < 0) input_state->count = 0;
+        input_state->text[input_state->count] = '\0';
+    }
+    if (input_state->count < MAX_INPUT_CHARS) {
+        // Draw blinking underscore char
+        if (((frames_count/20)%2) == 0) DrawText("_", (int)box.x + 8 + MeasureText(input_state->text, 20), (int)box.y + 12, 20, SKYBLUE);
+    }
+    DrawPressEnter();
+    DrawText(TextFormat("%i/%i", input_state->count, MAX_INPUT_CHARS), box.x, box.y + 28 + space, 10, GRAY);
+}
+
+static void DrawClue(FullState * state, int height) {
+    int y = GetScreenHeight() - height + space;
+    DrawText("Who is the murderer?", space, y, 20, WHITE);
+    DrawTextInput(&state->input_state, (Rectangle){space, y + 20 + space, 220, 30}, state->frames_counter, state->input_state.text);
+
+    if (IsKeyPressed(KEY_ENTER)) {
+        switch (clue(state->game, state->input_state.text)) {
+        case Full:
+            state->bottom_screen = BSCREEN_ERROR;
+            strncpy(state->error, "too many characters in this room already", MAX_ERROR_CHARS); 
+            break;
+        case Ok:
+            state->bottom_screen = BSCREEN_CLUE_POST;
+            break;
+        default:
+            state->bottom_screen = BSCREEN_ERROR;
+            strncpy(state->error, "not a valid character", MAX_ERROR_CHARS); 
+            break;
+        };
+    }
+}
+
+static void DrawCluePost(struct Game * game, BottomScreen * bottom_screen, struct InputState * input_state, int height) {
+    int y = GetScreenHeight() - height + space;
+    const char * c1 = "Room: ";
+    DrawText(c1, space, y, 20, WHITE);
+    DrawText(game->okRoom ? "OK" : "WRONG", space + MeasureText(c1, 20), y, 20, game->okRoom ? GREEN : RED);
+
+    const char * c2 = "Item: ";
+    DrawText(c2, space, y + 20 + space, 20, WHITE);
+    DrawText(game->okRoom ? "OK" : "WRONG", space + MeasureText(c2, 20), y + 20 + space, 20, game->okRoom ? GREEN : RED);
+
+    const char * c3 = "Murderer: ";
+    DrawText(c3, space, y + 40 + space * 2, 20, WHITE);
+    DrawText(game->okRoom ? "OK" : "WRONG", space + MeasureText(c3, 20), y + 40 + space * 2, 20, game->okRoom ? GREEN : RED);
+    
+    DrawPressEnter();
+}
+
+static void DrawError(const char * txt, int height) {
+    int y = GetScreenHeight() - height + space;
+    DrawText(txt, space, y, 20, RED);
+    DrawPressEnter();
+}
+
+void DrawBottomScreen(struct FullState * state, int height) {
     DrawRectangle(0, GetScreenHeight() - height, GetScreenWidth(), height, BLACK);
-    switch(*bottom_screen) {
-        case IDLE: {
-            DrawIdle(bottom_screen, height);
+    BottomScreen * screen = &state->bottom_screen;
+    switch(*screen) {
+        case BSCREEN_IDLE: {
+            if (state->lock != 0) state->lock = 0;
+            DrawIdle(&state->input_state, screen, height);
         } break;
-        case TALK: {
-            DrawChat(game, chat, height);
+        case BSCREEN_TALK: {
+            DrawChat(state, height);
         } break;
-        case TAKE: {
-            DrawTake(game, height);
-            if (IsKeyPressed(KEY_ENTER)) *bottom_screen = IDLE;
+        case BSCREEN_TAKE: {
+            DrawTake(state, height);
+            if (IsKeyPressed(KEY_ENTER)) *screen = BSCREEN_IDLE;
         } break;
-        case DROP: {
-            DrawDrop(game, height);
-            if (IsKeyPressed(KEY_ENTER)) *bottom_screen = IDLE;
+        case BSCREEN_DROP: {
+            DrawDrop(state->game, height);
+            if (IsKeyPressed(KEY_ENTER)) *screen = BSCREEN_IDLE;
+        } break;
+        case BSCREEN_CLUE: {
+            DrawClue(state, height);
+        } break;
+        case BSCREEN_CLUE_POST: {
+            if (state->lock != 0) state->lock = 0;
+            DrawCluePost(state->game, screen, &state->input_state, height);
+            if (IsKeyPressed(KEY_ENTER)) {
+                 *screen = BSCREEN_IDLE;
+            }
+        } break;
+        case BSCREEN_ERROR: {
+            if (state->lock != 0) state->lock = 0;
+            DrawError(state->error, height);
+            if (IsKeyPressed(KEY_ENTER)) {
+                state->error[0] = "\0";
+                *screen = BSCREEN_IDLE;
+            }
         } break;
     }
 }
