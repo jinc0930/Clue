@@ -101,8 +101,6 @@ void UpdateDrawFrame(void* arg_)
     //----------------------------------------------------------------------------------
     struct FullState* state = arg_;
     struct Game * game = state->game;
-    struct Room * current_room = game->avatar->location;
-    struct ChatState * chat = &state->chat;
 
     state->frames_counter += 1; // note: if the game is running for more than 2 years at 30 fps, this causes a crash
     if (state->chat.talking_to != NULL) state->lock |= LOCK_MOVE;

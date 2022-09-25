@@ -352,7 +352,7 @@ enum actionResult clue(struct Game * game, const char * murderer) {
         game->okChar = true;
     }
 
-    if (game->okChar && game->okItem && game->okRoom || game->attempts >= MAX_ATTEMPTS) {
+    if ((game->okChar && game->okItem && game->okRoom) || game->attempts >= MAX_ATTEMPTS) {
         game->finished = true;
     }
     return Ok;

@@ -11,7 +11,7 @@
 const int keys[] = { KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE };
 const int space = 8;
 
-inline int wordlen(const char * str){
+static int wordlen(const char * str){
    int idx = 0;
    while(str[idx]!=' ' && str[idx]!=0 && str[idx]!='\n'){
       ++idx;
@@ -325,7 +325,7 @@ static void DrawClue(FullState * state, int height) {
     }
 }
 
-static void DrawCluePost(struct Game * game, BottomScreen * bottom_screen, struct InputState * input_state, int height) {
+static void DrawCluePost(struct Game * game, BottomScreen * bottom_screen, int height) {
     int y = GetScreenHeight() - height + space;
     const char * c1 = "Room: ";
     DrawText(c1, space, y, 20, WHITE);
@@ -373,7 +373,7 @@ void DrawBottomScreen(struct FullState * state, int height) {
         } break;
         case BSCREEN_CLUE_POST: {
             if (state->lock != 0) state->lock = 0;
-            DrawCluePost(state->game, screen, state->text_input, height);
+            DrawCluePost(state->game, screen, height);
             if (IsKeyPressed(KEY_ENTER)) {
                  *screen = BSCREEN_IDLE;
             }
@@ -382,7 +382,7 @@ void DrawBottomScreen(struct FullState * state, int height) {
             if (state->lock != 0) state->lock = 0;
             DrawError(state->error, height);
             if (IsKeyPressed(KEY_ENTER)) {
-                state->error[0] = "\0";
+                state->error[0] = '\0';
                 *screen = BSCREEN_IDLE;
             }
         } break;

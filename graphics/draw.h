@@ -35,7 +35,7 @@ typedef struct FullState {
     int frames_counter;
     Lock lock;
     char error[80];
-    char player_name[MAX_INPUT_CHARS + 1] 
+    char player_name[MAX_INPUT_CHARS + 1];
 } FullState;
 
 // Draw map
