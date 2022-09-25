@@ -103,12 +103,12 @@ void DrawCheatSheet(struct FullState * state) {
     for (int i = 0; i < N_CHARACTERS; i++) {
         int y = 30 * step++ + space - remove + margin_top;
         int x = 0;
-        if (strcmp(CHARACTERS[i], state->game->characters[state->game->replacedChar]->name) == 0) {
+        if (i == state->game->replacedChar) {
             remove = 30;
             continue; // skip
         }
-        DrawText(CHARACTERS[i], 40 + x, y, 20, BLACK);
-        Rectangle btnBounds = { 20 + x, y, MeasureText(CHARACTERS[i], 20) + 20, 20 };
+        DrawText(state->game->characters[i]->name, 40 + x, y, 20, BLACK);
+        Rectangle btnBounds = { 20 + x, y, MeasureText(state->game->characters[i]->name, 20) + 20, 20 };
         if (CheckCollisionPointRec(state->mouse_pos, btnBounds)){
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) state->cheatsheet_characters[i] = !state->cheatsheet_characters[i];
         }
