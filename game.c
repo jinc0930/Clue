@@ -19,7 +19,8 @@ struct Game makeGame() {
         .okChar = false,
         .okItem = false,
         .okRoom = false,
-        .finished = false
+        .finished = false,
+        .started = false
     };
 
     // INIT: ROOMS, CHARACTERS, ITEMS
@@ -31,7 +32,9 @@ struct Game makeGame() {
         game.items[poolTake(&b)] = makeitem(ITEMS[i]);
     }
     for (size_t i = 0; i < N_CHARACTERS; i++) {
-        game.characters[poolTake(&c)] = makeChar(CHARACTERS[i]);
+        struct Character * ch = makeChar(CHARACTERS[i]);
+        ch->uid = i;
+        game.characters[poolTake(&c)] = ch;
     }
     // making sure pools are consumed
     assert(a.length == 0 && b.length == 0 && c.length == 0);
@@ -89,6 +92,7 @@ int initGame(struct Game * game, const char * name) {
     }
 
     // AVATAR
+    game->replacedChar = avatarIdx;
     game->avatar = game->characters[avatarIdx];
     game->avatar->name = name;
     game->avatar->id = "avatar";
@@ -199,6 +203,7 @@ int initGame(struct Game * game, const char * name) {
     struct Character * accused = game->characters[poolTake(&notMeAndAvatar)];
     set_char_hint(game->characters[murderIdx], accused);
 
+    game->started = true;
     return avatarIdx;
 }
 
@@ -347,6 +352,9 @@ enum actionResult clue(struct Game * game, const char * murderer) {
         game->okChar = true;
     }
 
+    if (game->okChar && game->okItem && game->okRoom || game->attempts >= MAX_ATTEMPTS) {
+        game->finished = true;
+    }
     return Ok;
 }
 

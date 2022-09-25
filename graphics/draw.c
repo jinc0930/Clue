@@ -51,16 +51,16 @@ void DrawMap(struct Room* map[9], Texture2D char_textures[], int _x, int _y, int
             int idx = (i*3)+j;
             int x = _x + (j)*xStep + 10.0f * j;
             int y = _y + (i)*yStep + 10.0f * i;
-            int texture = 0;
             Rectangle rec = { .width = xStep, .height = yStep, .x = x, .y = y };
             DrawRectangleRec(rec, SKYBLUE);
             DrawText(TextFormat(map[idx]->name), x + space, y + space, 20, BLACK);
             for (size_t i = 0; i < MAX_CHARACTER; i++) {
                 if (map[idx]->chara[i] == NULL) continue;
                 int offset = char_size * i + space * i;
+                int texture = 0;
                 if (strcmp(map[idx]->chara[i]->id, "avatar") == 0) {
-                    texture = 1;
-                } else texture = 0;
+                    texture = 9;
+                } else texture = map[idx]->chara[i]->uid;
                 char_textures[texture].width = char_size;
                 char_textures[texture].height = char_size;
                 DrawTexture(char_textures[texture], x + offset + space, y + yStep - char_size - space, WHITE);
@@ -81,22 +81,70 @@ void DrawSide(struct Game * game, int x, int y) {
         DrawText(inventory->name, x, i++ * 20 + space *2 + 20, 20, BLUE);
         inventory = inventory->next;
     }
+
+    int margin = 60 + space * 6;
+    DrawText("Room", x, space + margin, 20, BLACK);
+    int inc = 0;
+    for (size_t j = 0; j < MAX_CHARACTER; j++){
+        struct Character * ch = game->avatar->location->chara[j]; 
+        if (ch != NULL) {
+            DrawText(ch->name, x, inc++ * 20 + space *2 + 20 + margin, 20, strcmp(ch->name, game->avatar->name) == 0 ? LIGHTGRAY : BLUE);
+        }
+    }
 }
 
-void DrawCheatSheet(bool items[N_ITEMS], Vector2 mousePoint) {
+void DrawCheatSheet(struct FullState * state) {
+    int margin_top = 60;
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
     int step = 0;
+    DrawText("CHEATSHEET", space, space * 2, 20, DARKGRAY);
     DrawText("Press C to close", GetScreenWidth() - 200, GetScreenHeight() - 20 - space, 20, DARKGRAY);
-    for (int i = 0; i < N_ITEMS; i++) {
-        int y = 30.0f * step++ + space;
-        DrawText(CHARACTERS[i], 40, y, 20, BLACK);
-        Rectangle btnBounds = { 20, y, 100, 20 };
-        if (CheckCollisionPointRec(mousePoint, btnBounds)){
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) items[i] = !items[i];
+    int remove = 0;
+    for (int i = 0; i < N_CHARACTERS; i++) {
+        int y = 30 * step++ + space - remove + margin_top;
+        int x = 0;
+        if (i == state->game->replacedChar) {
+            remove = 30;
+            continue; // skip
         }
-        DrawRectangle(10, y, 20, 20, DARKGRAY);
-        if (items[i] == false) {
+        DrawText(CHARACTERS[i], 40 + x, y, 20, BLACK);
+        Rectangle btnBounds = { 20 + x, y, MeasureText(CHARACTERS[i], 20) + 20, 20 };
+        if (CheckCollisionPointRec(state->mouse_pos, btnBounds)){
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) state->cheatsheet_characters[i] = !state->cheatsheet_characters[i];
+        }
+        DrawRectangle(10 + x, y, 20, 20, DARKGRAY);
+        if (state->cheatsheet_characters[i] == false) {
             DrawRectangle(12, y + 2, 16, 16, WHITE);
+        }
+    }
+
+    step = 0;
+    for (int i = 0; i < N_ITEMS; i++) {
+        int y = 30 * step++ + space + margin_top;
+        int x = 240;
+        DrawText(ITEMS[i], 40 + x, y, 20, BLACK);
+        Rectangle btnBounds = { 20 + x, y, MeasureText(ITEMS[i], 20) + 20, 20 };
+        if (CheckCollisionPointRec(state->mouse_pos, btnBounds)){
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) state->cheatsheet_items[i] = !state->cheatsheet_items[i];
+        }
+        DrawRectangle(10 + x, y, 20, 20, DARKGRAY);
+        if (state->cheatsheet_items[i] == false) {
+            DrawRectangle(12 + x, y + 2, 16, 16, WHITE);
+        }
+    }
+
+    step = 0;
+    for (int i = 0; i < N_ROOMS; i++) {
+        int y = 30 * step++ + space + margin_top;
+        int x = 240*2;
+        DrawText(ROOMS[i], 40 + x, y, 20, BLACK);
+        Rectangle btnBounds = { 20 + x, y, MeasureText(ROOMS[i], 20) + 20, 20 };
+        if (CheckCollisionPointRec(state->mouse_pos, btnBounds)){
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) state->cheatsheet_rooms[i] = !state->cheatsheet_rooms[i];
+        }
+        DrawRectangle(10 + x, y, 20, 20, DARKGRAY);
+        if (state->cheatsheet_rooms[i] == false) {
+            DrawRectangle(12 + x, y + 2, 16, 16, WHITE);
         }
     }
 }
@@ -187,7 +235,7 @@ static void DrawDrop(struct Game * game, int height) {
     if (step == 0) DrawText("Empty..", space + prev, y + 20 + space*2, 20, GRAY);
 }
 
-static void DrawIdle(struct InputState * input_state, BottomScreen * bottom_screen, int height) {
+static void DrawIdle(char * text_input, BottomScreen * bottom_screen, int height) {
     int y = GetScreenHeight() - height + space;
     DrawText("Choose an action:", space, y, 20, SKYBLUE);
     char * arr[] = {"Talk", "Take", "Drop", "Clue"};
@@ -204,42 +252,59 @@ static void DrawIdle(struct InputState * input_state, BottomScreen * bottom_scre
     else if (IsKeyPressed(keys[2])) *bottom_screen = BSCREEN_DROP;
     else if (IsKeyPressed(keys[3])) {
         *bottom_screen = BSCREEN_CLUE;
-        input_state->count = 0;
-        input_state->text[0] = '\0';
+        text_input[0] = '\0';
     };
 }
 
-
-static void DrawTextInput(struct InputState * input_state, Rectangle box, int frames_count, char * dest) {
-    DrawRectangleRec(box, BLACK);
-    DrawRectangleLines(box.x, box.y, box.width, box.height, LIGHTGRAY);
-    DrawText(dest, box.x + 5, box.y + 8, 20, WHITE);
+static void DrawTextInput(char * dest, Rectangle box, Color color, Color bg, Color border, int frames_count) {
+    DrawRectangleRec(box, bg);
+    DrawRectangleLines(box.x, box.y, box.width, box.height, border);
+    DrawText(dest, box.x + 5, box.y + 8, 20, color);
     int key = GetCharPressed();
-    if (isalpha(key) && (input_state->count < MAX_INPUT_CHARS)) {
-        input_state->text[input_state->count] = (char)key;
-        input_state->text[input_state->count+1] = '\0';
-        input_state->count++;
+    int len = strlen(dest);
+    if (isalpha(key) && (len < MAX_INPUT_CHARS)) {
+        dest[len] = (char)key;
+        dest[len+1] = '\0';
     }
-    if (IsKeyPressed(KEY_BACKSPACE)) {
-        input_state->count--;
-        if (input_state->count < 0) input_state->count = 0;
-        input_state->text[input_state->count] = '\0';
+    if (IsKeyPressed(KEY_BACKSPACE) && len > 0) {
+        dest[len-1] = '\0';
     }
-    if (input_state->count < MAX_INPUT_CHARS) {
-        // Draw blinking underscore char
-        if (((frames_count/20)%2) == 0) DrawText("_", (int)box.x + 8 + MeasureText(input_state->text, 20), (int)box.y + 12, 20, SKYBLUE);
+    if (len < MAX_INPUT_CHARS) {
+        if (((frames_count/20)%2) == 0) DrawText("_", (int)box.x + 8 + MeasureText(dest, 20), (int)box.y + 12, 20, SKYBLUE);
+    }
+    DrawText(TextFormat("%i/%i", len, MAX_INPUT_CHARS), box.x, box.y + 28 + space, 10, ColorAlpha(color, 0.5));
+}
+
+void DrawStart(char * text_input, int frames_count) {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
+    DrawTextInput(text_input, (Rectangle){GetScreenWidth() / 2 - 110, GetScreenHeight() / 2 - 10, 220, 30}, BLUE, WHITE, GRAY, frames_count);
+    const char * your_name = "Type your name:";
+    DrawText(your_name, GetScreenWidth() / 2 - 110, GetScreenHeight() / 2 - 22, 10, GRAY);
+
+    const char * c = "CLUE";
+    DrawText(c, GetScreenWidth() / 2 - MeasureText(c, 40) / 2, GetScreenHeight() / 2 - 100, 40, BLUE);
+}
+
+void DrawEnd(FullState * state) {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
+    if (state->game->okChar && state->game->okItem && state->game->okRoom) {
+        const char * c = "YOU WIN";
+        DrawText(c, GetScreenWidth() / 2 - MeasureText(c, 40) / 2, GetScreenHeight() / 2 - 100, 40, BLUE);
+    } else {
+        const char * c = "YOU LOSE";
+        DrawText(c, GetScreenWidth() / 2 - MeasureText(c, 40) / 2, GetScreenHeight() / 2 - 100, 40, RED);
     }
     DrawPressEnter();
-    DrawText(TextFormat("%i/%i", input_state->count, MAX_INPUT_CHARS), box.x, box.y + 28 + space, 10, GRAY);
 }
 
 static void DrawClue(FullState * state, int height) {
     int y = GetScreenHeight() - height + space;
     DrawText("Who is the murderer?", space, y, 20, WHITE);
-    DrawTextInput(&state->input_state, (Rectangle){space, y + 20 + space, 220, 30}, state->frames_counter, state->input_state.text);
+    DrawTextInput(state->text_input, (Rectangle){space, y + 20 + space, 220, 30}, WHITE, BLACK, GRAY, state->frames_counter);
+    DrawPressEnter();
 
     if (IsKeyPressed(KEY_ENTER)) {
-        switch (clue(state->game, state->input_state.text)) {
+        switch (clue(state->game, state->text_input)) {
         case Full:
             state->bottom_screen = BSCREEN_ERROR;
             strncpy(state->error, "too many characters in this room already", MAX_ERROR_CHARS); 
@@ -253,6 +318,11 @@ static void DrawClue(FullState * state, int height) {
             break;
         };
     }
+    
+    if (state->game->finished) {
+        state->lock = LOCK_KEYS | LOCK_MOVE;
+        state->current_screen = SCREEN_END;
+    }
 }
 
 static void DrawCluePost(struct Game * game, BottomScreen * bottom_screen, struct InputState * input_state, int height) {
@@ -263,11 +333,11 @@ static void DrawCluePost(struct Game * game, BottomScreen * bottom_screen, struc
 
     const char * c2 = "Item: ";
     DrawText(c2, space, y + 20 + space, 20, WHITE);
-    DrawText(game->okRoom ? "OK" : "WRONG", space + MeasureText(c2, 20), y + 20 + space, 20, game->okRoom ? GREEN : RED);
+    DrawText(game->okItem ? "OK" : "WRONG", space + MeasureText(c2, 20), y + 20 + space, 20, game->okItem ? GREEN : RED);
 
     const char * c3 = "Murderer: ";
     DrawText(c3, space, y + 40 + space * 2, 20, WHITE);
-    DrawText(game->okRoom ? "OK" : "WRONG", space + MeasureText(c3, 20), y + 40 + space * 2, 20, game->okRoom ? GREEN : RED);
+    DrawText(game->okChar ? "OK" : "WRONG", space + MeasureText(c3, 20), y + 40 + space * 2, 20, game->okChar ? GREEN : RED);
     
     DrawPressEnter();
 }
@@ -278,13 +348,14 @@ static void DrawError(const char * txt, int height) {
     DrawPressEnter();
 }
 
+
 void DrawBottomScreen(struct FullState * state, int height) {
     DrawRectangle(0, GetScreenHeight() - height, GetScreenWidth(), height, BLACK);
     BottomScreen * screen = &state->bottom_screen;
     switch(*screen) {
         case BSCREEN_IDLE: {
             if (state->lock != 0) state->lock = 0;
-            DrawIdle(&state->input_state, screen, height);
+            DrawIdle(state->text_input, screen, height);
         } break;
         case BSCREEN_TALK: {
             DrawChat(state, height);
@@ -302,7 +373,7 @@ void DrawBottomScreen(struct FullState * state, int height) {
         } break;
         case BSCREEN_CLUE_POST: {
             if (state->lock != 0) state->lock = 0;
-            DrawCluePost(state->game, screen, &state->input_state, height);
+            DrawCluePost(state->game, screen, state->text_input, height);
             if (IsKeyPressed(KEY_ENTER)) {
                  *screen = BSCREEN_IDLE;
             }

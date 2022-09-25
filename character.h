@@ -10,6 +10,7 @@
 
 //character structure
 struct Character{
+    int uid;
     const char* name;
     struct Item * inventory;
     struct Room * location;

@@ -9,6 +9,7 @@
 #define N_ROOMS 9
 #define N_ITEMS 9
 #define N_SPECIAL_ITEMS 2
+#define MAX_ATTEMPTS 9
 
 // struct for keeping track of state of the game
 struct Game {
@@ -25,6 +26,8 @@ struct Game {
     bool okRoom;
     bool okItem;
     bool finished;
+    bool started;
+    int replacedChar;
 };
 
 extern const char* CHARACTERS[];

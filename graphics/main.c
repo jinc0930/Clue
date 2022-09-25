@@ -34,22 +34,34 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
     struct Game game = makeGame();
-    initGame(&game, "ME");
     FullState state = {
         .game = &game,
         .characters_textures = {
-            LoadTexture("./graphics/resources/char_02.png"),
-            LoadTexture("./graphics/resources/char_23.png"),
+            // order matters same indexes of game.c
+            // {"minh","james","ivan","tenzin","edrick","chang","kevin","michael","joey"};
+            LoadTexture("./graphics/resources/minh.png"),
+            LoadTexture("./graphics/resources/james.png"),
+            LoadTexture("./graphics/resources/ivan.png"),
+            LoadTexture("./graphics/resources/tenzin.png"),
+            LoadTexture("./graphics/resources/edrick.png"),
+            LoadTexture("./graphics/resources/chang.png"),
+            LoadTexture("./graphics/resources/kevin.png"),
+            LoadTexture("./graphics/resources/michael.png"),
+            LoadTexture("./graphics/resources/joey.png"),
+            LoadTexture("./graphics/resources/avatar.png"),
         },
         .cheatsheet_items = { false },
+        .cheatsheet_characters = { false },
+        .cheatsheet_rooms = { false },
         .mouse_pos = (Vector2){ 0.0f, 0.0f },
-        .current_screen = (GameScreen)SCREEN_GAMEPLAY,
+        .current_screen = (GameScreen)SCREEN_START,
         .chat = (ChatState){ NULL, 0, 0 },
         .bottom_screen = (BottomScreen)BSCREEN_IDLE,
-        .input_state = (InputState){0, { 0 }},
+        .text_input = {0},
         .frames_counter = 0,
-        .lock = 0,
-        .error = { 0 }
+        .lock = LOCK_MOVE | LOCK_KEYS,
+        .error = { 0 },
+        .player_name = { 0 }
     };
 
 #if defined(PLATFORM_WEB)
@@ -116,7 +128,25 @@ void UpdateDrawFrame(void* arg_)
                 DrawSide(state->game, GetScreenWidth() - panelWidth + 8 * 3, GetScreenHeight() - 100 - chatHeight);
             } break;
             case SCREEN_CHEATSHEET: {
-                DrawCheatSheet(state->cheatsheet_items, state->mouse_pos);
+                DrawCheatSheet(state);
+            } break;
+            case SCREEN_START: {
+                DrawStart(state->player_name, state->frames_counter);
+                if (IsKeyPressed(KEY_ENTER)) {
+                    if (strlen(state->player_name) <= 0) break;
+                    initGame(game, state->player_name);
+                    state->current_screen = SCREEN_GAMEPLAY;
+                    state->lock = 0;
+                }
+            } break;
+            case SCREEN_END: {
+                DrawEnd(state);
+                if (IsKeyPressed(KEY_ENTER)) {
+                    freeGame(game);
+                    *game = makeGame();
+                    state->current_screen = SCREEN_START;
+                    state->bottom_screen = BSCREEN_IDLE;
+                }
             } break;
         }
 
