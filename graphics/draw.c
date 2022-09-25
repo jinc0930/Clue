@@ -103,7 +103,7 @@ void DrawCheatSheet(struct FullState * state) {
     for (int i = 0; i < N_CHARACTERS; i++) {
         int y = 30 * step++ + space - remove + margin_top;
         int x = 0;
-        if (i == state->game->replacedChar) {
+        if (strcmp(CHARACTERS[i], state->game->characters[state->game->replacedChar]->name) == 0) {
             remove = 30;
             continue; // skip
         }
