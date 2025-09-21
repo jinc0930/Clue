@@ -4,8 +4,8 @@
 #include "utils.h"
 #include <assert.h>
 
-const char* CHARACTERS[] = {"minh","james","ivan","tenzin","edrick","chang","kevin","michael","joey"};
-const char* ITEMS[] = {"butter knife","bat","wrench","rope","dagger","rifle","hammer","lead pipe","poison bottle"};
+const char* CHARACTERS[] = {"jason","james","will","matthew","eric","chang","kevin","michael","joey"};
+const char* ITEMS[] = {"butter knife","bat","wrench","rope","dagger","rifle","hammer","bow and arrow","poison bottle"};
 const char* ROOMS[] = {"kitchen","hall","study","bathroom","ballroom","library","lounge","office","bedroom"};
 const char* SPECIAL_ITEMS[] = {"key","bread"};
 

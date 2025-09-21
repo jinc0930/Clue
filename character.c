@@ -181,6 +181,7 @@ bool constainsItem(struct Character* character, const char * item) {
     else temp = temp->next;
     return false;
 }
+
 //takes character and item, gives the character that hint
 void set_item_hint(struct Character* character, struct Item* itemHint){
     if((strcmp(character -> id,"accuser")==0)||(strcmp(character -> id,"murderer")==0)){
@@ -206,8 +207,8 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
         else if (strcmp(itemHint->name, "hammer") == 0) {
             strcpy(character->hints[0], "hammer because it's sticky");
         }
-        else if (strcmp(itemHint->name, "lead pipe") == 0) {
-            strcpy(character->hints[0], "lead pipe because it looks like someone ripped it off the building");
+        else if (strcmp(itemHint->name, "bow and arrow") == 0) {
+            strcpy(character->hints[0], "bow and arrow because it looks like someone was practing with it");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
             strcpy(character->hints[0], "poison bottle because the floor was corroded");
@@ -237,8 +238,8 @@ void set_item_hint(struct Character* character, struct Item* itemHint){
         else if (strcmp(itemHint->name, "hammer") == 0) {
             strcpy(character->hints[0], "hammer because I was using it to fix my cabinet");
         }
-        else if (strcmp(itemHint->name, "lead pipe") == 0) {
-            strcpy(character->hints[0], "lead pipe because we shipped it to a fixing company");
+        else if (strcmp(itemHint->name, "bow and arrow") == 0) {
+            strcpy(character->hints[0], "bow and arrow because i saw birds shot down by an arrow");
         }
         else if (strcmp(itemHint->name, "poison bottle") == 0) {
             strcpy(character->hints[0], "poison bottle because it was locked in the lab");
@@ -305,7 +306,7 @@ void set_room_hint(struct Character* character, struct Room* roomHint){
             strcpy(character->hints[1], "office because I took a nap in there");
         }
         else if (strcmp(roomHint->name, "bedroom") == 0) {
-            strcpy(character->hints[1], "bedroom because Ivan was sleeping there");
+            strcpy(character->hints[1], "bedroom because will was sleeping there");
         }
     }
 }
@@ -323,20 +324,20 @@ void set_char_hint(struct Character* character, struct Character* accused){
         else if (strcmp(accused ->name, "james") == 0) {
             strcpy(character->hints[2], "James because he used the bathroom for a couple of hours");
         }
-        else if (strcmp(accused ->name, "tenzin") == 0) {
-            strcpy(character->hints[2], "Tenzin because he loves to play violent videogames.");
+        else if (strcmp(accused ->name, "matthew") == 0) {
+            strcpy(character->hints[2], "Matthew because he loves to play violent videogames.");
         }
-        else if (strcmp(accused ->name, "minh") == 0) {
-            strcpy(character->hints[2], "Minh because he is so fake, he acts nice but bad mouths you behind your back");
+        else if (strcmp(accused ->name, "jason") == 0) {
+            strcpy(character->hints[2], "Jason because he is so fake, he acts nice but bad mouths you behind your back");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
             strcpy(character->hints[2], "Michael because he and the victim's are enemies");
         }
-        else if (strcmp(accused ->name, "ivan") == 0) {
-            strcpy(character->hints[2], "Ivan because he was off for the whole day and stayed in");
+        else if (strcmp(accused ->name, "will") == 0) {
+            strcpy(character->hints[2], "Will because he was off for the whole day and stayed in");
         }
-        else if (strcmp(accused ->name, "edrick") == 0) {
-            strcpy(character->hints[2], "Edrick because he was acting weird and didn't study that night");
+        else if (strcmp(accused ->name, "eric") == 0) {
+            strcpy(character->hints[2], "Eric because he was acting weird and didn't study that night");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
             strcpy(character->hints[2], "Joey because he did not go work out at the gym that day");
@@ -353,20 +354,20 @@ void set_char_hint(struct Character* character, struct Character* accused){
         else if (strcmp(accused ->name, "james") == 0) {
             strcpy(character->hints[2], "James because he is the nicest man I have ever seen");
         }
-        else if (strcmp(accused ->name, "tenzin") == 0) {
-            strcpy(character->hints[2], "Tenzin because he was playing videogames the time of the murder.");
+        else if (strcmp(accused ->name, "matthew") == 0) {
+            strcpy(character->hints[2], "Matthew because he was playing videogames the time of the murder.");
         }
-        else if (strcmp(accused ->name, "minh") == 0) {
-            strcpy(character->hints[2], "Minh because he is such a nice person");
+        else if (strcmp(accused ->name, "jason") == 0) {
+            strcpy(character->hints[2], "Jason because he is such a nice person");
         }
         else if (strcmp(accused ->name, "michael") == 0) {
             strcpy(character->hints[2], "Michael because he is the victim's bestfriend");
         }
-        else if (strcmp(accused ->name, "ivan") == 0) {
-            strcpy(character->hints[2], "Ivan because he was working the whole day");
+        else if (strcmp(accused ->name, "will") == 0) {
+            strcpy(character->hints[2], "Will because he was working the whole day");
         }
-        else if (strcmp(accused ->name, "edrick") == 0) {
-            strcpy(character->hints[2], "Edrick because he was busy studying");
+        else if (strcmp(accused ->name, "eric") == 0) {
+            strcpy(character->hints[2], "Eric because he was busy studying");
         }
         else if (strcmp(accused ->name, "joey") == 0) {
             strcpy(character->hints[2], "Joey because he was working out at the gym");
