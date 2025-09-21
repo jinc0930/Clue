@@ -53,21 +53,26 @@ void setloc(struct Character* character, struct Room* room){
 
 //updates amount of coins a character has
 int updatecoins(struct Character* character, int purchase){
-    if((character->coins_count += purchase)<0){
+    int temp = character->coins_count + purchase;
+    if(temp >= 0){
+        character->coins_count += purchase;
         return 1;
     }
     else{
-        character->coins_count += purchase;
         return 0;
     }
 }
 
 //
 int transaction(struct Character* sender, struct Character* receiver, int amount) {
-    // ============
-    // FIXME TODO
-    // ============
-    return 0;
+    if (sender->coins_count >= amount){
+        sender->coins_count -= amount;
+        receiver->coins_count += amount;
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 //add(character:Character*,item:Item*):int

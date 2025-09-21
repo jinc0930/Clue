@@ -666,14 +666,14 @@ int main(void) {
   TEST(test_room_unlock);
   TEST(test_transfer_item_1);
   TEST(test_transfer_item_2);
+  TEST(test_coin);
+  TEST(test_transaction_1); 
+  TEST(test_transaction_2); 
+  TEST(test_transaction_3);
 
 // tests work in progress
 #ifndef DISABLE_FUTURE
   puts("\n## START FUTURE TESTS ##");
-  TEST(test_coin); // FAILING
-  TEST(test_transaction_1); // FAILING
-  TEST(test_transaction_2); // FAILING
-  TEST(test_transaction_3); // FAILING
   TEST(test_graph_1); // FAILING
   TEST(test_graph_buy); // FAILING
 #endif
